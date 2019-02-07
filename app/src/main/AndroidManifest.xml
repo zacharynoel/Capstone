@@ -25,34 +25,37 @@
         android:theme="@style/AppTheme.NoActionBar">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login" />
+        <activity
+            android:name=".menu_activity"
+            android:label="@string/title_activity_menu_activity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
 
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity>
-    <activity
-        android:name=".ScrollingActivity"
-        android:label="@string/title_activity_scrolling"
-        android:theme="@style/AppTheme.NoActionBar" />
-    <activity
-        android:name=".LoginActivity"
-        android:label="@string/title_activity_login" />
-    <activity android:name=".menu_activity"
-        android:label="@string/title_activity_menu_activity"
-        android:theme="@style/AppTheme.NoActionBar" >
-      <intent-filter>
-        <action android:name="android.intent.action.SEARCH" />
-      </intent-filter>
-      <meta-data android:name="android.app.searchable"
-          android:resource="@xml/searchable"/>
-    </activity>
-    <activity
-        android:name=".Messages"
-        android:label="@string/title_activity_messages"
-        android:theme="@style/AppTheme.NoActionBar" />
-    <activity
-        android:name=".Send_message"
-        android:label="@string/title_activity_send_message"
-        android:theme="@style/AppTheme.NoActionBar"></activity>
-  </application>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".Messages"
+            android:label="@string/title_activity_messages"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Send_message"
+            android:label="@string/title_activity_send_message"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".EditProduct"></activity>
+    </application>
 
 </manifest>
