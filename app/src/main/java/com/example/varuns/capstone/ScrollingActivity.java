@@ -58,6 +58,18 @@ public class ScrollingActivity extends AppCompatActivity {
 
     }
 
+    public void editProductClick(View v)
+    {
+        View parentRow = (View) v.getParent();
+        ListView listView = (ListView) parentRow.getParent();
+        final int position = listView.getPositionForView(parentRow);
+
+        Intent intent = new Intent(ScrollingActivity.this, EditProduct.class);
+        intent.putExtra("artisanId", artisan.getArtisanId());
+        intent.putExtra("itemId", position);
+        startActivity(intent);
+    }
+
     private void getArtisanById(final Integer artisanId) {
 
         Call<RestfulResponse<Artisan>> call = ApiService.artisanService().getArtisanById(artisanId.toString());
