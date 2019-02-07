@@ -19,8 +19,6 @@ public class User {
     private String country;
     private String postal;
 
-
-
     private Collection<UserRole> roles;
 
     private Integer isActive;

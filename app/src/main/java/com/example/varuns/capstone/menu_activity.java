@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -42,6 +43,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
+
 public class menu_activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
          SearchView.OnQueryTextListener {
@@ -69,8 +72,7 @@ public class menu_activity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         artisanList = (ListView)findViewById(R.id.artisanList);
 
-        //TODO - uncomment this getArtisans();
-        getArtisansNoDB();
+        getArtisans();
         artisanList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -174,6 +176,7 @@ public class menu_activity extends AppCompatActivity
                 Toast.makeText(menu_activity.this, "success", Toast.LENGTH_SHORT).show();
                 menu_activity.ArtisanAdapter artisanAdapter = new menu_activity.ArtisanAdapter(artisans);
                 artisanList.setAdapter(artisanAdapter);
+                artisanAdapterGlobal = artisanAdapter;
             }
 
             @Override
@@ -244,8 +247,18 @@ public class menu_activity extends AppCompatActivity
         return true;
     }
 
+
+
     public static ArtisanAdapter getAdapter() {
         return artisanAdapterGlobal;
+    }
+
+    private static final String LOG_TAG =
+            menu_activity.class.getSimpleName();
+
+    public void addNewArtisan(View view) {
+        Intent intent = new Intent(this, AddArtisanActivity.class);
+        startActivity(intent);
     }
 
     class ArtisanAdapter extends BaseAdapter implements Filterable {

@@ -18,6 +18,9 @@ public class Artisan {
         this.lastName = lastName;
     }
 
+    public Artisan() {
+    }
+
     public Integer getArtisanId() {
         return artisanId;
     }
