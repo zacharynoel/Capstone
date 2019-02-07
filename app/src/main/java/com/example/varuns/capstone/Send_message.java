@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class Send_message extends AppCompatActivity implements View.OnClickListener {
 
-    private static final int SEND_PERMISSION =0 ;
+    private static final int SEND_PERMISSION = 0;
     Button sendButton;
     EditText phoneText;
     EditText messageText;
@@ -34,45 +34,40 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
         messageText.setOnClickListener(this);
     }
 
-    /*
-    onClick
-    - Calls sendMessage then clears the message body
-     */
+    //Calls sendMessage then clears the message body
     public void onClick(View view) {
         sendMessage();
         messageText.getText().clear();
     }
 
-    /*
-    sendMessage
-    - Retrieves the entered phone number and message
-    - Checks permissions to send SMS
-     */
+
+    //Retrieves the entered phone number and message
+    //Checks permissions to send SMS
     protected void sendMessage() {
         phoneNo = phoneText.getText().toString();
         message = messageText.getText().toString();
 
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.SEND_SMS)
-                != PackageManager.PERMISSION_GRANTED){
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.SEND_SMS)){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+                == PackageManager.PERMISSION_GRANTED){
+            //Permission granted, proceed to send message
+            try {
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(phoneNo, null, message, null, null);
+                Toast.makeText(getApplicationContext(), "Sent", Toast.LENGTH_LONG).show();
             }
-
-            else{
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.SEND_SMS},
-                        SEND_PERMISSION);
-            }
+            catch(Exception e){}
+        }
+        else{
+            //Ask the user to enable SMS permissions
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.SEND_SMS},
+                    SEND_PERMISSION);
         }
     }
 
-    /*
-    onRequestPermissionResult
-    - Override that checks if permission has been granted
-    - If so, send the message string to the number stored in the phone string
-    - Displays Toast pop-up message to indicate if the message was sent
-     */
+    //Override called after requestPermissions
+    //If permission granted, send messages
+    //If not, display Toast pop-up indicating failure
     @Override
     public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
         switch (requestCode){
