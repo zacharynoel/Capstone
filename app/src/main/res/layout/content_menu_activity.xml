@@ -7,9 +7,20 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".menu_activity"
     tools:showIn="@layout/app_bar_menu_activity">
+
     <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/artisanList"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="469dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/add_artisan_btn" />
+
+    <Button
+        android:id="@+id/add_artisan_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="addNewArtisan"
+        android:text="Add New Artisan"
+        app:layout_constraintBottom_toTopOf="@+id/artisanList"
+        tools:layout_editor_absoluteX="0dp" />
 </android.support.constraint.ConstraintLayout>

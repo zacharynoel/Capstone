@@ -55,6 +55,14 @@
             android:name=".Send_message"
             android:label="@string/title_activity_send_message"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AddArtisanActivity"
+            android:label="@string/addartisan_name"
+            android:parentActivityName=".menu_activity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.varuns.capstone.menu_activity" />
+        </activity>
         <activity android:name=".EditProduct"></activity>
     </application>
 
