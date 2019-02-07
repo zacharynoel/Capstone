@@ -55,6 +55,7 @@
         android:text="✎"
         android:textColor="@android:color/background_light"
         android:textSize="25dp"
-        android:paddingBottom="11dp"/>
+        android:paddingBottom="11dp"
+        android:onClick="editProductClick"/>
 
 </RelativeLayout>
