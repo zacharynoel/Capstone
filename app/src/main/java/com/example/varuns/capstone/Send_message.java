@@ -1,7 +1,5 @@
 package com.example.varuns.capstone;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.Manifest;
@@ -15,14 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import com.google.gson.internal.bind.JsonAdapterAnnotationTypeAdapterFactory;
-
 import java.util.ArrayList;
 
 public class Send_message extends AppCompatActivity implements View.OnClickListener {
 
+    //Global to denote if SMS permissions enabled
     private static final int SEND_PERMISSION = 0;
+
     Button sendButton;
     EditText phoneText;
     EditText messageText;
@@ -30,6 +27,7 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
     String phoneNo;
     String message;
 
+    //Used to populate ListView
     ArrayList<String> messages = new ArrayList<>();
 
     @Override
@@ -75,6 +73,7 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    //If permissions are granted, process sending the message
     public void processMessage(){
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(phoneNo, null, message, null, null);
@@ -87,7 +86,7 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
     }
 
     //Override called after requestPermissions
-    //If permission granted, send messages
+    //If permission granted (for first message after asking), send messages
     //If not, display Toast pop-up indicating failure
     @Override
     public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {

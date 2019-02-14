@@ -48,7 +48,7 @@ public class ScrollingActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myintent = new Intent(ScrollingActivity.this, Messages.class);
+                Intent myintent = new Intent(ScrollingActivity.this, Send_message.class);
                 startActivity(myintent);
             }
         });
