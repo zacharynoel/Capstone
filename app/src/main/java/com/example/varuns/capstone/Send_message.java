@@ -29,6 +29,7 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
 
     //Used to populate ListView
     ArrayList<String> messages = new ArrayList<>();
+    ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,6 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
         savedText = findViewById(R.id.listText);
 
         sendButton.setOnClickListener(this);
-        messageText.setOnClickListener(this);
     }
 
     //Calls sendMessage then clears the message body
@@ -50,20 +50,25 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
         messageText.getText().clear();
     }
 
-
     //Retrieves the entered phone number and message
     //Checks permissions to send SMS
     protected void sendMessage() {
         phoneNo = phoneText.getText().toString();
         message = messageText.getText().toString();
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+        if(!phoneNo.matches("\\d+")) {
+            Toast.makeText(getApplicationContext(),
+                    "Could not send, phone number is not an integer", Toast.LENGTH_LONG).show();
+        }
+        else if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
                 == PackageManager.PERMISSION_GRANTED){
             //Permission granted, proceed to send message
             try {
                 processMessage();
             }
-            catch(Exception e){}
+            catch(Exception e){
+                System.out.println("Could not handle message processing request");
+            }
         }
         else{
             //Ask the user to enable SMS permissions
@@ -80,7 +85,7 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
         Toast.makeText(getApplicationContext(), "Sent", Toast.LENGTH_LONG).show();
         messages.add(message);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+        adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, messages);
         savedText.setAdapter(adapter);
     }
@@ -98,7 +103,7 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
                 }
                 else{
                     Toast.makeText(getApplicationContext(),
-                            "Could Not Send", Toast.LENGTH_LONG).show();
+                            "Could not send, must enable SMS Permissions", Toast.LENGTH_LONG).show();
                 }
             }
         }
