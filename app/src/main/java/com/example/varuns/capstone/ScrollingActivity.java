@@ -29,8 +29,12 @@ import retrofit2.Response;
 
 public class ScrollingActivity extends AppCompatActivity {
 
-    Artisan artisan;
-    TextView artisanBio;
+    static Artisan artisan;
+    private static ArtisanProductAdapter artisanProductAdapterGlobal;
+    static TextView artisanBio;
+    static TextView artisanName;
+    static TextView prodName;
+    static TextView prodDesc;
     private Integer[] artisanImages = {R.drawable.maria, R.drawable.native5, R.drawable.native3 };
 
 
@@ -53,9 +57,15 @@ public class ScrollingActivity extends AppCompatActivity {
             }
         });
         artisanBio = (TextView) findViewById(R.id.artisanBio);
+        artisanName = (TextView) findViewById(R.id.artisanName);
         Integer artisanId = getIntent().getExtras().getInt("artisanId");
         getArtisanById(artisanId);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     public void editProductClick(View v)
@@ -67,6 +77,20 @@ public class ScrollingActivity extends AppCompatActivity {
         Intent intent = new Intent(ScrollingActivity.this, EditProduct.class);
         intent.putExtra("artisanId", artisan.getArtisanId());
         intent.putExtra("itemId", position);
+        prodName = (TextView) parentRow.findViewById(R.id.itemName);
+        prodDesc = (TextView) parentRow.findViewById(R.id.itemDescription);
+        startActivity(intent);
+    }
+
+    public void editArtisanClick(View v){
+        Intent intent = new Intent(ScrollingActivity.this, EditArtisan.class);
+        intent.putExtra("artisanId", artisan.getArtisanId());
+        startActivity(intent);
+    }
+
+    public void addItemClick(View v){
+        Intent intent = new Intent(ScrollingActivity.this, AddProduct.class);
+        intent.putExtra("artisanId", artisan.getArtisanId());
         startActivity(intent);
     }
 
@@ -101,6 +125,10 @@ public class ScrollingActivity extends AppCompatActivity {
 
     }
 
+    public static ArtisanProductAdapter getAdapter(){
+        return artisanProductAdapterGlobal;
+    }
+
     class ArtisanProductAdapter extends BaseAdapter {
 
         List<ArtisanItem> artisanItems;
@@ -116,8 +144,9 @@ public class ScrollingActivity extends AppCompatActivity {
         public ArtisanItem getItem(int i) {
             return artisanItems.get(i);
         }
+        public void addItem(ArtisanItem artisanItem) { artisanItems.add(artisanItem);}
         public long getItemId(int i) {
-            return 0;
+            return artisanItems.get(i).getItemId();
         }
         public View getView(int i, View view, ViewGroup viewGroup) {
             view = getLayoutInflater().inflate(R.layout.artisan_products_layout, null);

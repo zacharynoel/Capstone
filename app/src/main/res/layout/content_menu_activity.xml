@@ -22,5 +22,5 @@
         android:onClick="addNewArtisan"
         android:text="Add New Artisan"
         app:layout_constraintBottom_toTopOf="@+id/artisanList"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>
