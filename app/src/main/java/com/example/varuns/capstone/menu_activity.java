@@ -53,6 +53,7 @@ public class menu_activity extends AppCompatActivity
          SearchView.OnQueryTextListener {
 
     private ListView artisanList;
+    static TextView artName;
     private static ArtisanAdapter artisanAdapterGlobal;
     private Integer[] artisanImages = { R.drawable.maria, R.drawable.native5, R.drawable.native3 };
 
@@ -83,6 +84,7 @@ public class menu_activity extends AppCompatActivity
                 Artisan artisan = (Artisan) parent.getAdapter().getItem(position);
                 Intent intent = new Intent(menu_activity.this, ScrollingActivity.class);
                 intent.putExtra("artisanId", artisan.getArtisanId());
+                artName = (TextView) view.findViewById(R.id.artisanName);
                 startActivity(intent);
             }
         });
