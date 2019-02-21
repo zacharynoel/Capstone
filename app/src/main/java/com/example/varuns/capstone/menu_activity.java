@@ -26,6 +26,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,12 +37,14 @@ import com.example.varuns.capstone.services.RestfulResponse;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Comparator;
+import java.util.ArrayList;
+
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import java.util.List;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
@@ -115,8 +118,23 @@ public class menu_activity extends AppCompatActivity
     public boolean onQueryTextChange(String query) {
         //whenever the user changes the text within the search bar, filter artisans
         artisanAdapterGlobal.getFilter().filter(query);
-
         return true;
+    }
+
+    public void onFilterAlphabeticallyPressed() {
+        artisanAdapterGlobal.sortAlphabetically();
+    }
+
+    public void onFilterByDatePressed() {
+        artisanAdapterGlobal.sortByDate();
+    }
+
+    public void onFilterByItemCountPressed() {
+        artisanAdapterGlobal.sortByNumberOfItems();
+    }
+
+    public void onFilterByProductsSoldPressed() {
+        artisanAdapterGlobal.sortByProductsSold();
     }
 
     String itemNameT = "Teddy Bear";
@@ -210,6 +228,30 @@ public class menu_activity extends AppCompatActivity
             return true;
         }
 
+        if (id == R.id.sort_alpha) {
+            item.setChecked(true);
+            artisanAdapterGlobal.sortAlphabetically();
+            return true;
+        }
+
+        if (id == R.id.sort_date) {
+            item.setChecked(true);
+            artisanAdapterGlobal.sortByDate();
+            return true;
+        }
+
+        if (id == R.id.sort_items) {
+            item.setChecked(true);
+            artisanAdapterGlobal.sortByNumberOfItems();
+            return true;
+        }
+
+        if (id == R.id.sort_products) {
+            item.setChecked(true);
+            artisanAdapterGlobal.sortByProductsSold();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -266,6 +308,34 @@ public class menu_activity extends AppCompatActivity
         List<Artisan> artisans;
         List<Artisan> filteredArtisans;
         private ArtisanFilter artisanFilter;
+
+        private class AlphabeticSort implements Comparator<Artisan> {
+            public int compare(Artisan a1, Artisan a2) {
+                return (a1.getFirstName() + a1.getLastName())
+                        .compareTo(a2.getFirstName() + a2.getLastName());
+            }
+        }
+
+        private class ItemCountSort implements Comparator<Artisan> {
+            public int compare(Artisan a1, Artisan a2) {
+                return a1.getArtisanItems().size() - a2.getArtisanItems().size();
+            }
+        }
+
+        private class ProductCountSort implements Comparator<Artisan> {
+            public int compare(Artisan a1, Artisan a2) {
+                //TODO - don't currently keep track of sales
+                return 0;
+            }
+        }
+
+        private class DateAddedSort implements Comparator<Artisan> {
+            public int compare(Artisan a1, Artisan a2) {
+                //TODO - this works because artisan Id's are incremental,
+                // if this were to change this would break
+                return a1.getArtisanId() - a2.getArtisanId();
+            }
+        }
 
         private class ArtisanFilter extends Filter {
 
@@ -342,6 +412,26 @@ public class menu_activity extends AppCompatActivity
             }
         }
 
+        public void sortAlphabetically() {
+            filteredArtisans.sort(new AlphabeticSort());
+            notifyDataSetChanged();
+        }
+
+        public void sortByDate() {
+            filteredArtisans.sort(new DateAddedSort());
+            notifyDataSetChanged();
+        }
+
+        public void sortByNumberOfItems() {
+            filteredArtisans.sort(new ItemCountSort());
+            notifyDataSetChanged();
+        }
+
+        public void sortByProductsSold() {
+            filteredArtisans.sort(new ProductCountSort());
+            notifyDataSetChanged();
+        }
+
         @Override
         public Filter getFilter() {
             if (artisanFilter == null) {
@@ -382,7 +472,9 @@ public class menu_activity extends AppCompatActivity
             ImageView artisanImage = (ImageView)view.findViewById(R.id.artisanImage);
 
             TextView artisanName = (TextView)view.findViewById(R.id.artisanName);
-            artisanName.setText(filteredArtisans.get(i).getFirstName() + " " + filteredArtisans.get(i).getLastName());
+            artisanName.setText(filteredArtisans.get(i).getFirstName() + " "
+                    + filteredArtisans.get(i).getLastName());
+
             artisanImage.setImageResource(artisanImages[i%3]);
 
             return view;

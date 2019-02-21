@@ -8,8 +8,29 @@
         app:showAsAction="never" />
 
     <item android:id="@+id/action_search"
-        android:icon="@drawable/ic_search"
-        android:title="@string/action_search"
-        app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
+    android:icon="@drawable/ic_search"
+    android:title="@string/action_search"
+    app:showAsAction="ifRoom|collapseActionView"
+    app:actionViewClass="android.support.v7.widget.SearchView" />
+
+    <item android:id="@+id/action_sort"
+        android:icon="@drawable/baseline_sort_24"
+        android:title="Sort"
+        app:showAsAction="ifRoom|collapseActionView">
+            <menu xmlns:android="http://schemas.android.com/apk/res/android">
+                <item android:id="@+id/sort_title"
+                    android:title="Sort" />
+
+                <group android:checkableBehavior="single">
+                    <item android:id="@+id/sort_alpha"
+                        android:title="Alphabetically" />
+                    <item android:id="@+id/sort_date"
+                        android:title="By Date Added" />
+                    <item android:id="@+id/sort_items"
+                        android:title="By Number of Items" />
+                    <item android:id="@+id/sort_products"
+                        android:title="By Products Sold" />
+                </group>
+            </menu>
+    </item>
 </menu>
