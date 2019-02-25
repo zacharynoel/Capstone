@@ -320,7 +320,7 @@ public class menu_activity extends AppCompatActivity
 
         private class ItemCountSort implements Comparator<Artisan> {
             public int compare(Artisan a1, Artisan a2) {
-                return a1.getArtisanItems().size() - a2.getArtisanItems().size();
+                return a2.getArtisanItems().size() - a1.getArtisanItems().size();
             }
         }
 
