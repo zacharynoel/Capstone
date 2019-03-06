@@ -27,4 +27,9 @@ public class ApiService {
         return retrofit.create(UserService.class);
     }
 
+    public static ItemService itemService() {
+        Retrofit retrofit = getRetrofitInstance();
+        return retrofit.create(ItemService.class);
+    }
+
 }
