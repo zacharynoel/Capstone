@@ -1,9 +1,12 @@
 package com.example.varuns.capstone;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -46,6 +49,32 @@ public class EditProduct extends AppCompatActivity {
 
         getArtisanById(artisanId);
 
+        setupBottomNavigationView();
+    }
+
+    private void setupBottomNavigationView() {
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_home:
+                        Intent intent = new Intent(EditProduct.this, menu_activity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.navigation_dashboard:
+                        Intent intent1 = new Intent(EditProduct.this, Send_message.class);
+                        startActivity(intent1);
+                        break;
+                    case R.id.navigation_notifications:
+                        Intent intent2 = new Intent(EditProduct.this, Send_message.class);
+                        startActivity(intent2);
+                        break;
+
+                }
+                return true;
+            }
+        });
     }
 
     //this function takes the text inputted into the name and desc boxes and updates an ArtisanItem with it

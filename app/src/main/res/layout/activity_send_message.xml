@@ -38,4 +38,7 @@
         android:layout_alignParentBottom="true"
         android:text="Send" />
 
+
+
 </RelativeLayout>
+
