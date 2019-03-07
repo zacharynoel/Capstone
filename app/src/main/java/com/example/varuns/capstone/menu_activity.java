@@ -97,6 +97,7 @@ public class menu_activity extends AppCompatActivity
 
     private void setupBottomNavigationView() {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -105,7 +106,7 @@ public class menu_activity extends AppCompatActivity
                     Intent intent = new Intent(menu_activity.this, menu_activity.class);
                     startActivity(intent);
                     break;
-                    
+
                 case R.id.navigation_dashboard:
                     Intent intent1 = new Intent(menu_activity.this, Send_message.class);
                     startActivity(intent1);

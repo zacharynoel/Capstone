@@ -44,6 +44,7 @@ public class AddProduct extends AppCompatActivity {
 
     private void setupBottomNavigationView() {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -57,7 +58,7 @@ public class AddProduct extends AppCompatActivity {
                         startActivity(intent1);
                         break;
                     case R.id.navigation_notifications:
-                        Intent intent2 = new Intent(AddProduct.this, Send_message.class);
+                        Intent intent2 = new Intent(AddProduct.this, ReportsActivity.class);
                         startActivity(intent2);
                         break;
 

@@ -49,7 +49,7 @@ public class EditArtisan extends AppCompatActivity {
                         startActivity(intent1);
                         break;
                     case R.id.navigation_notifications:
-                        Intent intent2 = new Intent(EditArtisan.this, Send_message.class);
+                        Intent intent2 = new Intent(EditArtisan.this, ReportsActivity.class);
                         startActivity(intent2);
                         break;
 

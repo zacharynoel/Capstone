@@ -52,6 +52,7 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
 
     private void setupBottomNavigationView() {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -65,7 +66,7 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
                         startActivity(intent1);
                         break;
                     case R.id.navigation_notifications:
-                        Intent intent2 = new Intent(Send_message.this, Send_message.class);
+                        Intent intent2 = new Intent(Send_message.this, ReportsActivity.class);
                         startActivity(intent2);
                         break;
 
