@@ -2,10 +2,13 @@ package com.example.varuns.capstone;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -61,6 +64,32 @@ public class ScrollingActivity extends AppCompatActivity {
         Integer artisanId = getIntent().getExtras().getInt("artisanId");
         getArtisanById(artisanId);
 
+        setupBottomNavigationView();
+    }
+
+    private void setupBottomNavigationView() {
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_home:
+                        Intent intent = new Intent(ScrollingActivity.this, menu_activity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.navigation_dashboard:
+                        Intent intent1 = new Intent(ScrollingActivity.this, Send_message.class);
+                        startActivity(intent1);
+                        break;
+                    case R.id.navigation_notifications:
+                        Intent intent2 = new Intent(ScrollingActivity.this, Send_message.class);
+                        startActivity(intent2);
+                        break;
+
+                }
+                return true;
+            }
+        });
     }
 
     @Override
