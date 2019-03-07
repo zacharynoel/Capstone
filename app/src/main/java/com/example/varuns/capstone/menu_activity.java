@@ -1,9 +1,12 @@
 package com.example.varuns.capstone;
 
+import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.SearchView;
@@ -88,7 +91,35 @@ public class menu_activity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+
+        setupBottomNavigationView();
     }
+
+    private void setupBottomNavigationView() {
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    Intent intent = new Intent(menu_activity.this, menu_activity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.navigation_dashboard:
+                    Intent intent1 = new Intent(menu_activity.this, Send_message.class);
+                    startActivity(intent1);
+                    break;
+                case R.id.navigation_notifications:
+                    Intent intent2 = new Intent(menu_activity.this, Send_message.class);
+                    startActivity(intent2);
+                    break;
+
+            }
+                return true;
+        }
+    });
+}
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -414,21 +445,25 @@ public class menu_activity extends AppCompatActivity
             }
         }
 
+        @SuppressLint("NewApi")
         public void sortAlphabetically() {
             filteredArtisans.sort(new AlphabeticSort());
             notifyDataSetChanged();
         }
 
+        @SuppressLint("NewApi")
         public void sortByDate() {
             filteredArtisans.sort(new DateAddedSort());
             notifyDataSetChanged();
         }
 
+        @SuppressLint("NewApi")
         public void sortByNumberOfItems() {
             filteredArtisans.sort(new ItemCountSort());
             notifyDataSetChanged();
         }
 
+        @SuppressLint("NewApi")
         public void sortByProductsSold() {
             filteredArtisans.sort(new ProductCountSort());
             notifyDataSetChanged();

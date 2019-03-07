@@ -1,7 +1,11 @@
 package com.example.varuns.capstone;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -35,6 +39,32 @@ public class AddProduct extends AppCompatActivity {
         itemname = (EditText) findViewById(R.id.addProductName);
         itemdesc = (EditText) findViewById(R.id.addProductDesc);
 
+        setupBottomNavigationView();
+    }
+
+    private void setupBottomNavigationView() {
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_home:
+                        Intent intent = new Intent(AddProduct.this, menu_activity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.navigation_dashboard:
+                        Intent intent1 = new Intent(AddProduct.this, Send_message.class);
+                        startActivity(intent1);
+                        break;
+                    case R.id.navigation_notifications:
+                        Intent intent2 = new Intent(AddProduct.this, Send_message.class);
+                        startActivity(intent2);
+                        break;
+
+                }
+                return true;
+            }
+        });
     }
 
     public void cancelAddProd(View v){
