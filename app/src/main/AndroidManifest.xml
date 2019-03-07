@@ -62,7 +62,8 @@
         </activity>
         <activity android:name=".EditProduct" />
         <activity android:name=".AddProduct" />
-        <activity android:name=".EditArtisan"></activity>
+        <activity android:name=".EditArtisan" />
+        <activity android:name=".ReportsActivity"></activity>
     </application>
 
 </manifest>

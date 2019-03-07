@@ -105,12 +105,14 @@ public class menu_activity extends AppCompatActivity
                     Intent intent = new Intent(menu_activity.this, menu_activity.class);
                     startActivity(intent);
                     break;
+                    
                 case R.id.navigation_dashboard:
                     Intent intent1 = new Intent(menu_activity.this, Send_message.class);
                     startActivity(intent1);
                     break;
+
                 case R.id.navigation_notifications:
-                    Intent intent2 = new Intent(menu_activity.this, Send_message.class);
+                    Intent intent2 = new Intent(menu_activity.this, ReportsActivity.class);
                     startActivity(intent2);
                     break;
 
