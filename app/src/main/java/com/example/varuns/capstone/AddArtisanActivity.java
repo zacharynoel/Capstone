@@ -90,6 +90,7 @@ public class AddArtisanActivity extends AppCompatActivity {
         artisan.setFirstName(names[0]);
         artisan.setLastName(names[1]);
         artisan.setBio(bio);
+        artisan.setPhoneNo(phoneNumber);
 
         //call save artisan function of artisan service
         //when saving what ever you saved is returned with updated ids and other fields
