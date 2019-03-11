@@ -125,6 +125,12 @@ public class ScrollingActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void onReportClick(View v){
+        Intent intent = new Intent(ScrollingActivity.this, ReportsActivity.class);
+        intent.putExtra("artisanId", artisan.getArtisanId());
+        startActivity(intent);
+    }
+
     private void getArtisanById(final Integer artisanId) {
 
         Call<RestfulResponse<Artisan>> call = ApiService.artisanService().getArtisanById(artisanId.toString());

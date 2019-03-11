@@ -96,9 +96,17 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         setupBottomNavigationView();
 
         List<Artisan> artisansList = menu_activity.getAdapter().getArtisans();
-        List<String> artisanStrings = new ArrayList<>();
-        for (Artisan a : artisansList) {
-            artisanStrings.add(a.getFirstName() + " " + a.getLastName());
+
+        //If the artisan was manually selected, then make sure it is selected within the spinner
+        if (this.getIntent().getExtras() != null) {
+            Integer artisanId = this.getIntent().getExtras().getInt("artisanId");
+            for (Artisan a : artisansList) {
+                if (a.getArtisanId() == artisanId) {
+                    artisansList.remove(a);
+                    artisansList.add(0, a);
+                    break;
+                }
+            }
         }
 
         Spinner spinner = (Spinner) findViewById(R.id.artisans_spinner);
