@@ -66,4 +66,8 @@ public class Artisan {
     public String getPhoneNo(){ return phoneNo; }
 
     public void setPhoneNo(String phoneNo){ this.phoneNo = phoneNo; }
+
+    public String toString() {
+        return firstName + " " + lastName;
+    }
 }

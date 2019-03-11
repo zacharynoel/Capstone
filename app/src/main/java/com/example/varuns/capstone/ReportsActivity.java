@@ -9,6 +9,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Filterable;
@@ -25,6 +27,7 @@ import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -33,7 +36,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReportsActivity extends AppCompatActivity {
+public class ReportsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    private GraphView graph;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +61,6 @@ public class ReportsActivity extends AppCompatActivity {
         calendar.add(Calendar.DATE, 1);
         Date d7 = calendar.getTime();
 
-
-        GraphView graph = (GraphView) findViewById(R.id.graph);
-
 // you can directly pass Date objects to DataPoint-Constructor
 // this will convert the Date to double via Date#getTime()
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
@@ -70,6 +72,8 @@ public class ReportsActivity extends AppCompatActivity {
                 new DataPoint(d6, 3),
                 new DataPoint(d7, 6)
         });
+
+        graph = (GraphView) findViewById(R.id.graph);
 
         graph.addSeries(series);
 
@@ -91,14 +95,22 @@ public class ReportsActivity extends AppCompatActivity {
 
         setupBottomNavigationView();
 
-        /*Spinner spinner = (Spinner) findViewById(R.id.spinner);
-// Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.values.fake_artisans, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
+        List<Artisan> artisansList = menu_activity.getAdapter().getArtisans();
+        List<String> artisanStrings = new ArrayList<>();
+        for (Artisan a : artisansList) {
+            artisanStrings.add(a.getFirstName() + " " + a.getLastName());
+        }
+
+        Spinner spinner = (Spinner) findViewById(R.id.artisans_spinner);
+    // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<Artisan> adapter = new ArrayAdapter<Artisan>(this,
+                android.R.layout.simple_spinner_item, artisansList);
+
+    // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
-        spinner.setAdapter(adapter);*/
+    // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
 
         //getArtisans();
     }
@@ -150,5 +162,18 @@ public class ReportsActivity extends AppCompatActivity {
                 Toast.makeText(ReportsActivity.this, "failure", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        Artisan current = (Artisan)parent.getItemAtPosition(pos);
+        if (graph != null) {
+            graph.removeAllSeries();
+        }
+        //TODO - add new series from the current artisan
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
     }
 }

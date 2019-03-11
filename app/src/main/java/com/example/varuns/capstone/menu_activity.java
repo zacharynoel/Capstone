@@ -79,7 +79,7 @@ public class menu_activity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         artisanList = (ListView)findViewById(R.id.artisanList);
 
-        getArtisans();
+        getArtisansNoDB();
         artisanList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -206,21 +206,20 @@ public class menu_activity extends AppCompatActivity
 
     private String placeHolderText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
 
-    /*
+
     public void getArtisansNoDB() {
         List<Artisan> artisans = new ArrayList<Artisan>();
         //Integer artisanId, String firstName, String lastName, String bio, List<ArtisanItem> artisanItems
         for (int i = 0; i < nameDB.length; i++) {
             ArrayList<ArtisanItem> items = new ArrayList<>();
             items.add(new ArtisanItem(i, 0, itemNameT, itemDescT));
-            artisans.add(new Artisan(i, nameDB[i], nameDBLast[i], placeHolderText, items));
+            artisans.add(new Artisan(i, nameDB[i], nameDBLast[i], placeHolderText, items, "fake"));
         }
 
         menu_activity.ArtisanAdapter artisanAdapter = new menu_activity.ArtisanAdapter(artisans);
         artisanAdapterGlobal = artisanAdapter;
         artisanList.setAdapter(artisanAdapter);
     }
-    */
 
     public void getArtisans() {
         Call<RestfulResponse<List<Artisan>>> call = ApiService.artisanService().getAllArtisans();
