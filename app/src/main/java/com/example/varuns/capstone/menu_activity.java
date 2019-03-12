@@ -69,11 +69,11 @@ public class menu_activity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        /*DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer,
            toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        toggle.syncState();*/
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -228,7 +228,7 @@ public class menu_activity extends AppCompatActivity
             @Override
             public void onResponse(Call<RestfulResponse<List<Artisan>>> call, Response<RestfulResponse<List<Artisan>>> response) {
                 List<Artisan> artisans = response.body().getData();
-                Toast.makeText(menu_activity.this, "success", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(menu_activity.this, "success", Toast.LENGTH_SHORT).show();
                 menu_activity.ArtisanAdapter artisanAdapter = new menu_activity.ArtisanAdapter(artisans);
                 artisanList.setAdapter(artisanAdapter);
                 artisanAdapterGlobal = artisanAdapter;

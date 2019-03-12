@@ -31,12 +31,12 @@ public class AddArtisanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Add New Artisan");
         setContentView(R.layout.activity_add_artisan);
 
         editName = (EditText) findViewById(R.id.editName);
         editPhoneNumber = (EditText) findViewById(R.id.editPhoneNumber);
         editBio = (EditText) findViewById(R.id.editBio);
-
 
         setupBottomNavigationView();
     }
@@ -66,9 +66,6 @@ public class AddArtisanActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
 
     public void addNewArtisan(View view) {
         if (!verifyFields()) {
