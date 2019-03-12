@@ -8,6 +8,7 @@ public class Artisan {
     String firstName;
     String lastName;
     String bio;
+    String phoneNo;
     List<ArtisanItem> artisanItems;
 
     public Artisan(Integer artisanId, String firstName, String lastName, String bio, List<ArtisanItem> artisanItems) {
@@ -59,5 +60,13 @@ public class Artisan {
 
     public void setArtisanItems(List<ArtisanItem> artisanItems) {
         this.artisanItems = artisanItems;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
     }
 }

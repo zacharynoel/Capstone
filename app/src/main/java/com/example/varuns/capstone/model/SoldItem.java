@@ -2,11 +2,12 @@ package com.example.varuns.capstone.model;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
 
 public class SoldItem {
 
         private Integer soldItemId;
-        private Timestamp dateSold;
+        private Date dateSold;
         private Integer ArtisanId;
         private Integer itemId;
         private BigDecimal price;
@@ -20,11 +21,11 @@ public class SoldItem {
             this.soldItemId = soldItemId;
         }
 
-        public Timestamp getDateSold() {
+        public Date getDateSold() {
             return dateSold;
         }
 
-        public void setDateSold(Timestamp dateSold) {
+        public void setDateSold(Date dateSold) {
             this.dateSold = dateSold;
         }
 
