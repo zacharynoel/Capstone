@@ -10,7 +10,6 @@ public class Artisan {
     String bio;
     String phoneNo;
     List<ArtisanItem> artisanItems;
-    String phoneNo;
 
     public Artisan(Integer artisanId, String firstName, String lastName, String bio, List<ArtisanItem> artisanItems, String phoneNo) {
         this.artisanItems = artisanItems;
@@ -70,9 +69,5 @@ public class Artisan {
 
     public String toString() {
         return firstName + " " + lastName;
-    }
-  
-    public String getPhoneNo() {
-        return phoneNo;
     }
 }

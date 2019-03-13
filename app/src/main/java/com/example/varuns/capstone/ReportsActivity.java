@@ -54,8 +54,6 @@ import retrofit2.Response;
 public class ReportsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private GraphView graph;
-
-    private GraphView graph;
     private ListView reportList;
     private ListView soldItemList;
     private Button backButton;
@@ -105,8 +103,6 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         Date d6 = calendar.getTime();
         calendar.add(Calendar.DATE, 1);
         Date d7 = calendar.getTime();
-
-        this.graph = (GraphView) findViewById(R.id.graph);
       
 // you can directly pass Date objects to DataPoint-Constructor
 // this will convert the Date to double via Date#getTime()
