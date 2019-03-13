@@ -50,19 +50,20 @@ public class ScrollingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        artisanBio = (TextView) findViewById(R.id.artisanBio);
+        artisanName = (TextView) findViewById(R.id.artisanName);
+        Integer artisanId = getIntent().getExtras().getInt("artisanId");
+        getArtisanById(artisanId);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent myintent = new Intent(ScrollingActivity.this, Send_message.class);
+                myintent.putExtra("phoneNo", artisan.getPhoneNo());
                 startActivity(myintent);
             }
         });
-        artisanBio = (TextView) findViewById(R.id.artisanBio);
-        artisanName = (TextView) findViewById(R.id.artisanName);
-        Integer artisanId = getIntent().getExtras().getInt("artisanId");
-        getArtisanById(artisanId);
 
         setupBottomNavigationView();
     }
@@ -120,6 +121,12 @@ public class ScrollingActivity extends AppCompatActivity {
 
     public void addItemClick(View v){
         Intent intent = new Intent(ScrollingActivity.this, AddProduct.class);
+        intent.putExtra("artisanId", artisan.getArtisanId());
+        startActivity(intent);
+    }
+
+    public void onReportClick(View v){
+        Intent intent = new Intent(ScrollingActivity.this, ReportsActivity.class);
         intent.putExtra("artisanId", artisan.getArtisanId());
         startActivity(intent);
     }

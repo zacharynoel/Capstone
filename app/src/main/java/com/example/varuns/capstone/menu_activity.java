@@ -69,11 +69,11 @@ public class menu_activity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        /*DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer,
            toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        toggle.syncState();*/
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -206,13 +206,14 @@ public class menu_activity extends AppCompatActivity
 
     private String placeHolderText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
 
+
     public void getArtisansNoDB() {
         List<Artisan> artisans = new ArrayList<Artisan>();
         //Integer artisanId, String firstName, String lastName, String bio, List<ArtisanItem> artisanItems
         for (int i = 0; i < nameDB.length; i++) {
             ArrayList<ArtisanItem> items = new ArrayList<>();
             items.add(new ArtisanItem(i, 0, itemNameT, itemDescT));
-            artisans.add(new Artisan(i, nameDB[i], nameDBLast[i], placeHolderText, items));
+            artisans.add(new Artisan(i, nameDB[i], nameDBLast[i], placeHolderText, items, "fake"));
         }
 
         menu_activity.ArtisanAdapter artisanAdapter = new menu_activity.ArtisanAdapter(artisans);
@@ -227,7 +228,7 @@ public class menu_activity extends AppCompatActivity
             @Override
             public void onResponse(Call<RestfulResponse<List<Artisan>>> call, Response<RestfulResponse<List<Artisan>>> response) {
                 List<Artisan> artisans = response.body().getData();
-                Toast.makeText(menu_activity.this, "success", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(menu_activity.this, "success", Toast.LENGTH_SHORT).show();
                 menu_activity.ArtisanAdapter artisanAdapter = new menu_activity.ArtisanAdapter(artisans);
                 artisanList.setAdapter(artisanAdapter);
                 artisanAdapterGlobal = artisanAdapter;

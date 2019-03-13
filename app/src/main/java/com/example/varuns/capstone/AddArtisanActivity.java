@@ -31,12 +31,12 @@ public class AddArtisanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Add New Artisan");
         setContentView(R.layout.activity_add_artisan);
 
         editName = (EditText) findViewById(R.id.editName);
         editPhoneNumber = (EditText) findViewById(R.id.editPhoneNumber);
         editBio = (EditText) findViewById(R.id.editBio);
-
 
         setupBottomNavigationView();
     }
@@ -67,9 +67,6 @@ public class AddArtisanActivity extends AppCompatActivity {
         });
     }
 
-
-
-
     public void addNewArtisan(View view) {
         if (!verifyFields()) {
             //user has not correctly inputted all fields
@@ -90,6 +87,7 @@ public class AddArtisanActivity extends AppCompatActivity {
         artisan.setFirstName(names[0]);
         artisan.setLastName(names[1]);
         artisan.setBio(bio);
+        artisan.setPhoneNo(phoneNumber);
 
         //call save artisan function of artisan service
         //when saving what ever you saved is returned with updated ids and other fields

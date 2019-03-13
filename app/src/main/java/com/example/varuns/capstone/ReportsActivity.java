@@ -51,7 +51,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReportsActivity extends AppCompatActivity {
+public class ReportsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    private GraphView graph;
 
     private GraphView graph;
     private ListView reportList;
@@ -64,6 +66,7 @@ public class ReportsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reports);
+        setTitle("Reports");
 
         reportList = (ListView) findViewById(R.id.reportList);
         soldItemList = (ListView) findViewById(R.id.soldItemList);
@@ -103,9 +106,8 @@ public class ReportsActivity extends AppCompatActivity {
         calendar.add(Calendar.DATE, 1);
         Date d7 = calendar.getTime();
 
-
         this.graph = (GraphView) findViewById(R.id.graph);
-
+      
 // you can directly pass Date objects to DataPoint-Constructor
 // this will convert the Date to double via Date#getTime()
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
@@ -117,6 +119,8 @@ public class ReportsActivity extends AppCompatActivity {
                 new DataPoint(d6, 3),
                 new DataPoint(d7, 6)
         });
+
+        graph = (GraphView) findViewById(R.id.graph);
 
         graph.addSeries(series);
 
@@ -138,14 +142,30 @@ public class ReportsActivity extends AppCompatActivity {
 
         setupBottomNavigationView();
 
-        /*Spinner spinner = (Spinner) findViewById(R.id.spinner);
-// Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.values.fake_artisans, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
+        List<Artisan> artisansList = menu_activity.getAdapter().getArtisans();
+
+        //If the artisan was manually selected, then make sure it is selected within the spinner
+        if (this.getIntent().getExtras() != null) {
+            Integer artisanId = this.getIntent().getExtras().getInt("artisanId");
+            for (Artisan a : artisansList) {
+                if (a.getArtisanId() == artisanId) {
+                    artisansList.remove(a);
+                    artisansList.add(0, a);
+                    break;
+                }
+            }
+        }
+
+        Spinner spinner = (Spinner) findViewById(R.id.artisans_spinner);
+    // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<Artisan> adapter = new ArrayAdapter<Artisan>(this,
+                android.R.layout.simple_spinner_item, artisansList);
+
+    // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
-        spinner.setAdapter(adapter);*/
+    // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
 
         getArtisans();
     }
@@ -231,6 +251,18 @@ public class ReportsActivity extends AppCompatActivity {
         });
     }
 
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        Artisan current = (Artisan)parent.getItemAtPosition(pos);
+        if (graph != null) {
+            graph.removeAllSeries();
+        }
+        //TODO - add new series from the current artisan
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
+    }
 
     private class SoldItemAdapter extends BaseAdapter {
 

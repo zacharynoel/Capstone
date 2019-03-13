@@ -10,13 +10,15 @@ public class Artisan {
     String bio;
     String phoneNo;
     List<ArtisanItem> artisanItems;
+    String phoneNo;
 
-    public Artisan(Integer artisanId, String firstName, String lastName, String bio, List<ArtisanItem> artisanItems) {
+    public Artisan(Integer artisanId, String firstName, String lastName, String bio, List<ArtisanItem> artisanItems, String phoneNo) {
         this.artisanItems = artisanItems;
         this.artisanId = artisanId;
         this.firstName = firstName;
         this.bio = bio;
         this.lastName = lastName;
+        this.phoneNo = phoneNo;
     }
 
     public Artisan() {
@@ -62,11 +64,15 @@ public class Artisan {
         this.artisanItems = artisanItems;
     }
 
+    public String getPhoneNo(){ return phoneNo; }
+
+    public void setPhoneNo(String phoneNo){ this.phoneNo = phoneNo; }
+
+    public String toString() {
+        return firstName + " " + lastName;
+    }
+  
     public String getPhoneNo() {
         return phoneNo;
-    }
-
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
     }
 }

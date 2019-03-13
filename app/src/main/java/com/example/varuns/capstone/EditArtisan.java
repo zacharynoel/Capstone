@@ -24,11 +24,13 @@ public class EditArtisan extends AppCompatActivity {
     Artisan artisan;
     EditText nameinput;
     EditText bioinput;
+    EditText phoneinput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_artisan);
+        setTitle("Edit Artisan");
         int id = this.getIntent().getExtras().getInt("artisanId");
         getArtisanById(id);
         setupBottomNavigationView();
@@ -69,6 +71,7 @@ public class EditArtisan extends AppCompatActivity {
         artisan.setFirstName(names[0]);
         artisan.setLastName(names[1]);
         artisan.setBio(bioinput.getText().toString());
+        artisan.setPhoneNo(phoneinput.getText().toString());
 
         //call save artisan function of artisan service
         //when saving what ever you saved is returned with updated ids and other fields
@@ -104,8 +107,10 @@ public class EditArtisan extends AppCompatActivity {
 
                 nameinput = (EditText) findViewById(R.id.editName2);
                 bioinput = (EditText) findViewById(R.id.editBio2);
+                phoneinput = (EditText) findViewById(R.id.editPhoneNumber2);
                 nameinput.setText(artisan.getFirstName()+" "+artisan.getLastName());
                 bioinput.setText(artisan.getBio());
+                phoneinput.setText(artisan.getPhoneNo());
             }
 
             @Override

@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 
@@ -42,6 +43,12 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
 
         sendButton = findViewById(R.id.sendText);
         phoneText = findViewById(R.id.phoneText);
+        try {
+            if (getIntent().getExtras().getString("phoneNo").length() != 0)
+                phoneText.setText(getIntent().getExtras().getString("phoneNo"), TextView.BufferType.EDITABLE);
+        }catch (Exception e){
+            System.out.println("Could not set Artisan's phone number");
+        }
         messageText = findViewById(R.id.messageText);
         savedText = findViewById(R.id.listText);
 

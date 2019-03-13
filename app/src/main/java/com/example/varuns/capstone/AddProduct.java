@@ -32,6 +32,7 @@ public class AddProduct extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
+        setTitle("Add Product");
 
         id = this.getIntent().getExtras().getInt("artisanId");
         getArtisanById(id);
