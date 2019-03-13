@@ -8,6 +8,7 @@ public class Artisan {
     String firstName;
     String lastName;
     String bio;
+    String phoneNo;
     List<ArtisanItem> artisanItems;
     String phoneNo;
 
@@ -69,5 +70,9 @@ public class Artisan {
 
     public String toString() {
         return firstName + " " + lastName;
+    }
+  
+    public String getPhoneNo() {
+        return phoneNo;
     }
 }
