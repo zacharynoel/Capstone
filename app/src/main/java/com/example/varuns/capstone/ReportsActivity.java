@@ -231,7 +231,6 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPointsArr);
         this.graph.addSeries(series);
 
-
         return soldItems;
     }
 
@@ -261,7 +260,13 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         Artisan current = (Artisan)parent.getItemAtPosition(pos);
 
         graph.removeAllSeries();
-        createGraphData(mapArtisanIdToSoldItems.get(current.getArtisanId()));
+        List<SoldItem> soldItems = mapArtisanIdToSoldItems.get(current.getArtisanId());
+        if (!(soldItems == null) && !soldItems.isEmpty())
+            createGraphData(soldItems);
+        else {
+            soldItems = new ArrayList<SoldItem>();
+            createGraphData(soldItems);
+        }
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
