@@ -45,6 +45,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -59,6 +60,9 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
     private Button backButton;
     private static ReportsActivity.ReportAdapter reportAdapterGlobal;
 
+    Date d1, d2, d3, d4, d5;
+
+    HashMap<Integer, List<SoldItem>> mapArtisanIdToSoldItems = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,35 +94,33 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
 
         // generate Dates
         Calendar calendar = Calendar.getInstance();
-        Date d1 = calendar.getTime();
+        calendar.set(Calendar.HOUR_OF_DAY, 16);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.add(Calendar.DATE, -1);
+        calendar.add(Calendar.DATE, -1);
+        calendar.add(Calendar.DATE, -1);
+        d1 = calendar.getTime();
         calendar.add(Calendar.DATE, 1);
-        Date d2 = calendar.getTime();
+        d2 = calendar.getTime();
         calendar.add(Calendar.DATE, 1);
-        Date d3 = calendar.getTime();
+        d3 = calendar.getTime();
         calendar.add(Calendar.DATE, 1);
-        Date d4 = calendar.getTime();
+        d4 = calendar.getTime();
         calendar.add(Calendar.DATE, 1);
-        Date d5 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d6 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d7 = calendar.getTime();
+        d5 = calendar.getTime();
       
 // you can directly pass Date objects to DataPoint-Constructor
 // this will convert the Date to double via Date#getTime()
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
+        /*LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
                 new DataPoint(d1, 1),
                 new DataPoint(d2, 5),
                 new DataPoint(d3, 3),
                 new DataPoint(d4, 1),
                 new DataPoint(d5, 5),
-                new DataPoint(d6, 3),
-                new DataPoint(d7, 6)
         });
+        graph.addSeries(series);*/
 
         graph = (GraphView) findViewById(R.id.graph);
-
-        graph.addSeries(series);
 
         graph.setTitle("Products Sold");
 
@@ -126,7 +128,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         graph.getGridLabelRenderer().setNumHorizontalLabels(3);
 
         graph.getViewport().setMinX(d1.getTime());
-        graph.getViewport().setMaxX(d7.getTime());
+        graph.getViewport().setMaxX(d5.getTime());
         graph.getViewport().setXAxisBoundsManual(true);
 
         graph.getGridLabelRenderer().setNumVerticalLabels(7);
@@ -200,14 +202,21 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         });
     }
 
+    public void initMap(List<SoldItem> items) {
+        for (SoldItem si : items) {
+            if (!mapArtisanIdToSoldItems.containsKey(si.getArtisanId())) {
+                List<SoldItem> newList = new LinkedList<SoldItem>();
+                newList.add(si);
+                mapArtisanIdToSoldItems.put(si.getArtisanId(), newList);
+            } else {
+                mapArtisanIdToSoldItems.get(si.getArtisanId()).add(si);
+            }
+        }
+    }
+
     public List<SoldItem> createGraphData(List<SoldItem> soldItems) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//        Collections.sort(soldItems, new Comparator<SoldItem>() {
-//            @Override
-//            public int compare(SoldItem o1, SoldItem o2) {
-//                return o1.getDateSold().getTime() < o2.getDateSold().getTime() ? -1 : 1;
-//            }
-//        });
+
         ReportsActivity.ReportAdapter reportAdapter = new ReportsActivity.ReportAdapter(soldItems);
         reportList.setAdapter(reportAdapter);
         reportAdapterGlobal = reportAdapter;
@@ -216,8 +225,8 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         for (SoldItem si : soldItems) {
             dateLongs.add(si.getDateSold().getTime());
         }
-        DataPoint[] dataPointsArr = DateUtil.getDataPointsFromDates(dateLongs);
 
+        DataPoint[] dataPointsArr = DateUtil.getDataPointsFromDates(dateLongs);
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPointsArr);
         this.graph.addSeries(series);
@@ -233,7 +242,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
             @Override
             public void onResponse(Call<RestfulResponse<List<SoldItem>>> call, Response<RestfulResponse<List<SoldItem>>> response) {
                 List<SoldItem> soldItems = response.body().getData();
-                soldItems = createGraphData(soldItems);
+                initMap(soldItems);
 
                 Toast.makeText(ReportsActivity.this, "success", Toast.LENGTH_SHORT).show();
             }
@@ -250,10 +259,9 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
         Artisan current = (Artisan)parent.getItemAtPosition(pos);
-        if (graph != null) {
-            graph.removeAllSeries();
-        }
-        //TODO - add new series from the current artisan
+
+        graph.removeAllSeries();
+        createGraphData(mapArtisanIdToSoldItems.get(current.getArtisanId()));
     }
 
     public void onNothingSelected(AdapterView<?> parent) {

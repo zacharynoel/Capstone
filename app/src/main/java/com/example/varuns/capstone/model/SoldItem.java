@@ -8,7 +8,7 @@ public class SoldItem {
 
         private Integer soldItemId;
         private Date dateSold;
-        private Integer ArtisanId;
+        private Integer artisanId;
         private Integer itemId;
         private BigDecimal price;
         private String itemDescription;
@@ -30,11 +30,11 @@ public class SoldItem {
         }
 
         public Integer getArtisanId() {
-            return ArtisanId;
+            return artisanId;
         }
 
         public void setArtisanId(Integer artisanId) {
-            ArtisanId = artisanId;
+            this.artisanId = artisanId;
         }
 
         public Integer getItemId() {
