@@ -9,9 +9,7 @@
     <Spinner
         android:id="@+id/artisans_spinner"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="69dp"
-        app:layout_constraintBottom_toTopOf="@+id/graph"
+        android:layout_height="31dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -19,10 +17,10 @@
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="218dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="198dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/artisans_spinner" />
 
