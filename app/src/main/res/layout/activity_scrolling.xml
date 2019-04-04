@@ -122,7 +122,7 @@
     <ListView
         android:id="@+id/artisanProductList"
         android:layout_width="match_parent"
-        android:layout_height="115dp"
+        android:layout_height="255dp"
         android:layout_marginTop="365dp"></ListView>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,11 +21,12 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
+    <ImageView
+        android:id="@+id/imageView3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="94dp"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@drawable/handmade1" />
 
     <ScrollView
         android:id="@+id/login_form"
@@ -76,14 +78,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:background="@drawable/round_button"
                 android:text="Sign In"
+                android:textColor="@android:color/background_light"
                 android:textStyle="bold" />
 
             <Button
                 android:id="@+id/button4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Register" />
+                android:layout_marginTop="5dp"
+                android:background="@drawable/round_button"
+                android:text="Register"
+                android:textColor="@android:color/background_light" />
 
         </LinearLayout>
     </ScrollView>

@@ -71,8 +71,10 @@
         android:layout_marginStart="51dp"
         android:layout_marginLeft="51dp"
         android:layout_marginTop="64dp"
-        android:text="Cancel"
+        android:background="@drawable/round_button"
         android:onClick="cancelEdit"
+        android:text="Cancel"
+        android:textColor="@android:color/background_light"
         app:layout_constraintStart_toEndOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
@@ -83,8 +85,10 @@
         android:layout_marginStart="58dp"
         android:layout_marginLeft="58dp"
         android:layout_marginTop="64dp"
-        android:text="Submit"
+        android:background="@drawable/round_button"
         android:onClick="saveItem"
+        android:text="Submit"
+        android:textColor="@android:color/background_light"
         app:layout_constraintStart_toEndOf="@+id/cancelEdit"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
