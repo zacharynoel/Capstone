@@ -47,6 +47,8 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import java.util.LinkedList;
 import java.util.List;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
@@ -58,7 +60,7 @@ public class menu_activity extends AppCompatActivity
     private ListView artisanList;
     static TextView artName;
     private static ArtisanAdapter artisanAdapterGlobal;
-    private Integer[] artisanImages = { R.drawable.maria, R.drawable.native5, R.drawable.native3 };
+    public Integer[] artisanImages = { R.drawable.maria, R.drawable.native5, R.drawable.native3 };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,7 +218,7 @@ public class menu_activity extends AppCompatActivity
             artisans.add(new Artisan(i, nameDB[i], nameDBLast[i], placeHolderText, items, "fake"));
         }
 
-        menu_activity.ArtisanAdapter artisanAdapter = new menu_activity.ArtisanAdapter(artisans);
+        ArtisanAdapter artisanAdapter = new ArtisanAdapter(this, artisans);
         artisanAdapterGlobal = artisanAdapter;
         artisanList.setAdapter(artisanAdapter);
     }
@@ -224,12 +226,13 @@ public class menu_activity extends AppCompatActivity
     public void getArtisans() {
         Call<RestfulResponse<List<Artisan>>> call = ApiService.artisanService().getAllArtisans();
         //handle the response
+        final Context context = this;
         call.enqueue(new Callback<RestfulResponse<List<Artisan>>>() {
             @Override
             public void onResponse(Call<RestfulResponse<List<Artisan>>> call, Response<RestfulResponse<List<Artisan>>> response) {
                 List<Artisan> artisans = response.body().getData();
-                //Toast.makeText(menu_activity.this, "success", Toast.LENGTH_SHORT).show();
-                menu_activity.ArtisanAdapter artisanAdapter = new menu_activity.ArtisanAdapter(artisans);
+                //Toast.makeText(menu_activity.this, "success", Toast.LENGTH_SHORT).show()
+                ArtisanAdapter artisanAdapter = new ArtisanAdapter(context, artisans);
                 artisanList.setAdapter(artisanAdapter);
                 artisanAdapterGlobal = artisanAdapter;
             }
@@ -326,8 +329,6 @@ public class menu_activity extends AppCompatActivity
         return true;
     }
 
-
-
     public static ArtisanAdapter getAdapter() {
         return artisanAdapterGlobal;
     }
@@ -338,187 +339,5 @@ public class menu_activity extends AppCompatActivity
     public void addNewArtisan(View view) {
         Intent intent = new Intent(this, AddArtisanActivity.class);
         startActivity(intent);
-    }
-
-    class ArtisanAdapter extends BaseAdapter implements Filterable {
-
-        List<Artisan> artisans;
-        List<Artisan> filteredArtisans;
-        private ArtisanFilter artisanFilter;
-
-        private class AlphabeticSort implements Comparator<Artisan> {
-            public int compare(Artisan a1, Artisan a2) {
-                return (a1.getFirstName() + a1.getLastName())
-                        .compareTo(a2.getFirstName() + a2.getLastName());
-            }
-        }
-
-        private class ItemCountSort implements Comparator<Artisan> {
-            public int compare(Artisan a1, Artisan a2) {
-                return a2.getArtisanItems().size() - a1.getArtisanItems().size();
-            }
-        }
-
-        private class ProductCountSort implements Comparator<Artisan> {
-            public int compare(Artisan a1, Artisan a2) {
-                //TODO - don't currently keep track of sales
-                return 0;
-            }
-        }
-
-        private class DateAddedSort implements Comparator<Artisan> {
-            public int compare(Artisan a1, Artisan a2) {
-                //TODO - this works because artisan Id's are incremental,
-                // if this were to change this would break
-                return a1.getArtisanId() - a2.getArtisanId();
-            }
-        }
-
-        private class ArtisanFilter extends Filter {
-
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                FilterResults filterResults = new FilterResults();
-
-                //case: user has queried a value
-                if (constraint != null && constraint.length() > 0) {
-                    ArrayList<Artisan> filtered = new ArrayList<>();
-
-                    constraint = constraint.toString().toLowerCase();
-                    String[] separated = ((String) constraint).split(" ");
-
-                    // search content in friend list
-                    for (Artisan a : artisans) {
-                        String first = a.getFirstName().toLowerCase();
-                        String last = a.getLastName().toLowerCase();
-
-                        //user only has searched whitespace
-                        if (separated.length == 0)
-                            break;
-
-                        boolean firstValid = true, lastValid = true;
-                        for (int i = 0; i < separated[0].length(); i++) {
-                            //check first whitespace separated query against first name
-                            if (first.length() <= i || 
-                                (separated[0].charAt(i) != first.charAt(i))) {
-                                firstValid = false;
-                            }
-
-                            //check first whitespace separated query against last name
-                            if (last.length() <= i || 
-                                (separated[0].charAt(i) != last.charAt(i))) {
-                                lastValid = false;
-                            }
-                        }
-
-                        //user searched 2 words - this assumes second word is last name
-                        if (separated.length >= 2) {
-                            lastValid = true;
-                            for (int i = 0; i < separated[1].length(); i++) {
-                                //check first whitespace separated query against last name
-                                if (last.length() <= i || 
-                                    (separated[1].charAt(i) != last.charAt(i))) {
-                                    lastValid = false;
-                                }
-                            }
-                        }
-
-                        if (firstValid || lastValid) {
-                            filtered.add(a);
-                        }
-                    }
-
-                    filterResults.count = filtered.size();
-                    filterResults.values = filtered;
-                }
-
-                //case: search query is empty
-                else {
-                    filterResults.count = artisans.size();
-                    filterResults.values = artisans;
-                }
-
-                return filterResults;
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                filteredArtisans = (ArrayList<Artisan>) results.values;
-                notifyDataSetChanged();
-            }
-        }
-
-        @SuppressLint("NewApi")
-        public void sortAlphabetically() {
-            filteredArtisans.sort(new AlphabeticSort());
-            notifyDataSetChanged();
-        }
-
-        @SuppressLint("NewApi")
-        public void sortByDate() {
-            filteredArtisans.sort(new DateAddedSort());
-            notifyDataSetChanged();
-        }
-
-        @SuppressLint("NewApi")
-        public void sortByNumberOfItems() {
-            filteredArtisans.sort(new ItemCountSort());
-            notifyDataSetChanged();
-        }
-
-        @SuppressLint("NewApi")
-        public void sortByProductsSold() {
-            filteredArtisans.sort(new ProductCountSort());
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public Filter getFilter() {
-            if (artisanFilter == null) {
-                artisanFilter = new ArtisanFilter();
-            }
-
-            return artisanFilter;
-        }
-
-        public ArtisanAdapter(List<Artisan> artisans) {
-            this.artisans = artisans;
-            this.filteredArtisans = artisans;
-            getFilter();
-        }
-
-        public void addArtisan(Artisan a) {
-            artisans.add(a);
-        }
-
-        public List<Artisan> getArtisans() {
-            return artisans;
-        }
-
-        public int getCount() {
-            return filteredArtisans.size();
-        }
-
-        public Artisan getItem(int i) {
-            return filteredArtisans.get(i);
-        }
-
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            view = getLayoutInflater().inflate(R.layout.artisan_list_layout, null);
-            ImageView artisanImage = (ImageView)view.findViewById(R.id.artisanImage);
-
-            TextView artisanName = (TextView)view.findViewById(R.id.artisanName);
-            artisanName.setText(filteredArtisans.get(i).getFirstName() + " "
-                    + filteredArtisans.get(i).getLastName());
-
-            artisanImage.setImageResource(artisanImages[i%3]);
-
-            return view;
-        }
     }
 }
