@@ -108,7 +108,9 @@ public class AddArtisanActivity extends AppCompatActivity {
             }
         });
 
-        menu_activity.getAdapter().addArtisan(artisan);
+        if (menu_activity.getAdapter() != null)
+            menu_activity.getAdapter().addArtisan(artisan);
+
         finish();
     }
 
