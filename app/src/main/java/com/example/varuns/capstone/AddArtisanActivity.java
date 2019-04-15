@@ -31,6 +31,7 @@ public class AddArtisanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setTitle("Add New Artisan");
         setContentView(R.layout.activity_add_artisan);
 
@@ -72,6 +73,7 @@ public class AddArtisanActivity extends AppCompatActivity {
             //user has not correctly inputted all fields
             return;
         }
+
         String name = editName.getText().toString();
         String phoneNumber = editPhoneNumber.getText().toString();
         String bio = editBio.getText().toString();

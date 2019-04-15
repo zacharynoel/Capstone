@@ -86,11 +86,11 @@ public class menu_activity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                Artisan artisan = (Artisan) parent.getAdapter().getItem(position);
-                Intent intent = new Intent(menu_activity.this, ScrollingActivity.class);
-                intent.putExtra("artisanId", artisan.getArtisanId());
-                artName = (TextView) view.findViewById(R.id.artisanName);
-                startActivity(intent);
+            Artisan artisan = (Artisan) parent.getAdapter().getItem(position);
+            Intent intent = new Intent(menu_activity.this, ScrollingActivity.class);
+            intent.putExtra("artisanId", artisan.getArtisanId());
+            artName = (TextView) view.findViewById(R.id.artisanName);
+            startActivity(intent);
             }
         });
 
@@ -178,7 +178,7 @@ public class menu_activity extends AppCompatActivity
     String itemNameT = "Teddy Bear";
     String itemDescT = "A lovable stuffed bear";
 
-    private String[] nameDB = {
+    public String[] nameDB = {
         "Martha",
         "Maria",
         "Sofia",
@@ -192,7 +192,7 @@ public class menu_activity extends AppCompatActivity
         "Natalia"
     };
 
-    private String[] nameDBLast = {
+    public String[] nameDBLast = {
         "Hernandez",
         "Garcia",
         "Lopez",
@@ -208,8 +208,7 @@ public class menu_activity extends AppCompatActivity
 
     private String placeHolderText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
 
-
-    public void getArtisansNoDB() {
+    public List<Artisan> getArtisansNoDB() {
         List<Artisan> artisans = new ArrayList<Artisan>();
         //Integer artisanId, String firstName, String lastName, String bio, List<ArtisanItem> artisanItems
         for (int i = 0; i < nameDB.length; i++) {
@@ -220,7 +219,10 @@ public class menu_activity extends AppCompatActivity
 
         ArtisanAdapter artisanAdapter = new ArtisanAdapter(this, artisans);
         artisanAdapterGlobal = artisanAdapter;
-        artisanList.setAdapter(artisanAdapter);
+        if (artisanList != null)
+            artisanList.setAdapter(artisanAdapter);
+
+        return artisans;
     }
 
     public void getArtisans() {
@@ -332,6 +334,8 @@ public class menu_activity extends AppCompatActivity
     public static ArtisanAdapter getAdapter() {
         return artisanAdapterGlobal;
     }
+
+    public ArtisanAdapter getArtisanAdapterGlobal() { return artisanAdapterGlobal; }
 
     private static final String LOG_TAG =
             menu_activity.class.getSimpleName();

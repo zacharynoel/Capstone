@@ -14,9 +14,13 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class SortingAndFilteringTests {
+
     @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+    public void testGetArtisansNoDB() {
+        menu_activity instance = new menu_activity();
+        List<Artisan> artisans = instance.getArtisansNoDB();
+        assertTrue(artisans.size() > 0);
+        assertEquals(artisans.get(0).getFirstName(), instance.nameDB[0]);
     }
 
     @Test
