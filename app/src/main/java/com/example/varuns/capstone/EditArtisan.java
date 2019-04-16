@@ -3,7 +3,6 @@ package com.example.varuns.capstone;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -22,9 +21,9 @@ import retrofit2.Response;
 public class EditArtisan extends AppCompatActivity {
 
     Artisan artisan;
-    EditText nameinput;
-    EditText bioinput;
-    EditText phoneinput;
+    EditText nameInput;
+    EditText bioInput;
+    EditText phoneInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +61,37 @@ public class EditArtisan extends AppCompatActivity {
     }
 
 
-    public void cancelEditArt(View v){
+    public void cancelEditArtisan(View v){
         finish();
     }
 
-    public void addArt(View v){
-        String[] names = nameinput.getText().toString().split(" ");
+    public void nameError(String errorMsg) {
+        nameInput.setError(errorMsg);
+    }
+
+    public void addArtisan(View v) {
+        String[] names = nameInput.getText().toString().split(" ");
+
+        if (nameInput.getText().length() == 0) {
+            nameError("Name is required!");
+            return;
+        }
+
+        if (names.length > 2) {
+            nameError("Name can only be First OR First Last");
+            return;
+        }
+
         artisan.setFirstName(names[0]);
-        artisan.setLastName(names[1]);
-        artisan.setBio(bioinput.getText().toString());
-        artisan.setPhoneNo(phoneinput.getText().toString());
+
+        if (names.length == 2) {
+            artisan.setLastName(names[1]);
+        }
+        else {
+            artisan.setLastName("");
+        }
+        artisan.setBio(bioInput.getText().toString());
+        artisan.setPhoneNo(phoneInput.getText().toString());
 
         //call save artisan function of artisan service
         //when saving what ever you saved is returned with updated ids and other fields
@@ -105,12 +125,12 @@ public class EditArtisan extends AppCompatActivity {
             public void onResponse(Call<RestfulResponse<Artisan>> call, Response<RestfulResponse<Artisan>> response) {
                 artisan = response.body().getData();
 
-                nameinput = (EditText) findViewById(R.id.editName2);
-                bioinput = (EditText) findViewById(R.id.editBio2);
-                phoneinput = (EditText) findViewById(R.id.editPhoneNumber2);
-                nameinput.setText(artisan.getFirstName()+" "+artisan.getLastName());
-                bioinput.setText(artisan.getBio());
-                phoneinput.setText(artisan.getPhoneNo());
+                nameInput = (EditText) findViewById(R.id.editName2);
+                bioInput = (EditText) findViewById(R.id.editBio2);
+                phoneInput = (EditText) findViewById(R.id.editPhoneNumber2);
+                nameInput.setText(artisan.getFirstName()+" "+artisan.getLastName());
+                bioInput.setText(artisan.getBio());
+                phoneInput.setText(artisan.getPhoneNo());
             }
 
             @Override
