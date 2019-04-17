@@ -120,7 +120,17 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
     //If permissions are granted, process sending the message
     public void processMessage(){
         SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(phoneNo, null, message, null, null);
+        ArrayList<String> split;
+
+        if(message.length() > 160) {
+            split = smsManager.divideMessage(message);
+
+            for(int i = 0; i < split.size(); i++)
+                smsManager.sendTextMessage(phoneNo, null, split.get(i), null, null);
+        }
+        else{
+            smsManager.sendTextMessage(phoneNo, null, message, null, null);
+        }
         Toast.makeText(getApplicationContext(), "Sent", Toast.LENGTH_LONG).show();
         messages.add(message);
 
