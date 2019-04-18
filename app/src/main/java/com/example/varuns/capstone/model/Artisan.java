@@ -10,6 +10,7 @@ public class Artisan {
     String bio;
     String phoneNo;
     List<ArtisanItem> artisanItems;
+    List<SoldItem> soldItems;
 
     public Artisan(Integer artisanId, String firstName, String lastName, String bio, List<ArtisanItem> artisanItems, String phoneNo) {
         this.artisanItems = artisanItems;
@@ -61,6 +62,14 @@ public class Artisan {
 
     public void setArtisanItems(List<ArtisanItem> artisanItems) {
         this.artisanItems = artisanItems;
+    }
+
+    public void setArtisanSoldItems(List<SoldItem> soldItems) {
+        this.soldItems = soldItems;
+    }
+
+    public List<SoldItem> getSoldItems() {
+        return soldItems;
     }
 
     public String getPhoneNo(){ return phoneNo; }

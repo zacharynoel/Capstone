@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.example.varuns.capstone.model.Artisan;
 import com.example.varuns.capstone.model.ArtisanItem;
+import com.example.varuns.capstone.model.SoldItem;
 import com.example.varuns.capstone.services.ApiService;
 import com.example.varuns.capstone.services.RestfulResponse;
 
@@ -48,11 +49,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.surveymonkey.surveymonkeyandroidsdk.SurveyMonkey;
 import com.surveymonkey.surveymonkeyandroidsdk.utils.SMError;
 
@@ -242,6 +248,26 @@ public class menu_activity extends AppCompatActivity
                 ArtisanAdapter artisanAdapter = new ArtisanAdapter(context, artisans);
                 artisanList.setAdapter(artisanAdapter);
                 artisanAdapterGlobal = artisanAdapter;
+
+                //queue a second call to retrieve sold items for the artisan
+                Call<RestfulResponse<List<SoldItem>>> call2 = ApiService.itemService().getSoldItemsByUserId("1");
+                //handle the response
+                call2.enqueue(new Callback<RestfulResponse<List<SoldItem>>>() {
+                    @Override
+                    public void onResponse(Call<RestfulResponse<List<SoldItem>>> call2, Response<RestfulResponse<List<SoldItem>>> response) {
+                        List<SoldItem> soldItems = response.body().getData();
+                        initMap(soldItems);
+
+                        Toast.makeText(menu_activity.this, "success", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<RestfulResponse<List<SoldItem>>> call2, Throwable t) {
+                        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                        Date d = new Date(System.currentTimeMillis());
+                        String s = gson.toJson(d);
+                    }
+                });
             }
 
             @Override
@@ -249,6 +275,31 @@ public class menu_activity extends AppCompatActivity
                 Toast.makeText(menu_activity.this, "failure", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void initMap(List<SoldItem> items) {
+        HashMap<Integer, List<SoldItem>> mapArtisanIdToSoldItems = new HashMap<>();
+
+        for (SoldItem si : items) {
+            System.out.println("found sold item");
+            if (!mapArtisanIdToSoldItems.containsKey(si.getArtisanId())) {
+                List<SoldItem> newList = new LinkedList<SoldItem>();
+                newList.add(si);
+                mapArtisanIdToSoldItems.put(si.getArtisanId(), newList);
+            } else {
+                mapArtisanIdToSoldItems.get(si.getArtisanId()).add(si);
+            }
+        }
+
+        HashMap<Integer, Artisan> mapArtisanIdToArtisan = new HashMap<>();
+        for (Artisan a : artisanAdapterGlobal.getArtisans()) {
+            mapArtisanIdToArtisan.put(a.getArtisanId(), a);
+        }
+
+        for (Map.Entry<Integer, List<SoldItem>> entry : mapArtisanIdToSoldItems.entrySet()) {
+            Artisan a = mapArtisanIdToArtisan.get(entry.getKey());
+            a.setArtisanSoldItems(entry.getValue());
+        }
     }
 
     @Override
