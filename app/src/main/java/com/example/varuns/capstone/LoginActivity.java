@@ -35,6 +35,9 @@ import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
+import com.surveymonkey.surveymonkeyandroidsdk.SurveyMonkey;
+import com.surveymonkey.surveymonkeyandroidsdk.utils.SMError;
+
 /**
  * A login screen that offers login via email/password.
  */
@@ -44,6 +47,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
+
+    private SurveyMonkey sdkInstance = new SurveyMonkey();
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -88,6 +93,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+
+        Button mSurveyButton = (Button) findViewById(R.id.feedbackButton);
+        mSurveyButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                surveyClicked();
             }
         });
 
@@ -192,6 +205,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             startActivity(myIntent);
         }
     }
+
+    private void surveyClicked() {
+        sdkInstance.onStart(this, "Amazon Handmade", 1, "SNPMH8T");
+        sdkInstance.startSMFeedbackActivityForResult(this,
+                1, "SNPMH8T");
+    }
+
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
