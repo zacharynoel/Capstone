@@ -210,7 +210,10 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
         artisanName.setText(filteredArtisans.get(i).getFirstName() + " "
                 + filteredArtisans.get(i).getLastName());
 
-        artisanImage.setImageResource(((menu_activity)context).artisanImages[i%3]);
+        int ran_seed = Math.abs((filteredArtisans.get(i).getFirstName()
+                + filteredArtisans.get(i).getLastName()).hashCode());
+        System.out.println(ran_seed);
+        artisanImage.setImageResource(((menu_activity)context).artisanImages[ran_seed%3]);
 
         return view;
     }
