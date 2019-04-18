@@ -53,6 +53,9 @@ import java.util.List;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
+import com.surveymonkey.surveymonkeyandroidsdk.SurveyMonkey;
+import com.surveymonkey.surveymonkeyandroidsdk.utils.SMError;
+
 public class menu_activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
          SearchView.OnQueryTextListener {
@@ -61,6 +64,8 @@ public class menu_activity extends AppCompatActivity
     static TextView artName;
     private static ArtisanAdapter artisanAdapterGlobal;
     public Integer[] artisanImages = { R.drawable.maria, R.drawable.native5, R.drawable.native3 };
+
+    private SurveyMonkey sdkInstance = new SurveyMonkey();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -258,6 +263,12 @@ public class menu_activity extends AppCompatActivity
         }
     }
 
+    private void surveyClicked() {
+        sdkInstance.onStart(this, "Amazon Handmade", 1, "SNPMH8T");
+        sdkInstance.startSMFeedbackActivityForResult(this,
+                1, "SNPMH8T");
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -270,6 +281,10 @@ public class menu_activity extends AppCompatActivity
             Intent settingsIntent = new Intent(menu_activity.this, SettingsActivity.class);
             startActivity(settingsIntent);
             return true;
+        }
+
+        if (id == R.id.action_feedback) {
+            surveyClicked();
         }
 
         if (id == R.id.sort_alpha) {

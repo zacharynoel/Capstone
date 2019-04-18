@@ -33,4 +33,9 @@
                 </group>
             </menu>
     </item>
+    <item
+        android:id="@+id/action_feedback"
+        android:orderInCategory="101"
+        android:title="Bug Feedback"
+        app:showAsAction="never" />
 </menu>
