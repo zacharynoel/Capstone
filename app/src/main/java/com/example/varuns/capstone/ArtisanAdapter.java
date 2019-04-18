@@ -40,8 +40,7 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
 
     private class ProductCountSort implements Comparator<Artisan> {
         public int compare(Artisan a1, Artisan a2) {
-            //TODO - don't currently keep track of sales
-            return 0;
+            return a2.getSoldItems().size() - a1.getSoldItems().size();
         }
     }
 
