@@ -116,13 +116,41 @@ public class ScrollingActivity extends AppCompatActivity {
     public void editArtisanClick(View v){
         Intent intent = new Intent(ScrollingActivity.this, EditArtisan.class);
         intent.putExtra("artisanId", artisan.getArtisanId());
-        startActivity(intent);
+        startActivityForResult(intent, 1);
     }
 
     public void addItemClick(View v){
         Intent intent = new Intent(ScrollingActivity.this, AddProduct.class);
         intent.putExtra("artisanId", artisan.getArtisanId());
-        startActivity(intent);
+        startActivityForResult(intent, 2);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //editArtisan
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                artisanName.setText(data.getStringExtra("artisanName"));
+                artisanBio.setText(data.getStringExtra("artisanBio"));
+            }
+        }
+
+        //addItem
+        if (requestCode == 2) {
+            if(resultCode == RESULT_OK) {
+                final ArtisanItem newItem = new ArtisanItem(
+                        data.getIntExtra("productArtisan", -1),
+                        data.getIntExtra("productId", -1),
+                        data.getStringExtra("productName"),
+                        data.getStringExtra("productDesc"));
+                ListView artisanList = (ListView)findViewById(R.id.artisanProductList);
+                List<ArtisanItem> items = artisan.getArtisanItems();
+                items.add(newItem);
+                artisan.setArtisanItems(items);
+                ScrollingActivity.ArtisanProductAdapter artisanProductAdapter = new ScrollingActivity.ArtisanProductAdapter(items);
+                artisanList.setAdapter(artisanProductAdapter);
+            }
+        }
     }
 
     public void onReportClick(View v){

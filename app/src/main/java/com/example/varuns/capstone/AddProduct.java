@@ -100,6 +100,12 @@ public class AddProduct extends AppCompatActivity {
             }
         });
 
+        Intent intent = new Intent();
+        intent.putExtra("productArtisan", newItem.getArtisanId());
+        intent.putExtra("productId", newItem.getItemId());
+        intent.putExtra("productName", newItem.getItemName());
+        intent.putExtra("productDesc", newItem.getItemDescription());
+        setResult(RESULT_OK, intent);
         //ScrollingActivity.getAdapter().addItem(newItem);
         finish();
     }
