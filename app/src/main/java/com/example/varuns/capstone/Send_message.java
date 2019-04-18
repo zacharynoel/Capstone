@@ -31,6 +31,7 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
     ListView savedText;
     String phoneNo;
     String message;
+    String currentNum = "";
 
     //Used to populate ListView
     ArrayList<String> messages = new ArrayList<>();
@@ -95,6 +96,9 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
         phoneNo = phoneText.getText().toString();
         message = messageText.getText().toString();
 
+        if(currentNum.isEmpty())
+            currentNum = phoneNo;
+
         if(!phoneNo.matches("\\d+")) {
             Toast.makeText(getApplicationContext(),
                     "Could not send, phone number is not an integer", Toast.LENGTH_LONG).show();
@@ -132,6 +136,12 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
             smsManager.sendTextMessage(phoneNo, null, message, null, null);
         }
         Toast.makeText(getApplicationContext(), "Sent", Toast.LENGTH_LONG).show();
+
+        if(!currentNum.equals(phoneNo)) {
+            messages = new ArrayList<>();
+            currentNum = phoneNo;
+        }
+
         messages.add(message);
 
         adapter = new ArrayAdapter<>(this,
