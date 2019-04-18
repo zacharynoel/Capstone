@@ -281,7 +281,6 @@ public class menu_activity extends AppCompatActivity
         HashMap<Integer, List<SoldItem>> mapArtisanIdToSoldItems = new HashMap<>();
 
         for (SoldItem si : items) {
-            System.out.println("found sold item");
             if (!mapArtisanIdToSoldItems.containsKey(si.getArtisanId())) {
                 List<SoldItem> newList = new LinkedList<SoldItem>();
                 newList.add(si);
@@ -315,9 +314,10 @@ public class menu_activity extends AppCompatActivity
     }
 
     private void surveyClicked() {
-        sdkInstance.onStart(this, "Amazon Handmade", 1, "SNPMH8T");
+        System.out.println("Here");
+        sdkInstance.onStart(this, "Amazon Handmade", 2, "SNPMH8T");
         sdkInstance.startSMFeedbackActivityForResult(this,
-                1, "SNPMH8T");
+                2, "SNPMH8T");
     }
 
     @Override
