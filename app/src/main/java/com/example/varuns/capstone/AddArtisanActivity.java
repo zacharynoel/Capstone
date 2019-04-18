@@ -81,13 +81,19 @@ public class AddArtisanActivity extends AppCompatActivity {
         //create artisan to save
         final Artisan artisan = new Artisan();
         String[] names = name.split(" ");
-        //If the person forgot a last name force them to add one
-        if (names.length < 2) {
-            editName.setError("Last name is required!");
+        if (names.length > 2) {
+            editName.setError("Name can only be First OR First Last");
             return;
         }
+
         artisan.setFirstName(names[0]);
-        artisan.setLastName(names[1]);
+
+        if (names.length == 2) {
+            artisan.setLastName(names[1]);
+        }
+        else {
+            artisan.setLastName("");
+        }
         artisan.setBio(bio);
         artisan.setPhoneNo(phoneNumber);
 

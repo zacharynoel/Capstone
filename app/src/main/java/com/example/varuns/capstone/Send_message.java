@@ -31,6 +31,7 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
     ListView savedText;
     String phoneNo;
     String message;
+    String currentNum = "";
 
     //Used to populate ListView
     ArrayList<String> messages = new ArrayList<>();
@@ -104,6 +105,8 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
             phoneText.setError("Phone number is too long!");
             return;
         }
+        if(currentNum.isEmpty())
+            currentNum = phoneNo;
 
         if(!phoneNo.matches("\\d+")) {
             Toast.makeText(getApplicationContext(),
@@ -142,6 +145,12 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
             smsManager.sendTextMessage(phoneNo, null, message, null, null);
         }
         Toast.makeText(getApplicationContext(), "Sent", Toast.LENGTH_LONG).show();
+
+        if(!currentNum.equals(phoneNo)) {
+            messages = new ArrayList<>();
+            currentNum = phoneNo;
+        }
+
         messages.add(message);
 
         adapter = new ArrayAdapter<>(this,
