@@ -125,9 +125,13 @@ public class EditArtisan extends AppCompatActivity {
             }
         });
 
-        menu_activity.artName.setText(artisan.getFirstName()+" " +artisan.getLastName());
-        ScrollingActivity.artisanBio.setText(artisan.getBio());
-        ScrollingActivity.artisanName.setText(artisan.getFirstName()+" " +artisan.getLastName());
+        Intent intent = new Intent();
+        intent.putExtra("artisanName", (artisan.getFirstName() + " " + artisan.getLastName()));
+        intent.putExtra("artisanBio", artisan.getBio());
+        setResult(RESULT_OK, intent);
+        //menu_activity.artName.setText(artisan.getFirstName()+" " +artisan.getLastName());
+        //ScrollingActivity.artisanBio.setText(artisan.getBio());
+        //ScrollingActivity.artisanName.setText(artisan.getFirstName()+" " +artisan.getLastName());
         finish();
     }
 

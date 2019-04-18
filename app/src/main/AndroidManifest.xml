@@ -50,6 +50,7 @@
         </activity>
         <activity
             android:name=".Send_message"
+            android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_send_message"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
