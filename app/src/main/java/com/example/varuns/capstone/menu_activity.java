@@ -267,6 +267,8 @@ public class menu_activity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(menu_activity.this, SettingsActivity.class);
+            startActivity(settingsIntent);
             return true;
         }
 

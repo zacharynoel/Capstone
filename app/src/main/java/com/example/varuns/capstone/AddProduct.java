@@ -74,6 +74,10 @@ public class AddProduct extends AppCompatActivity {
     }
 
     public void saveProd(View v){
+        if (!verifyFields()){
+            return;
+        }
+
         List<ArtisanItem> items = artisan.getArtisanItems();
         ArtisanItem newItem = new ArtisanItem(id, items.size()+1, itemname.getText().toString(), itemdesc.getText().toString());
         items.add(newItem);
@@ -116,5 +120,13 @@ public class AddProduct extends AppCompatActivity {
             }
         });
 
+    }
+
+    private boolean verifyFields(){
+        if (itemname.getText().length()==0) {
+            itemname.setError("Item name is required!");
+            return false;
+        }
+        return true;
     }
 }

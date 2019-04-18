@@ -77,8 +77,23 @@ public class EditArtisan extends AppCompatActivity {
             return;
         }
 
+        if (nameInput.getText().length() >45){
+            nameError("Name is too long!");
+            return;
+        }
+
         if (names.length > 2) {
             nameError("Name can only be First OR First Last");
+            return;
+        }
+
+        if (phoneInput.getText().length()==0){
+            phoneInput.setError("Phone number is required!");
+            return;
+        }
+
+        if (phoneInput.getText().length()>20){
+            phoneInput.setError("Phone number is too long!");
             return;
         }
 

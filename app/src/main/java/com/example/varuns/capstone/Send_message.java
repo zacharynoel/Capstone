@@ -95,6 +95,16 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
         phoneNo = phoneText.getText().toString();
         message = messageText.getText().toString();
 
+        if (phoneText.getText().length()==0){
+            phoneText.setError("Phone number is required!");
+            return;
+        }
+
+        if (phoneText.getText().length()>20){
+            phoneText.setError("Phone number is too long!");
+            return;
+        }
+
         if(!phoneNo.matches("\\d+")) {
             Toast.makeText(getApplicationContext(),
                     "Could not send, phone number is not an integer", Toast.LENGTH_LONG).show();

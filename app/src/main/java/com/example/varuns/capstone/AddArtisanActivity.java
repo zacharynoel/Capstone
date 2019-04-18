@@ -121,6 +121,19 @@ public class AddArtisanActivity extends AppCompatActivity {
             editName.setError("Name is required!");
             return false;
         }
+        if (editName.getText().length()>45){
+            editName.setError("Name is too long!");
+            return false;
+        }
+
+        if (editPhoneNumber.getText().length()==0) {
+            editPhoneNumber.setError("Phone number is required!");
+            return false;
+        }
+        if (editPhoneNumber.getText().length()>20) {
+            editPhoneNumber.setError("Phone number is too long!");
+            return false;
+        }
 
         return true;
     }
