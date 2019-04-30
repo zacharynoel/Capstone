@@ -38,12 +38,12 @@ public class MainActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent myIntent = new Intent(MainActivity.this, Login.class);
                 startActivity(myIntent);
             }
         });
 
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        Intent intent = new Intent(MainActivity.this, Login.class);
         startActivity(intent);
 
         //gson tool for printing objects

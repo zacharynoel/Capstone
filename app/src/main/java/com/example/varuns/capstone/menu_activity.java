@@ -92,7 +92,7 @@ public class menu_activity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         artisanList = (ListView)findViewById(R.id.artisanList);
 
-        getArtisans();
+        getArtisansNoDB();
         artisanList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,

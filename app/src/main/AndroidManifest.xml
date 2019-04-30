@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -34,9 +35,6 @@
             android:label="@string/title_activity_scrolling"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity
             android:name=".menu_activity"
             android:label="@string/title_activity_menu_activity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -50,9 +48,9 @@
         </activity>
         <activity
             android:name=".Send_message"
-            android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_send_message"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".AddArtisanActivity"
             android:label="@string/addartisan_name"
@@ -67,7 +65,29 @@
         <activity android:name=".ReportsActivity" />
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name="com.amazon.identity.auth.device.workflow.WorkflowActivity"
+            android:allowTaskReparenting="true"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- android:host must use the full package name found in Manifest General Attributes -->
+                <data
+                    android:host="${applicationId}"
+                    android:scheme="amzn" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Login"
+            android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+
     </application>
 
 </manifest>
