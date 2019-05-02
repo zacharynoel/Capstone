@@ -253,11 +253,13 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
 
         data.add(new ValueDataEntry(convertDate(startDate.toString()),0));
 
+        Long originalStartDate = startDate.getTime();
         while (startDate.getTime() < endDate.getTime()) {
             data.add(new ValueDataEntry(convertDate(startDate.toString()), 0));
             //increase by day
             startDate.setTime(startDate.getTime() + 86400000);
         }
+        startDate = new Date(originalStartDate);
 
         int max = 0;
         for (Map.Entry<String, List<SoldItem>> entry : map.entrySet()) {
