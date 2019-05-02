@@ -15,7 +15,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiService {
 
-    public static String token = "";
+    private static String token = "";
+
+    public static void setToken(String newToken) {token = newToken;}
+    public static void clearToken() {token = "";}
+    public static boolean hasToken() {return !token.equals("");}
 
     public static Retrofit getRetrofitInstance() {
         Gson gson = new GsonBuilder()

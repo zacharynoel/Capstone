@@ -3,6 +3,8 @@ package com.example.varuns.capstone;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.Intent;
 import android.se.omapi.Session;
@@ -65,19 +67,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
-
+    private SharedPreferences sharedPreferences = null;
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -88,11 +82,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        sharedPreferences = getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        if(sharedPreferences.contains("token")) {
+            System.out.println("FOUND TOKEN");
+            validateToken(sharedPreferences.getString("token", ""));
+        }
+
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = findViewById(R.id.email);
         populateAutoComplete();
 
-        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView = findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -104,7 +104,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        Button mEmailSignInButton = findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,11 +116,34 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
     }
 
+    private void validateToken(String token) {
+        ApiService.setToken(token);
+        Call<RestfulResponse> call = ApiService.loginService().validate();
+        //handle the response
+        call.enqueue(new Callback<RestfulResponse>() {
+            @Override
+            public void onResponse(Call<RestfulResponse> call, Response<RestfulResponse> response) {
+                if(response.isSuccessful()){
+                    System.out.println("Worked");
+                    nextScreen();
+                }
+                else{
+                    System.out.println("Didn't work");
+                    System.out.println(response.raw().toString());
+                    ApiService.clearToken();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RestfulResponse> call, Throwable t) {
+            }
+        });
+    }
+
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
         }
-
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -210,6 +233,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }
+    }
+
+    private void nextScreen() {
+        Intent myIntent = new Intent(LoginActivity.this, menu_activity.class);
+        startActivity(myIntent);
     }
 
     private boolean isEmailValid(String email) {
@@ -339,10 +367,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 @Override
                 public void onResponse(Call<RestfulResponse<SessionItem>> call, Response<RestfulResponse<SessionItem>> response) {
                     if(response.isSuccessful()){
-                        ApiService.token = response.body().getData().getToken();
+                        String token = response.body().getData().getToken();
+                        ApiService.setToken(token);
+                        sharedPreferences
+                                .edit()
+                                .putString("token", token)
+                                .apply();
+                        System.out.println("Storing token");
                     }
                     else{
-                        ApiService.token = "";
+                        ApiService.clearToken();
                     }
                 }
 
@@ -352,7 +386,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             });
 
-            return !ApiService.token.equals("");
+            return ApiService.hasToken();
         }
 
         @Override
@@ -362,8 +396,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 finish();
-                Intent myIntent = new Intent(LoginActivity.this, menu_activity.class);
-                startActivity(myIntent);
+                nextScreen();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
