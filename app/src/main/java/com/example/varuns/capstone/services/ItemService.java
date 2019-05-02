@@ -14,19 +14,19 @@ import retrofit2.http.Path;
 
 public interface ItemService {
 
-    @GET("artisan-item/sold-item/artisan-id/{artisanId}")
+    @GET("api/artisan-item/sold-item/artisan-id/{artisanId}")
     Call<RestfulResponse<List<SoldItem>>> getSoldItemsByArtisanId(@Path("artisanId") String artisanId);
 
-    @GET("artisan-item/sold-item/item-id/{itemId}")
+    @GET("api/artisan-item/sold-item/item-id/{itemId}")
     Call<RestfulResponse<SoldItem>> getSoldItemsByArtisanItemId(@Path("itemId") String itemId);
 
-    @POST("artisan-item/sold-item")
+    @POST("api/artisan-item/sold-item")
     Call<RestfulResponse<Integer>> saveSoldItem(@Body SoldItem soldItem);
 
-    @POST("artisan-item/sold-item")
+    @POST("api/artisan-item/sold-item")
     Call<RestfulResponse<Integer>> saveArtisanItem(@Body ArtisanItem soldItem);
 
-    @GET("artisan-item/sold-item/user-id/{userId}")
+    @GET("api/artisan-item/sold-item/user-id/{userId}")
     Call<RestfulResponse<List<SoldItem>>> getSoldItemsByUserId(@Path("userId") String userId);
 
 

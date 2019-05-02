@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
 import android.content.Intent;
+import android.se.omapi.Session;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,9 +30,29 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.varuns.capstone.model.SessionItem;
+import com.example.varuns.capstone.services.ApiService;
+import com.example.varuns.capstone.services.RestfulResponse;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import okhttp3.Headers;
+import okhttp3.Request;
+import okhttp3.ResponseBody;
+import okio.Buffer;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -188,8 +209,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
-            Intent myIntent = new Intent(LoginActivity.this, menu_activity.class);
-            startActivity(myIntent);
         }
     }
 
@@ -311,25 +330,29 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+            HashMap<String,String> loginObj = new HashMap<>();
+            loginObj.put("username", mEmail);
+            loginObj.put("password", mPassword);
+            Call<RestfulResponse<SessionItem>> call = ApiService.loginService().attemptLogin(loginObj);
+            //handle the response
+            call.enqueue(new Callback<RestfulResponse<SessionItem>>() {
+                @Override
+                public void onResponse(Call<RestfulResponse<SessionItem>> call, Response<RestfulResponse<SessionItem>> response) {
+                    if(response.isSuccessful()){
+                        ApiService.token = response.body().getData().getToken();
+                    }
+                    else{
+                        ApiService.token = "";
+                    }
                 }
-            }
 
-            // TODO: register the new account here.
-            return true;
+                @Override
+                public void onFailure(Call<RestfulResponse<SessionItem>> call, Throwable t) {
+                    Toast.makeText(LoginActivity.this, "failure", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            return !ApiService.token.equals("");
         }
 
         @Override
@@ -339,6 +362,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 finish();
+                Intent myIntent = new Intent(LoginActivity.this, menu_activity.class);
+                startActivity(myIntent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
