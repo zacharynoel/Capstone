@@ -15,21 +15,23 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.varuns.capstone.model.Artisan;
 import com.example.varuns.capstone.model.Report;
 import com.example.varuns.capstone.model.ReportDate;
 import com.example.varuns.capstone.model.SoldItem;
-import com.example.varuns.capstone.services.ApiService;
-import com.example.varuns.capstone.services.DateUtil;
-import com.example.varuns.capstone.services.RestfulResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
+import com.anychart.AnyChart;
+import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.charts.Cartesian;
+import com.anychart.core.cartesian.series.Column;
+import com.anychart.enums.Anchor;
+import com.anychart.enums.HoverMode;
+import com.anychart.enums.Position;
+import com.anychart.enums.TooltipPositionMode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,20 +41,60 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.Map;
 
 public class ReportsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-
-    private GraphView graph;
     private ListView reportList;
     private ListView soldItemList;
     private Button backButton;
     private static ReportsActivity.ReportAdapter reportAdapterGlobal;
 
-    Date d1, d2, d3, d4, d5;
+    Date startDate, endDate;
+    AnyChartView anyChartView;
+
+
+    List<SoldItem> currSoldItems = new LinkedList<>();
+
+    private class DateSpinnerSelector implements AdapterView.OnItemSelectedListener {
+        public void onItemSelected(AdapterView<?> parent, View view,
+                                   int pos, long id) {
+            String selected = (String)parent.getItemAtPosition(pos);
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 16);
+            calendar.set(Calendar.MINUTE, 0);
+
+            int negativeDays = 0;
+            switch (selected) {
+                case "Past Week":
+                    negativeDays = -7;
+                    break;
+
+                case "Past Month":
+                    negativeDays = -30;
+                    break;
+
+                case "Past Year":
+                    negativeDays = -365;
+                    break;
+
+                default:
+                    negativeDays = 7;
+                    break;
+            }
+
+            calendar.add(Calendar.DATE, negativeDays);
+            startDate = calendar.getTime();
+            calendar.add(Calendar.DATE, -negativeDays);
+            endDate = calendar.getTime();
+
+            createGraphData(currSoldItems);
+        }
+
+        public void onNothingSelected(AdapterView<?> parent) {
+            // Another interface callback
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,47 +126,15 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 16);
         calendar.set(Calendar.MINUTE, 0);
-        calendar.add(Calendar.DATE, -1);
-        calendar.add(Calendar.DATE, -1);
-        calendar.add(Calendar.DATE, -1);
-        d1 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        d2 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        d3 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        d4 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        d5 = calendar.getTime();
+        calendar.add(Calendar.DATE, -7);
+        startDate = calendar.getTime();
+        calendar.add(Calendar.DATE, 7);
+        endDate = calendar.getTime();
       
 // you can directly pass Date objects to DataPoint-Constructor
 // this will convert the Date to double via Date#getTime()
-        /*LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
-                new DataPoint(d1, 1),
-                new DataPoint(d2, 5),
-                new DataPoint(d3, 3),
-                new DataPoint(d4, 1),
-                new DataPoint(d5, 5),
-        });
-        graph.addSeries(series);*/
 
-        graph = (GraphView) findViewById(R.id.graph);
-
-        graph.setTitle("Products Sold");
-
-        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
-        graph.getGridLabelRenderer().setNumHorizontalLabels(3);
-
-        graph.getViewport().setMinX(d1.getTime());
-        graph.getViewport().setMaxX(d5.getTime());
-        graph.getViewport().setXAxisBoundsManual(true);
-
-        graph.getGridLabelRenderer().setNumVerticalLabels(7);
-        graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(6);
-        graph.getViewport().setYAxisBoundsManual(true);
-
-        graph.getGridLabelRenderer().setHumanRounding(false);
+        anyChartView = findViewById(R.id.any_chart_view);
 
         setupBottomNavigationView();
 
@@ -143,15 +153,35 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         }
 
         Spinner spinner = (Spinner) findViewById(R.id.artisans_spinner);
-    // Create an ArrayAdapter using the string array and a default spinner layout
+        // Create an ArrayAdapter using the artisans array and a default spinner layout
         ArrayAdapter<Artisan> adapter = new ArrayAdapter<Artisan>(this,
                 android.R.layout.simple_spinner_item, artisansList);
 
-    // Specify the layout to use when the list of choices appears
+        // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    // Apply the adapter to the spinner
+        // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
+
+        List<String> dateOptionsList = new LinkedList<>();
+        dateOptionsList.add("Past Week");
+        dateOptionsList.add("Past Month");
+        dateOptionsList.add("Past Year");
+        Spinner dateSpinner = (Spinner) findViewById(R.id.date_spinner);
+        ArrayAdapter<String> dateAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, dateOptionsList);
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        dateSpinner.setAdapter(dateAdapter);
+        DateSpinnerSelector selector = new DateSpinnerSelector();
+        dateSpinner.setOnItemSelectedListener(selector);
+    }
+
+    private String convertDate(String dateToString) {
+        String[] split = dateToString.split(" ");
+        return split[1] + " " + split[2];
     }
 
     public void goBackToReport(View view) {
@@ -188,22 +218,83 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         });
     }
 
+    Column column;
+    Cartesian cartesian;
+    boolean graphCreated = false;
     public List<SoldItem> createGraphData(List<SoldItem> soldItems) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        if (soldItems == null) {
+            soldItems = new LinkedList<>();
+        }
 
         ReportsActivity.ReportAdapter reportAdapter = new ReportsActivity.ReportAdapter(soldItems);
         reportList.setAdapter(reportAdapter);
         reportAdapterGlobal = reportAdapter;
 
-        List<Long> dateLongs = new ArrayList<>();
+        List<DataEntry> data = new ArrayList<>();
+        HashMap<String, List<SoldItem>> map = new HashMap<>();
+
         for (SoldItem si : soldItems) {
-            dateLongs.add(si.getDateSold().getTime());
+            if (si.getDateSold().getTime() >= startDate.getTime()
+                    && si.getDateSold().getTime() <= endDate.getTime()) {
+                String dateStr = convertDate(si.getDateSold().toString());
+                if (!map.containsKey(dateStr)) {
+                    List<SoldItem> newItems = new LinkedList<SoldItem>();
+                    newItems.add(si);
+                    map.put(dateStr, newItems);
+                }
+
+                else {
+                    map.get(dateStr).add(si);
+                }
+            }
         }
 
-        DataPoint[] dataPointsArr = DateUtil.getDataPointsFromDates(dateLongs);
+        data.add(new ValueDataEntry(convertDate(startDate.toString()),0));
 
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPointsArr);
-        this.graph.addSeries(series);
+        Long originalStartDate = startDate.getTime();
+        while (startDate.getTime() < endDate.getTime()) {
+            data.add(new ValueDataEntry(convertDate(startDate.toString()), 0));
+            //increase by day
+            startDate.setTime(startDate.getTime() + 86400000);
+        }
+        startDate = new Date(originalStartDate);
+
+        int max = 0;
+        for (Map.Entry<String, List<SoldItem>> entry : map.entrySet()) {
+            data.add(new ValueDataEntry(entry.getKey(), entry.getValue().size()));
+            max = max >= entry.getValue().size() ? max : entry.getValue().size();
+        }
+
+        if (!graphCreated) {
+            cartesian = AnyChart.column();
+            column = cartesian.column(data);
+            column.tooltip()
+                    .titleFormat("{%X}")
+                    .position(Position.CENTER_BOTTOM)
+                    .anchor(Anchor.CENTER_BOTTOM)
+                    .offsetX(0d)
+                    .offsetY(5d);
+
+            cartesian.animation(true);
+            cartesian.title("Products Sold");
+
+            cartesian.yScale().minimum(0);
+
+            cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
+            cartesian.interactivity().hoverMode(HoverMode.BY_X);
+
+            cartesian.xAxis(0).title("Date");
+            cartesian.yAxis(0).title("Products Sold");
+
+            anyChartView.setChart(cartesian);
+            graphCreated = true;
+        }
+
+        cartesian.yScale().maximum(max == 0 ? 1 : max);
+
+        column.data(data);
 
         return soldItems;
     }
@@ -212,8 +303,8 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                                int pos, long id) {
         Artisan current = (Artisan)parent.getItemAtPosition(pos);
 
-        graph.removeAllSeries();
         List<SoldItem> soldItems = current.getSoldItems();
+        currSoldItems = soldItems;
         if (!(soldItems == null) && !soldItems.isEmpty())
             createGraphData(soldItems);
         else {
@@ -248,7 +339,6 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
 
         public SoldItem getItem(int i) {
             return reportDate.getSoldItems().get(i);
-
         }
 
         public long getItemId(int i) {
@@ -269,9 +359,6 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
             return view;
         }
     }
-
-
-
 
     private class ReportAdapter extends BaseAdapter {
 
@@ -298,7 +385,6 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
             List<Long> dateTimes = new ArrayList<>(report.getReportDateMap().keySet());
             Collections.sort(dateTimes);
             return report.getReportDateMap().get(dateTimes.get(i));
-
         }
 
         public long getItemId(int i) {
