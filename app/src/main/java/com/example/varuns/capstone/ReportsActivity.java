@@ -224,6 +224,10 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
     public List<SoldItem> createGraphData(List<SoldItem> soldItems) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
+        if (soldItems == null) {
+            soldItems = new LinkedList<>();
+        }
+
         ReportsActivity.ReportAdapter reportAdapter = new ReportsActivity.ReportAdapter(soldItems);
         reportList.setAdapter(reportAdapter);
         reportAdapterGlobal = reportAdapter;
