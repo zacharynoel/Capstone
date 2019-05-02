@@ -88,9 +88,6 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
             calendar.add(Calendar.DATE, -negativeDays);
             endDate = calendar.getTime();
 
-            System.out.println("TIme diff;");
-            System.out.println(startDate.getTime() - endDate.getTime());
-
             createGraphData(currSoldItems);
         }
 
@@ -233,15 +230,10 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
 
         List<DataEntry> data = new ArrayList<>();
         HashMap<String, List<SoldItem>> map = new HashMap<>();
-        System.out.println(convertDate(startDate.toString()));
-        System.out.println(convertDate(endDate.toString()));
-        System.out.println(soldItems.size());
 
         for (SoldItem si : soldItems) {
-            System.out.println("before if");
             if (si.getDateSold().getTime() >= startDate.getTime()
                     && si.getDateSold().getTime() <= endDate.getTime()) {
-                System.out.println("hereooo");
                 String dateStr = convertDate(si.getDateSold().toString());
                 if (!map.containsKey(dateStr)) {
                     List<SoldItem> newItems = new LinkedList<SoldItem>();
@@ -255,7 +247,6 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
             }
         }
 
-        System.out.println(convertDate(startDate.toString()));
         data.add(new ValueDataEntry(convertDate(startDate.toString()),0));
 
         while (startDate.getTime() < endDate.getTime()) {
