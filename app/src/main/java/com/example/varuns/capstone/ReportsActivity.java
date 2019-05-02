@@ -26,10 +26,16 @@ import com.example.varuns.capstone.services.DateUtil;
 import com.example.varuns.capstone.services.RestfulResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
+import com.anychart.AnyChart;
+import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.charts.Cartesian;
+import com.anychart.core.cartesian.series.Column;
+import com.anychart.enums.Anchor;
+import com.anychart.enums.HoverMode;
+import com.anychart.enums.Position;
+import com.anychart.enums.TooltipPositionMode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,20 +45,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ReportsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-
-    private GraphView graph;
     private ListView reportList;
     private ListView soldItemList;
     private Button backButton;
     private static ReportsActivity.ReportAdapter reportAdapterGlobal;
 
     Date d1, d2, d3, d4, d5;
+    AnyChartView anyChartView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,32 +105,8 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
       
 // you can directly pass Date objects to DataPoint-Constructor
 // this will convert the Date to double via Date#getTime()
-        /*LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
-                new DataPoint(d1, 1),
-                new DataPoint(d2, 5),
-                new DataPoint(d3, 3),
-                new DataPoint(d4, 1),
-                new DataPoint(d5, 5),
-        });
-        graph.addSeries(series);*/
 
-        graph = (GraphView) findViewById(R.id.graph);
-
-        graph.setTitle("Products Sold");
-
-        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
-        graph.getGridLabelRenderer().setNumHorizontalLabels(3);
-
-        graph.getViewport().setMinX(d1.getTime());
-        graph.getViewport().setMaxX(d5.getTime());
-        graph.getViewport().setXAxisBoundsManual(true);
-
-        graph.getGridLabelRenderer().setNumVerticalLabels(7);
-        graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(6);
-        graph.getViewport().setYAxisBoundsManual(true);
-
-        graph.getGridLabelRenderer().setHumanRounding(false);
+        anyChartView = findViewById(R.id.any_chart_view);
 
         setupBottomNavigationView();
 
@@ -152,6 +134,11 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
     // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
+    }
+
+    private String convertDate(String dateToString) {
+        String[] split = dateToString.split(" ");
+        return split[1] + " " + split[2];
     }
 
     public void goBackToReport(View view) {
@@ -191,19 +178,61 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
     public List<SoldItem> createGraphData(List<SoldItem> soldItems) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
+
         ReportsActivity.ReportAdapter reportAdapter = new ReportsActivity.ReportAdapter(soldItems);
         reportList.setAdapter(reportAdapter);
         reportAdapterGlobal = reportAdapter;
 
-        List<Long> dateLongs = new ArrayList<>();
+        List<DataEntry> data = new ArrayList<>();
+        HashMap<String, List<SoldItem>> map = new HashMap<>();
         for (SoldItem si : soldItems) {
-            dateLongs.add(si.getDateSold().getTime());
+            if (si.getDateSold().getTime() >= d1.getTime()
+                    && si.getDateSold().getTime() <= d5.getTime()) {
+                String dateStr = convertDate(si.getDateSold().toString());
+                if (!map.containsKey(dateStr)) {
+                    List<SoldItem> newItems = new LinkedList<SoldItem>();
+                    newItems.add(si);
+                    map.put(dateStr, newItems);
+                }
+
+                else {
+                    map.get(dateStr).add(si);
+                }
+            }
         }
 
-        DataPoint[] dataPointsArr = DateUtil.getDataPointsFromDates(dateLongs);
+        data.add(new ValueDataEntry(convertDate(d1.toString()),0));
+        data.add(new ValueDataEntry(convertDate(d5.toString()),0));
+        int max = 0;
+        for (Map.Entry<String, List<SoldItem>> entry : map.entrySet()) {
+            data.add(new ValueDataEntry(entry.getKey(), entry.getValue().size()));
+            max = max >= entry.getValue().size() ? max : entry.getValue().size();
+        }
 
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPointsArr);
-        this.graph.addSeries(series);
+        Cartesian cartesian = AnyChart.column();
+
+        Column column = cartesian.column(data);
+
+        column.tooltip()
+                .titleFormat("{%X}")
+                .position(Position.CENTER_BOTTOM)
+                .anchor(Anchor.CENTER_BOTTOM)
+                .offsetX(0d)
+                .offsetY(5d);
+
+        cartesian.animation(true);
+        cartesian.title("Products Sold");
+
+        cartesian.yScale().minimum(0);
+        cartesian.yScale().maximum(max);
+
+        cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
+        cartesian.interactivity().hoverMode(HoverMode.BY_X);
+
+        cartesian.xAxis(0).title("Date");
+        cartesian.yAxis(0).title("Products Sold");
+
+        anyChartView.setChart(cartesian);
 
         return soldItems;
     }
@@ -212,7 +241,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                                int pos, long id) {
         Artisan current = (Artisan)parent.getItemAtPosition(pos);
 
-        graph.removeAllSeries();
+        //graph.removeAllSeries();
         List<SoldItem> soldItems = current.getSoldItems();
         if (!(soldItems == null) && !soldItems.isEmpty())
             createGraphData(soldItems);
