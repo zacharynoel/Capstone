@@ -19,6 +19,9 @@ import com.example.varuns.capstone.model.Artisan;
 import com.example.varuns.capstone.services.ApiService;
 import com.example.varuns.capstone.services.RestfulResponse;
 
+import java.io.IOException;
+
+import okio.Buffer;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -104,7 +107,14 @@ public class AddArtisanActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<RestfulResponse<Artisan>> call, Response<RestfulResponse<Artisan>> response) {
                 //report the result of the call
-                Toast.makeText(AddArtisanActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                try {
+                    Buffer buffer = new Buffer();
+                    call.request().body().writeTo(buffer);
+                    System.out.println("Caller: " + buffer.readUtf8());
+                } catch(IOException e) {
+
+                }
+                System.out.println("Reciever: " + response.raw().toString());
                 artisan.setArtisanId(response.body().getData().getArtisanId());
             }
 

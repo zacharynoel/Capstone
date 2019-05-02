@@ -136,6 +136,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             @Override
             public void onFailure(Call<RestfulResponse> call, Throwable t) {
+                System.out.println("Failed");
             }
         });
     }
