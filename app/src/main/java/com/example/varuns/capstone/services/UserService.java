@@ -6,7 +6,7 @@ import retrofit2.http.Path;
 
 public interface UserService {
 
-    @GET("authentication/user/{userId}")
+    @GET("api/authentication/user/{userId}")
     Call<RestfulResponse> getUserById(@Path("userId") String userId);
 
 }

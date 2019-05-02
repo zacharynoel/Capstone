@@ -238,6 +238,7 @@ public class menu_activity extends AppCompatActivity
 
     public void getArtisans() {
         Call<RestfulResponse<List<Artisan>>> call = ApiService.artisanService().getAllArtisans();
+
         //handle the response
         final Context context = this;
         call.enqueue(new Callback<RestfulResponse<List<Artisan>>>() {

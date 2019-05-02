@@ -12,13 +12,13 @@ import retrofit2.http.Path;
 
 public interface ArtisanService {
 
-    @GET("artisan/{artisanId}")
+    @GET("api/artisan/{artisanId}")
     Call<RestfulResponse<Artisan>> getArtisanById(@Path("artisanId") String artisanId);
 
-    @GET("artisan/all")
+    @GET("api/artisan/all")
     Call<RestfulResponse<List<Artisan>>> getAllArtisans();
 
-    @POST("artisan")
+    @POST("api/artisan")
     Call<RestfulResponse<Artisan>> saveArtisan(@Body Artisan artisan);
 
 }
