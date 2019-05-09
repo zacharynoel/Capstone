@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         sharedPreferences = getSharedPreferences("Settings", Context.MODE_PRIVATE);
         if(sharedPreferences.contains("token")) {
             System.out.println("FOUND TOKEN");
-            validateToken(sharedPreferences.getString("token", ""));
+            //validateToken(sharedPreferences.getString("token", ""));
         }
 
         // Set up the login form.
@@ -364,28 +364,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             loginObj.put("password", mPassword);
             Call<RestfulResponse<SessionItem>> call = ApiService.loginService().attemptLogin(loginObj);
             //handle the response
-            call.enqueue(new Callback<RestfulResponse<SessionItem>>() {
-                @Override
-                public void onResponse(Call<RestfulResponse<SessionItem>> call, Response<RestfulResponse<SessionItem>> response) {
-                    if(response.isSuccessful()){
-                        String token = response.body().getData().getToken();
-                        ApiService.setToken(token);
-                        sharedPreferences
-                                .edit()
-                                .putString("token", token)
-                                .apply();
-                        System.out.println("Storing token");
-                    }
-                    else{
-                        ApiService.clearToken();
-                    }
+            try {
+                Response<RestfulResponse<SessionItem>> response = call.execute();
+                if(response.isSuccessful()){
+                    String token = response.body().getData().getToken();
+                    ApiService.setToken(token);
+                    sharedPreferences
+                            .edit()
+                            .putString("token", token)
+                            .apply();
+                    System.out.println("Storing token");
                 }
-
-                @Override
-                public void onFailure(Call<RestfulResponse<SessionItem>> call, Throwable t) {
-                    Toast.makeText(LoginActivity.this, "failure", Toast.LENGTH_SHORT).show();
+                else{
+                    System.out.println("Response unsuccessful, clearing token");
+                    ApiService.clearToken();
                 }
-            });
+            } catch (IOException e) {
+                Toast.makeText(LoginActivity.this, "failure", Toast.LENGTH_SHORT).show();
+            }
 
             return ApiService.hasToken();
         }
@@ -396,9 +392,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                System.out.println("Successful login");
                 finish();
                 nextScreen();
             } else {
+                System.out.println("Unsuccessful login");
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
@@ -406,6 +404,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected void onCancelled() {
+            System.out.println("Cancelled");
             mAuthTask = null;
             showProgress(false);
         }
