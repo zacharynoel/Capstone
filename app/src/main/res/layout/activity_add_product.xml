@@ -8,6 +8,7 @@
 
     <ImageButton
         android:id="@+id/addProductPic"
+        android:scaleType="fitXY"
         android:layout_width="91dp"
         android:layout_height="89dp"
         android:layout_marginStart="16dp"
