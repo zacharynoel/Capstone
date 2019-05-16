@@ -188,4 +188,5 @@
     <string name="action_search">Search artisans...</string>
     <string name="title_activity_send_message">Send_message</string>
     <string name="addartisan_name">AddArtisan</string>
+    <string name="title_activity_feedback">FeedbackActivity</string>
 </resources>

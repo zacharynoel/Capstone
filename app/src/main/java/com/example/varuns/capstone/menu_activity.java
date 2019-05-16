@@ -59,19 +59,15 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.surveymonkey.surveymonkeyandroidsdk.SurveyMonkey;
-import com.surveymonkey.surveymonkeyandroidsdk.utils.SMError;
 
 public class menu_activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-         SearchView.OnQueryTextListener {
+             SearchView.OnQueryTextListener {
 
     private ListView artisanList;
     static TextView artName;
     private static ArtisanAdapter artisanAdapterGlobal;
     public Integer[] artisanImages = { R.drawable.maria, R.drawable.native5, R.drawable.native3 };
-
-    private SurveyMonkey sdkInstance = new SurveyMonkey();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -315,10 +311,8 @@ public class menu_activity extends AppCompatActivity
     }
 
     private void surveyClicked() {
-        System.out.println("Here");
-        sdkInstance.onStart(this, "Amazon Handmade", 2, "SNPMH8T");
-        sdkInstance.startSMFeedbackActivityForResult(this,
-                2, "SNPMH8T");
+        Intent intent = new Intent(menu_activity.this, FeedbackActivity.class);
+        startActivity(intent);
     }
 
     @Override
