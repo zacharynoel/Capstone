@@ -29,7 +29,7 @@ public class EditArtisan extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_artisan);
-        setTitle("Edit Artisan");
+        setTitle(R.string.editartisan);
         int id = this.getIntent().getExtras().getInt("artisanId");
         getArtisanById(id);
         setupBottomNavigationView();

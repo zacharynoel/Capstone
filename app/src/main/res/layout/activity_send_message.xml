@@ -1,66 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Send_message">
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".Send_message">
 
-    <EditText
-        android:id="@+id/phoneText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:inputType="phone"
-        android:hint="Phone Number" />
+	<EditText
+		android:id="@+id/phoneText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		android:inputType="phone"
+		android:hint="@string/phonenumber" />
 
-    <ListView
-        android:id="@+id/listText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/phoneText"
-        android:layout_above="@id/sendText"/>
+	<ListView
+		android:id="@+id/listText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/phoneText"
+		android:layout_above="@id/sendText"/>
 
-    <EditText
-        android:id="@+id/messageText"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/listText"
-        android:layout_alignParentLeft="true"
-        android:hint="Message"
-        android:inputType="textPersonName"/>
+	<EditText
+		android:id="@+id/messageText"
+		android:layout_width="300dp"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/listText"
+		android:layout_alignParentLeft="true"
+		android:hint="@string/message"
+		android:inputType="textPersonName"/>
 
-    <Button
-        android:id="@+id/sendText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="55dp"
-        android:layout_toRightOf="@id/messageText"
-        android:background="@drawable/round_button"
-        android:text="Send"
-        android:textColor="@android:color/background_light" />
+	<Button
+		android:id="@+id/sendText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentRight="true"
+		android:layout_alignParentBottom="true"
+		android:layout_marginBottom="55dp"
+		android:layout_toRightOf="@id/messageText"
+		android:background="@drawable/round_button"
+		android:text="@string/send"
+		android:textColor="@android:color/background_light" />
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".Send_message"
-        tools:layout_editor_absoluteY="81dp">
+	<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		tools:context=".Send_message"
+		tools:layout_editor_absoluteY="81dp">
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="?android:attr/windowBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/navigation" />
-    </android.support.constraint.ConstraintLayout>
+		<android.support.design.widget.BottomNavigationView
+			android:id="@+id/navigation"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="0dp"
+			android:layout_marginEnd="0dp"
+			android:background="?android:attr/windowBackground"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:menu="@menu/navigation" />
+	</android.support.constraint.ConstraintLayout>
 </RelativeLayout>
-

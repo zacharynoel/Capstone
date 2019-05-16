@@ -304,14 +304,17 @@ public class menu_activity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        /*DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } 
+        }
+        if(searchView.isSelected()){
+
+        }
 
         else {
             super.onBackPressed();
-        }
+        }*/
     }
 
     private void surveyClicked() {

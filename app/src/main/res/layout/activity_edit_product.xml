@@ -25,7 +25,7 @@
             android:id="@+id/namebox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name" />
+            android:hint="@string/nameproduct" />
     </android.support.design.widget.TextInputLayout>
 
     <ImageButton
@@ -61,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/namebox"
-            android:hint="Description" />
+            android:hint="@string/description" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
@@ -73,7 +73,7 @@
         android:layout_marginTop="64dp"
         android:background="@drawable/round_button"
         android:onClick="cancelEdit"
-        android:text="Cancel"
+        android:text="@string/cancel"
         android:textColor="@android:color/background_light"
         app:layout_constraintStart_toEndOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
@@ -87,7 +87,7 @@
         android:layout_marginTop="64dp"
         android:background="@drawable/round_button"
         android:onClick="saveItem"
-        android:text="Submit"
+        android:text="@string/submit"
         android:textColor="@android:color/background_light"
         app:layout_constraintStart_toEndOf="@+id/cancelEdit"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
