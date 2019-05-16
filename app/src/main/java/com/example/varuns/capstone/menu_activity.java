@@ -22,6 +22,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -155,8 +157,11 @@ public class menu_activity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        //search submission is ignored since every text change applies filter
-        return false;
+        //search submission closes the keyboard
+        View view = this.findViewById(android.R.id.content);
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        return true;
     }
 
     @Override
