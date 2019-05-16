@@ -11,6 +11,7 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.anychart.enums.Sort;
 import com.example.varuns.capstone.model.Artisan;
 
 import java.util.ArrayList;
@@ -24,6 +25,9 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
     List<Artisan> filteredArtisans;
     private ArtisanFilter artisanFilter;
     private Context context;
+    private enum SortType {
+        alpha, date, item, product
+    }
 
     private class AlphabeticSort implements Comparator<Artisan> {
         public int compare(Artisan a1, Artisan a2) {
@@ -148,8 +152,10 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
         }
     }
 
+    private SortType currentSort = SortType.date;
     @SuppressLint("NewApi")
     public void sortAlphabetically() {
+        currentSort = SortType.alpha;
         artisans.sort(new AlphabeticSort());
         filteredArtisans.sort(new AlphabeticSort());
         notifyDataSetChanged();
@@ -157,6 +163,7 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
 
     @SuppressLint("NewApi")
     public void sortByDate() {
+        currentSort = SortType.date;
         artisans.sort(new DateAddedSort());
         filteredArtisans.sort(new DateAddedSort());
         notifyDataSetChanged();
@@ -164,6 +171,7 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
 
     @SuppressLint("NewApi")
     public void sortByNumberOfItems() {
+        currentSort = SortType.item;
         artisans.sort(new ItemCountSort());
         filteredArtisans.sort(new ItemCountSort());
         notifyDataSetChanged();
@@ -171,7 +179,8 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
 
     @SuppressLint("NewApi")
     public void sortByProductsSold() {
-        artisans.sort(new ItemCountSort());
+        currentSort = SortType.product;
+        artisans.sort(new ProductCountSort());
         filteredArtisans.sort(new ProductCountSort());
         notifyDataSetChanged();
     }
@@ -201,7 +210,42 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
     }
 
     public void addArtisan(Artisan a) {
-        artisans.add(a);
+        //add artisan in appropriate place based on current sorting method
+        switch (currentSort) {
+            case date:
+                for (int i = 0; i < artisans.size(); i++) {
+                    if (artisans.get(i).getArtisanId() > a.getArtisanId()) {
+                        artisans.add(i, a);
+                        break;
+                    }
+                }
+                break;
+            case item:
+                for (int i = 0; i < artisans.size(); i++) {
+                    if (artisans.get(i).getArtisanItems().size() <= a.getArtisanItems().size()) {
+                        artisans.add(i, a);
+                        break;
+                    }
+                }
+                break;
+            case alpha:
+                for (int i = 0; i < artisans.size(); i++) {
+                    if ((artisans.get(i).getFirstName() + artisans.get(i).getLastName())
+                            .compareTo(a.getFirstName() + a.getLastName()) >= 0) {
+                        artisans.add(i, a);
+                        break;
+                    }
+                }
+                break;
+            case product:
+                for (int i = 0; i < artisans.size(); i++) {
+                    if (artisans.get(i).getSoldItems().size() <= a.getSoldItems().size()) {
+                        artisans.add(i, a);
+                        break;
+                    }
+                }
+                break;
+        }
     }
 
     public List<Artisan> getArtisans() {
