@@ -31,8 +31,8 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
 
     private class AlphabeticSort implements Comparator<Artisan> {
         public int compare(Artisan a1, Artisan a2) {
-            return (a1.getFirstName() + a1.getLastName())
-                    .compareTo(a2.getFirstName() + a2.getLastName());
+            return (a1.getFirstName().toLowerCase() + a1.getLastName().toLowerCase())
+                    .compareTo(a2.getFirstName().toLowerCase() + a2.getLastName().toLowerCase());
         }
     }
 
@@ -213,12 +213,7 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
         //add artisan in appropriate place based on current sorting method
         switch (currentSort) {
             case date:
-                for (int i = 0; i < artisans.size(); i++) {
-                    if (artisans.get(i).getArtisanId() > a.getArtisanId()) {
-                        artisans.add(i, a);
-                        break;
-                    }
-                }
+                artisans.add(a);
                 break;
             case item:
                 for (int i = 0; i < artisans.size(); i++) {
@@ -230,8 +225,8 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
                 break;
             case alpha:
                 for (int i = 0; i < artisans.size(); i++) {
-                    if ((artisans.get(i).getFirstName() + artisans.get(i).getLastName())
-                            .compareTo(a.getFirstName() + a.getLastName()) >= 0) {
+                    if ((artisans.get(i).getFirstName().toLowerCase() + artisans.get(i).getLastName().toLowerCase())
+                            .compareTo(a.getFirstName().toLowerCase() + a.getLastName().toLowerCase()) >= 0) {
                         artisans.add(i, a);
                         break;
                     }

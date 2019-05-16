@@ -1,5 +1,6 @@
 package com.example.varuns.capstone.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Artisan {
@@ -22,6 +23,8 @@ public class Artisan {
     }
 
     public Artisan() {
+        this.artisanItems = new ArrayList<>();
+        this.soldItems = new ArrayList<>();
     }
 
     public Integer getArtisanId() {

@@ -31,10 +31,15 @@ public class FeedbackActivity extends AppCompatActivity {
             }
         });
 
+        setTitle("Bug Feedback");
         bugFeedback = findViewById(R.id.bugDetail);
         bugCause = findViewById(R.id.bugCause);
-        Button mEmailSignInButton = findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
+
+        bugFeedback.setHint("Enter details about the bug here");
+        bugCause.setHint("Enter how you think the bug was caused here");
+
+        Button submitFeedbackBtn = findViewById(R.id.submitFeedback);
+        submitFeedbackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 submitSurvey();
@@ -51,7 +56,7 @@ public class FeedbackActivity extends AppCompatActivity {
         String cause = bugCause.getText().toString();
         if (feedback.isEmpty()) {
             submittable = false;
-            bugFeedback.setError("Please provide detail");
+            bugFeedback.setError("Please provide details about the bug");
         }
 
         if (cause.isEmpty()) {
@@ -71,6 +76,8 @@ public class FeedbackActivity extends AppCompatActivity {
                 Toast.makeText(FeedbackActivity.this, "No email client",
                         Toast.LENGTH_SHORT).show();
             }
+
+            finish();
         }
     }
 
