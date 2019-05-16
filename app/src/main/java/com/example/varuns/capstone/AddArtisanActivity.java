@@ -89,6 +89,11 @@ public class AddArtisanActivity extends AppCompatActivity {
             return;
         }
 
+        if(!phoneNumber.matches("\\d+")) {
+            editPhoneNumber.setError("Phone number must only contain digits");
+            return;
+        }
+
         if (names[0].matches("\\d+")) {
             editName.setError("Name should not contain any numbers");
             return;
