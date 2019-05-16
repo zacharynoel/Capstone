@@ -89,9 +89,19 @@ public class AddArtisanActivity extends AppCompatActivity {
             return;
         }
 
+        if (names[0].matches("\\d+")) {
+            editName.setError("Name should not contain any numbers");
+            return;
+        }
+
         artisan.setFirstName(names[0]);
 
         if (names.length == 2) {
+            if (names[1].matches("\\d+")) {
+                editName.setError("Name should not contain any numbers");
+                return;
+            }
+
             artisan.setLastName(names[1]);
         }
         else {
