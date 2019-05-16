@@ -150,24 +150,28 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
 
     @SuppressLint("NewApi")
     public void sortAlphabetically() {
+        artisans.sort(new AlphabeticSort());
         filteredArtisans.sort(new AlphabeticSort());
         notifyDataSetChanged();
     }
 
     @SuppressLint("NewApi")
     public void sortByDate() {
+        artisans.sort(new DateAddedSort());
         filteredArtisans.sort(new DateAddedSort());
         notifyDataSetChanged();
     }
 
     @SuppressLint("NewApi")
     public void sortByNumberOfItems() {
+        artisans.sort(new ItemCountSort());
         filteredArtisans.sort(new ItemCountSort());
         notifyDataSetChanged();
     }
 
     @SuppressLint("NewApi")
     public void sortByProductsSold() {
+        artisans.sort(new ItemCountSort());
         filteredArtisans.sort(new ProductCountSort());
         notifyDataSetChanged();
     }
