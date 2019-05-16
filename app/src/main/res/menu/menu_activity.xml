@@ -15,27 +15,27 @@
 
     <item android:id="@+id/action_sort"
         android:icon="@drawable/baseline_sort_24"
-        android:title="Sort"
+        android:title="@string/sort"
         app:showAsAction="ifRoom|collapseActionView">
             <menu xmlns:android="http://schemas.android.com/apk/res/android">
                 <item android:id="@+id/sort_title"
-                    android:title="Sort" />
+                    android:title="@string/sort" />
 
                 <group android:checkableBehavior="single">
                     <item android:id="@+id/sort_alpha"
-                        android:title="Alphabetically" />
+                        android:title="@string/alphabetically" />
                     <item android:id="@+id/sort_date"
-                        android:title="By Date Added" />
+                        android:title="@string/dateadded" />
                     <item android:id="@+id/sort_items"
-                        android:title="By Number of Items" />
+                        android:title="@string/numberofitems" />
                     <item android:id="@+id/sort_products"
-                        android:title="By Products Sold" />
+                        android:title="@string/productsold" />
                 </group>
             </menu>
     </item>
     <item
         android:id="@+id/action_feedback"
         android:orderInCategory="101"
-        android:title="Bug Feedback"
+        android:title="@string/feedback"
         app:showAsAction="never" />
 </menu>

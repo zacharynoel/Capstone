@@ -86,24 +86,25 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
 
     //Calls sendMessage then clears the message body
     public void onClick(View view) {
-        sendMessage();
-        messageText.getText().clear();
+        if(sendMessage()) {
+            messageText.getText().clear();
+        }
     }
 
     //Retrieves the entered phone number and message
     //Checks permissions to send SMS
-    protected void sendMessage() {
+    protected boolean sendMessage() {
         phoneNo = phoneText.getText().toString();
         message = messageText.getText().toString();
 
         if (phoneText.getText().length()==0){
             phoneText.setError("Phone number is required!");
-            return;
+            return false;
         }
 
         if (phoneText.getText().length()>20){
             phoneText.setError("Phone number is too long!");
-            return;
+            return false;
         }
         if(currentNum.isEmpty())
             currentNum = phoneNo;
@@ -128,6 +129,7 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
                     new String[]{Manifest.permission.SEND_SMS},
                     SEND_PERMISSION);
         }
+        return true;
     }
 
     //If permissions are granted, process sending the message
