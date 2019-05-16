@@ -41,7 +41,7 @@ public class EditProduct extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_product);
-        setTitle("Edit Product");
+        setTitle(R.string.editproduct);
 
         artisanId = getIntent().getExtras().getInt("artisanId");
         itemId = getIntent().getExtras().getInt("itemId");

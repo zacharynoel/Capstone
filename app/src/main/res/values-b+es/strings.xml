@@ -1,8 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Capstone</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Configuraciones</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings">Configuraciones</string>
 
     <!-- Strings related to Settings -->
 
@@ -75,16 +76,16 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_login">Iniciar Sesión</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
+    <string name="error_invalid_email">El correo electrónico es invalido</string>
+    <string name="error_invalid_password">La contraseña es demasiado corta</string>
+    <string name="error_incorrect_password">La contraseña es incorrecta</string>
+    <string name="error_field_required">Este articulo es requerido</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
@@ -95,48 +96,48 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="title_activity_messages">Messages</string>
-    <string name="search_hint">Search artisans...</string>
+    <string name="search_hint">Buscar Artesanos...</string>
     <string name="action_search">Search artisans...</string>
     <string name="title_activity_send_message">Send_message</string>
     <string name="addartisan_name">AddArtisan</string>
 
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="signin">Sign In</string>
-    <string name="register">Register</string>
+    <string name="email">Correo Electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="signin">Iniciar Sesión</string>
+    <string name="register">Crear Cuenta</string>
 
-    <string name="artisans">Artisans</string>
-    <string name="myartisans">My Artisans</string>
-    <string name="products">Products</string>
+    <string name="artisans">Artesanos</string>
+    <string name="myartisans">Mis Artesanos</string>
+    <string name="products">Productos</string>
 
-    <string name="messages">Messages</string>
-    <string name="message">Message</string>
-    <string name="send">send</string>
+    <string name="messages">Mensajes</string>
+    <string name="message">Mensaje</string>
+    <string name="send">Enviar</string>
 
-    <string name="sort">Sort</string>
-    <string name="alphabetically">Alphabetically</string>
-    <string name="dateadded">By Date Added</string>
-    <string name="numberofitems">By Number of Items</string>
-    <string name="productsold">By Products Sold</string>
+    <string name="sort">Ordendar</string>
+    <string name="alphabetically">Alfabéticamente</string>
+    <string name="dateadded">Por Fecha Agregada</string>
+    <string name="numberofitems">Por Numero de Articulos</string>
+    <string name="productsold">Por Productos Vendidos</string>
 
-    <string name="reports">Reports</string>
+    <string name="settings">Configuraciones</string>
+    <string name="feedback">Realimentación</string>
 
-    <string name="settings">Settings</string>
-    <string name="feedback">Bug Feedback</string>
+    <string name="reports">Informes</string>
 
-    <string name="addartisan">Add Artisan</string>
-    <string name="nameartisan">Name (First Last)</string>
-    <string name="bio">Bio</string>
-    <string name="phonenumber">Phone Number</string>
-    <string name="add">Add</string>
+    <string name="addartisan">Añadir Artesano</string>
+    <string name="nameartisan">Nomre (Primero Último)</string>
+    <string name="bio">Biografía</string>
+    <string name="phonenumber">Número de Teléfono</string>
+    <string name="add">Enviar</string>
 
-    <string name="addproduct">Add Product</string>
-    <string name="nameproduct">Name</string>
-    <string name="description">Description</string>
-    <string name="cancel">Cancel</string>
+    <string name="addproduct">Añadir Producto</string>
+    <string name="nameproduct">Nombre</string>
+    <string name="description">Descripción</string>
+    <string name="cancel">Cancelar</string>
 
-    <string name="editproduct">Edit Product</string>
-    <string name="submit">Submit</string>
+    <string name="editproduct">Editar Producto</string>
+    <string name="submit">Enviar</string>
 
-    <string name="editartisan">Edit Artisan</string>
+    <string name="editartisan">Editar Artesano</string>
 </resources>

@@ -6,6 +6,8 @@ public class ArtisanItem {
     Integer itemId;
     String itemName;
     String itemDescription;
+    String imageId;
+    String encodedImage;
 
     public ArtisanItem(Integer artisanId, Integer itemId, String itemName, String itemDescription) {
         this.artisanId = artisanId;
@@ -44,5 +46,21 @@ public class ArtisanItem {
 
     public void setItemDescription(String itemDescription) {
         this.itemDescription = itemDescription;
+    }
+
+    public String getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(String imageId) {
+        this.imageId = imageId;
+    }
+
+    public String getEncodedImage() {
+        return encodedImage;
+    }
+
+    public void setEncodedImage(String encodedImage) {
+        this.encodedImage = encodedImage;
     }
 }

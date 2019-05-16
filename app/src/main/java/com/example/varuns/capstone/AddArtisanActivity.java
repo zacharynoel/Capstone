@@ -35,7 +35,7 @@ public class AddArtisanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle("Add New Artisan");
+        setTitle(R.string.addartisan);
         setContentView(R.layout.activity_add_artisan);
 
         editName = (EditText) findViewById(R.id.editName);
@@ -89,9 +89,24 @@ public class AddArtisanActivity extends AppCompatActivity {
             return;
         }
 
+        if(!phoneNumber.matches("\\d+")) {
+            editPhoneNumber.setError("Phone number must only contain digits");
+            return;
+        }
+
+        if (names[0].matches("\\d+")) {
+            editName.setError("Name should not contain any numbers");
+            return;
+        }
+
         artisan.setFirstName(names[0]);
 
         if (names.length == 2) {
+            if (names[1].matches("\\d+")) {
+                editName.setError("Name should not contain any numbers");
+                return;
+            }
+
             artisan.setLastName(names[1]);
         }
         else {
