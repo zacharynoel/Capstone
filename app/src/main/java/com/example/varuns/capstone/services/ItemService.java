@@ -23,6 +23,9 @@ public interface ItemService {
     @POST("api/artisan-item/sold-item")
     Call<RestfulResponse<Integer>> saveSoldItem(@Body SoldItem soldItem);
 
+    @POST("api/artisan-item")
+    Call<RestfulResponse<ArtisanItem>> saveArtisanItem1(@Body ArtisanItem artisanItem);
+
     @POST("api/artisan-item/sold-item")
     Call<RestfulResponse<Integer>> saveArtisanItem(@Body ArtisanItem soldItem);
 

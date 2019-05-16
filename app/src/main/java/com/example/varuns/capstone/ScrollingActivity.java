@@ -1,6 +1,8 @@
 package com.example.varuns.capstone;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +44,10 @@ public class ScrollingActivity extends AppCompatActivity {
     static TextView prodDesc;
     private Integer[] artisanImages = {R.drawable.maria, R.drawable.native5, R.drawable.native3 };
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        System.out.println("ASSS");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,6 +227,14 @@ public class ScrollingActivity extends AppCompatActivity {
             view = getLayoutInflater().inflate(R.layout.artisan_products_layout, null);
             TextView itemName = (TextView)view.findViewById(R.id.itemName);
             TextView itemDescription = (TextView)view.findViewById(R.id.itemDescription);
+            ImageView imageView2 = (ImageView)view.findViewById(R.id.imageView2);
+            if (artisanItems.get(i).getEncodedImage() != null) {
+                System.out.println("xyz: " + artisanItems.get(i).getEncodedImage());
+                System.out.println("There is an item with an image.");
+                byte[] decodedString = Base64.decode(artisanItems.get(i).getEncodedImage(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                imageView2.setImageBitmap(decodedByte);
+            }
             itemName.setText(artisanItems.get(i).getItemName());
             itemDescription.setText(artisanItems.get(i).getItemDescription());
             return view;

@@ -2,6 +2,8 @@ package com.example.varuns.capstone;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -9,6 +11,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -19,6 +22,7 @@ import com.example.varuns.capstone.model.ArtisanItem;
 import com.example.varuns.capstone.services.ApiService;
 import com.example.varuns.capstone.services.RestfulResponse;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -116,11 +120,18 @@ public class EditProduct extends AppCompatActivity {
         item.setItemName(nameInput.getText().toString());
         item.setItemDescription(descInput.getText().toString());
 
+        Bitmap bitmap = ((BitmapDrawable)imgButton.getDrawable()).getBitmap();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream .toByteArray();
+        String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        item.setEncodedImage(encoded);
+
         //this call will update and save the contents of the artisan that is passed to it
-        Call<RestfulResponse<Artisan>> call1 = ApiService.artisanService().saveArtisan(artisan);
-        call1.enqueue(new Callback<RestfulResponse<Artisan>>() {
+        Call<RestfulResponse<ArtisanItem>> call1 = ApiService.itemService().saveArtisanItem1(item);
+        call1.enqueue(new Callback<RestfulResponse<ArtisanItem>>() {
             @Override
-            public void onResponse(Call<RestfulResponse<Artisan>> call, Response<RestfulResponse<Artisan>> response) {
+            public void onResponse(Call<RestfulResponse<ArtisanItem>> call, Response<RestfulResponse<ArtisanItem>> response) {
                 //report the result of the call
                 Toast.makeText(EditProduct.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
@@ -128,7 +139,7 @@ public class EditProduct extends AppCompatActivity {
 
             //if the call results in a failure
             @Override
-            public void onFailure(Call<RestfulResponse<Artisan>> call, Throwable t) {
+            public void onFailure(Call<RestfulResponse<ArtisanItem>> call, Throwable t) {
                 Toast.makeText(EditProduct.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -158,6 +169,11 @@ public class EditProduct extends AppCompatActivity {
 
                 nameInput.setText(item.getItemName());
                 descInput.setText(item.getItemDescription());
+                if (item.getEncodedImage() != null) {
+                    byte[] decodedString = Base64.decode(item.getEncodedImage(), Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    imgButton.setImageBitmap(decodedByte);
+                }
             }
 
             //response if call results in a failure
