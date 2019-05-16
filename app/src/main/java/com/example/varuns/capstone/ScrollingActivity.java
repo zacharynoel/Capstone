@@ -22,6 +22,7 @@ import com.example.varuns.capstone.model.Artisan;
 import com.example.varuns.capstone.model.ArtisanItem;
 import com.example.varuns.capstone.services.ApiService;
 import com.example.varuns.capstone.services.RestfulResponse;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -166,7 +167,9 @@ public class ScrollingActivity extends AppCompatActivity {
         call.enqueue(new Callback<RestfulResponse<Artisan>>() {
             @Override
             public void onResponse(Call<RestfulResponse<Artisan>> call, Response<RestfulResponse<Artisan>> response) {
+                Gson gson = new Gson();
                 artisan = response.body().getData();
+                System.out.println(artisan.getArtisanItems().get(0).getEncodedImage().length());
                 ImageView imageView = (ImageView)findViewById(R.id.imageButton);
                 imageView.setImageResource(artisanImages[(artisan.getArtisanId() - 1)%3]);
                 artisanBio = (TextView) findViewById(R.id.artisanBio);
