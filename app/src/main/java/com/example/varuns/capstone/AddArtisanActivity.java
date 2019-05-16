@@ -35,7 +35,7 @@ public class AddArtisanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle("Add New Artisan");
+        setTitle(R.string.addartisan);
         setContentView(R.layout.activity_add_artisan);
 
         editName = (EditText) findViewById(R.id.editName);

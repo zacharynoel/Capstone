@@ -8,14 +8,14 @@
     android:layout_height="match_parent"
     tools:context=".ScrollingActivity"
     tools:layout_editor_absoluteY="81dp">
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+  <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:layout_width="match_parent"
 
-    android:fitsSystemWindows="true"
-    tools:context=".ScrollingActivity"
-    android:layout_height="wrap_content">
+      android:fitsSystemWindows="true"
+      tools:context=".ScrollingActivity"
+      android:layout_height="wrap_content">
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -31,74 +31,74 @@
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+      <android.support.design.widget.CollapsingToolbarLayout
+          android:id="@+id/toolbar_layout"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:fitsSystemWindows="true"
+          app:contentScrim="?attr/colorPrimary"
+          app:layout_scrollFlags="scroll|exitUntilCollapsed"
+          app:toolbarId="@+id/toolbar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:toolbarId="@+id/toolbar">
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="Artisan" />
 
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:contentDescription="Artisan" />
+        <TextView
+            android:id="@+id/artisanName"
+            android:layout_width="match_parent"
+            android:layout_height="73dp"
+            android:layout_marginTop="140dp"
+            android:background="@drawable/rounded_corner"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:textColor="@android:color/white"
+            android:textSize="30dp" />
 
-            <TextView
-                android:id="@+id/artisanName"
-                android:layout_width="match_parent"
-                android:layout_height="73dp"
-                android:layout_marginTop="140dp"
-                android:background="@drawable/rounded_corner"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:textColor="@android:color/white"
-                android:textSize="30dp" />
+        <ImageButton
+            android:id="@+id/editArtisan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="310dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:onClick="editArtisanClick"
+            android:visibility="visible"
+            app:srcCompat="@android:drawable/ic_menu_edit" />
 
-            <ImageButton
-                android:id="@+id/editArtisan"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="310dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="20dp"
-                android:onClick="editArtisanClick"
-                android:visibility="visible"
-                app:srcCompat="@android:drawable/ic_menu_edit" />
+        <ImageButton
+            android:id="@+id/addItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="310dp"
+            android:layout_marginTop="68dp"
+            android:layout_marginRight="20dp"
+            android:onClick="addItemClick"
+            android:visibility="visible"
+            app:srcCompat="@android:drawable/ic_menu_add" />
 
-            <ImageButton
-                android:id="@+id/addItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="310dp"
-                android:layout_marginTop="68dp"
-                android:layout_marginRight="20dp"
-                android:onClick="addItemClick"
-                android:visibility="visible"
-                app:srcCompat="@android:drawable/ic_menu_add" />
-
-            <ImageButton
-                android:id="@+id/viewReport"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="310dp"
-                android:layout_marginTop="106dp"
-                android:layout_marginRight="20dp"
-                android:onClick="onReportClick"
-                android:visibility="visible"
-                app:srcCompat="@android:drawable/ic_menu_month" />
+        <ImageButton
+            android:id="@+id/viewReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="310dp"
+            android:layout_marginTop="106dp"
+            android:layout_marginRight="20dp"
+            android:onClick="onReportClick"
+            android:visibility="visible"
+            app:srcCompat="@android:drawable/ic_menu_month" />
 
 
-        </android.support.design.widget.CollapsingToolbarLayout>
+      </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
     <TextView
@@ -106,7 +106,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="165dp"
-        android:text="Bio"
+        android:text="@string/bio"
         android:textSize="20dp" />
 
     <include layout="@layout/content_scrolling" />
@@ -116,7 +116,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="335dp"
-        android:text="Products"
+        android:text="@string/products"
         android:textSize="20dp" />
 
     <ListView
@@ -125,17 +125,17 @@
         android:layout_height="255dp"
         android:layout_marginTop="365dp"></ListView>
 
-</android.support.design.widget.CoordinatorLayout>
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="?android:attr/windowBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/navigation" />
+  </android.support.design.widget.CoordinatorLayout>
+  <android.support.design.widget.BottomNavigationView
+      android:id="@+id/navigation"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="0dp"
+      android:layout_marginEnd="0dp"
+      android:background="?android:attr/windowBackground"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:menu="@menu/navigation" />
 
 </android.support.constraint.ConstraintLayout>
