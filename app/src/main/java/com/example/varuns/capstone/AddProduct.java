@@ -1,6 +1,9 @@
 package com.example.varuns.capstone;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +11,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.varuns.capstone.model.Artisan;
@@ -15,6 +19,8 @@ import com.example.varuns.capstone.model.ArtisanItem;
 import com.example.varuns.capstone.services.ApiService;
 import com.example.varuns.capstone.services.RestfulResponse;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -26,6 +32,7 @@ public class AddProduct extends AppCompatActivity {
     Artisan artisan;
     EditText itemname;
     EditText itemdesc;
+    ImageButton imgButton;
     Integer id;
 
     @Override
@@ -40,7 +47,34 @@ public class AddProduct extends AppCompatActivity {
         itemname = (EditText) findViewById(R.id.addProductName);
         itemdesc = (EditText) findViewById(R.id.addProductDesc);
 
+        imgButton = (ImageButton) findViewById(R.id.addProductPic);
+
+        imgButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, 1);
+            }
+        });
+
         setupBottomNavigationView();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (resultCode == RESULT_OK) {
+            if (intent != null) {
+                final Uri uri = intent.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                    imgButton.setImageBitmap(bitmap);
+                } catch(IOException e) {
+                    System.out.println("Error, cannot find image file");
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 
     private void setupBottomNavigationView() {
