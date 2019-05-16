@@ -169,7 +169,6 @@ public class ScrollingActivity extends AppCompatActivity {
             public void onResponse(Call<RestfulResponse<Artisan>> call, Response<RestfulResponse<Artisan>> response) {
                 Gson gson = new Gson();
                 artisan = response.body().getData();
-                System.out.println(artisan.getArtisanItems().get(0).getEncodedImage().length());
                 ImageView imageView = (ImageView)findViewById(R.id.imageButton);
                 imageView.setImageResource(artisanImages[(artisan.getArtisanId() - 1)%3]);
                 artisanBio = (TextView) findViewById(R.id.artisanBio);
