@@ -1,5 +1,7 @@
 package com.example.varuns.capstone.model;
 
+import java.math.BigDecimal;
+
 public class ArtisanItem {
 
     Integer artisanId;
@@ -8,6 +10,7 @@ public class ArtisanItem {
     String itemDescription;
     String imageId;
     String encodedImage;
+    BigDecimal price;
 
     public ArtisanItem(Integer artisanId, Integer itemId, String itemName, String itemDescription) {
         this.artisanId = artisanId;
@@ -62,5 +65,13 @@ public class ArtisanItem {
 
     public void setEncodedImage(String encodedImage) {
         this.encodedImage = encodedImage;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

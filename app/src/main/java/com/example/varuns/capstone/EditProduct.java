@@ -24,6 +24,7 @@ import com.example.varuns.capstone.services.RestfulResponse;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,6 +36,7 @@ public class EditProduct extends AppCompatActivity {
     Artisan artisan;
     TextInputEditText descInput;
     TextInputEditText nameInput;
+    TextInputEditText priceInput;
     List<ArtisanItem> items;
     ArtisanItem item;
     Integer artisanId;
@@ -52,6 +54,7 @@ public class EditProduct extends AppCompatActivity {
 
         nameInput = (TextInputEditText) findViewById(R.id.namebox);
         descInput = (TextInputEditText) findViewById(R.id.descbox);
+        priceInput = (TextInputEditText) findViewById(R.id.pricebox);
 
         getArtisanById(artisanId);
 
@@ -119,6 +122,7 @@ public class EditProduct extends AppCompatActivity {
         }
         item.setItemName(nameInput.getText().toString());
         item.setItemDescription(descInput.getText().toString());
+        item.setPrice(new BigDecimal(priceInput.getText().toString()));
 
         Bitmap bitmap = ((BitmapDrawable)imgButton.getDrawable()).getBitmap();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -169,6 +173,7 @@ public class EditProduct extends AppCompatActivity {
 
                 nameInput.setText(item.getItemName());
                 descInput.setText(item.getItemDescription());
+                priceInput.setText(item.getPrice().toString());
                 if (item.getEncodedImage() != null) {
                     byte[] decodedString = Base64.decode(item.getEncodedImage(), Base64.DEFAULT);
                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);

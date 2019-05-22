@@ -28,6 +28,7 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
+        android:background="@drawable/rounded_corner"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -35,6 +36,7 @@
           android:id="@+id/toolbar_layout"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
+          android:background="@color/colorPrimary"
           android:fitsSystemWindows="true"
           app:contentScrim="?attr/colorPrimary"
           app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -44,6 +46,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
             app:layout_collapseMode="pin"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
@@ -51,6 +54,7 @@
             android:id="@+id/imageButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
             android:contentDescription="Artisan" />
 
         <TextView
