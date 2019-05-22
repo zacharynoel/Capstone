@@ -11,6 +11,7 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.anychart.enums.Sort;
 import com.example.varuns.capstone.model.Artisan;
 
 import java.util.ArrayList;
@@ -24,11 +25,14 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
     List<Artisan> filteredArtisans;
     private ArtisanFilter artisanFilter;
     private Context context;
+    private enum SortType {
+        alpha, date, item, product
+    }
 
     private class AlphabeticSort implements Comparator<Artisan> {
         public int compare(Artisan a1, Artisan a2) {
-            return (a1.getFirstName() + a1.getLastName())
-                    .compareTo(a2.getFirstName() + a2.getLastName());
+            return (a1.getFirstName().toLowerCase() + a1.getLastName().toLowerCase())
+                    .compareTo(a2.getFirstName().toLowerCase() + a2.getLastName().toLowerCase());
         }
     }
 
@@ -148,26 +152,35 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
         }
     }
 
+    private SortType currentSort = SortType.date;
     @SuppressLint("NewApi")
     public void sortAlphabetically() {
+        currentSort = SortType.alpha;
+        artisans.sort(new AlphabeticSort());
         filteredArtisans.sort(new AlphabeticSort());
         notifyDataSetChanged();
     }
 
     @SuppressLint("NewApi")
     public void sortByDate() {
+        currentSort = SortType.date;
+        artisans.sort(new DateAddedSort());
         filteredArtisans.sort(new DateAddedSort());
         notifyDataSetChanged();
     }
 
     @SuppressLint("NewApi")
     public void sortByNumberOfItems() {
+        currentSort = SortType.item;
+        artisans.sort(new ItemCountSort());
         filteredArtisans.sort(new ItemCountSort());
         notifyDataSetChanged();
     }
 
     @SuppressLint("NewApi")
     public void sortByProductsSold() {
+        currentSort = SortType.product;
+        artisans.sort(new ProductCountSort());
         filteredArtisans.sort(new ProductCountSort());
         notifyDataSetChanged();
     }
@@ -197,7 +210,53 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
     }
 
     public void addArtisan(Artisan a) {
-        artisans.add(a);
+        //add artisan in appropriate place based on current sorting method
+        boolean added;
+        switch (currentSort) {
+            case date:
+                artisans.add(a);
+                break;
+            case item:
+                added = false;
+                for (int i = 0; i < artisans.size(); i++) {
+                    if (artisans.get(i).getArtisanItems().size() <= a.getArtisanItems().size()) {
+                        artisans.add(i, a);
+                        added = true;
+                        break;
+                    }
+                }
+                if (!added) {
+                    artisans.add(a);
+                }
+                break;
+            case alpha:
+                added = false;
+                for (int i = 0; i < artisans.size(); i++) {
+                    if ((artisans.get(i).getFirstName().toLowerCase() + artisans.get(i).getLastName().toLowerCase())
+                            .compareTo(a.getFirstName().toLowerCase() + a.getLastName().toLowerCase()) >= 0) {
+                        artisans.add(i, a);
+                        added = true;
+                        break;
+                    }
+                }
+                if (!added) {
+                    artisans.add(a);
+                }
+                break;
+            case product:
+                added = false;
+                for (int i = 0; i < artisans.size(); i++) {
+                    if (artisans.get(i).getSoldItems().size() <= a.getSoldItems().size()) {
+                        artisans.add(i, a);
+                        added = true;
+                        break;
+                    }
+                }
+                if (!added) {
+                    artisans.add(a);
+                }
+                break;
+        }
     }
 
     public List<Artisan> getArtisans() {

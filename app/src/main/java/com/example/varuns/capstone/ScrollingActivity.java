@@ -43,12 +43,13 @@ public class ScrollingActivity extends AppCompatActivity {
     static TextView prodName;
     static TextView prodDesc;
     private Integer[] artisanImages = {R.drawable.maria, R.drawable.native5, R.drawable.native3 };
-
     @Override
-    protected void onNewIntent(Intent intent) {
-        System.out.println("ASSS");
+    protected void onResume(){
+        super.onResume();
+        if (artisan != null) {
+            getArtisanById(artisan.getArtisanId());
+        }
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,7 +177,6 @@ public class ScrollingActivity extends AppCompatActivity {
             public void onResponse(Call<RestfulResponse<Artisan>> call, Response<RestfulResponse<Artisan>> response) {
                 Gson gson = new Gson();
                 artisan = response.body().getData();
-                System.out.println(artisan.getArtisanItems().get(0).getEncodedImage().length());
                 ImageView imageView = (ImageView)findViewById(R.id.imageButton);
                 imageView.setImageResource(artisanImages[(artisan.getArtisanId() - 1)%3]);
                 artisanBio = (TextView) findViewById(R.id.artisanBio);
@@ -229,8 +229,6 @@ public class ScrollingActivity extends AppCompatActivity {
             TextView itemDescription = (TextView)view.findViewById(R.id.itemDescription);
             ImageView imageView2 = (ImageView)view.findViewById(R.id.imageView2);
             if (artisanItems.get(i).getEncodedImage() != null) {
-                System.out.println("xyz: " + artisanItems.get(i).getEncodedImage());
-                System.out.println("There is an item with an image.");
                 byte[] decodedString = Base64.decode(artisanItems.get(i).getEncodedImage(), Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 imageView2.setImageBitmap(decodedByte);

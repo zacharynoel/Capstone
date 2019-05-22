@@ -22,6 +22,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -59,19 +61,15 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.surveymonkey.surveymonkeyandroidsdk.SurveyMonkey;
-import com.surveymonkey.surveymonkeyandroidsdk.utils.SMError;
 
 public class menu_activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-         SearchView.OnQueryTextListener {
+             SearchView.OnQueryTextListener {
 
     private ListView artisanList;
     static TextView artName;
     private static ArtisanAdapter artisanAdapterGlobal;
     public Integer[] artisanImages = { R.drawable.maria, R.drawable.native5, R.drawable.native3 };
-
-    private SurveyMonkey sdkInstance = new SurveyMonkey();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,8 +157,11 @@ public class menu_activity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        //search submission is ignored since every text change applies filter
-        return false;
+        //search submission closes the keyboard
+        View view = this.findViewById(android.R.id.content);
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        return true;
     }
 
     @Override
@@ -318,10 +319,8 @@ public class menu_activity extends AppCompatActivity
     }
 
     private void surveyClicked() {
-        System.out.println("Here");
-        sdkInstance.onStart(this, "Amazon Handmade", 2, "SNPMH8T");
-        sdkInstance.startSMFeedbackActivityForResult(this,
-                2, "SNPMH8T");
+        Intent intent = new Intent(menu_activity.this, FeedbackActivity.class);
+        startActivity(intent);
     }
 
     @Override
