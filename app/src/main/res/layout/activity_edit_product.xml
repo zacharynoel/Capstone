@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/descbox"
             android:hint="Price"
-            android:text="price" />
+            android:text="" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout

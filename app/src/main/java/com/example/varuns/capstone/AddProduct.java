@@ -24,6 +24,7 @@ import com.example.varuns.capstone.services.RestfulResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,6 +36,7 @@ public class AddProduct extends AppCompatActivity {
     Artisan artisan;
     EditText itemname;
     EditText itemdesc;
+    EditText itemPrice;
     ImageButton imgButton;
     Integer id;
 
@@ -49,6 +51,8 @@ public class AddProduct extends AppCompatActivity {
 
         itemname = (EditText) findViewById(R.id.addProductName);
         itemdesc = (EditText) findViewById(R.id.addProductDesc);
+        itemPrice = (EditText) findViewById(R.id.pricebox);
+
 
         imgButton = (ImageButton) findViewById(R.id.addProductPic);
 
@@ -124,6 +128,7 @@ public class AddProduct extends AppCompatActivity {
 
         List<ArtisanItem> items = artisan.getArtisanItems();
         ArtisanItem newItem = new ArtisanItem(id, items.size()+1, itemname.getText().toString(), itemdesc.getText().toString());
+        newItem.setPrice(new BigDecimal(itemPrice.getText().toString()));
         newItem.setEncodedImage(encoded);
         items.add(newItem);
         artisan.setArtisanItems(items);
@@ -150,6 +155,7 @@ public class AddProduct extends AppCompatActivity {
         intent.putExtra("productId", newItem.getItemId());
         intent.putExtra("productName", newItem.getItemName());
         intent.putExtra("productDesc", newItem.getItemDescription());
+        intent.putExtra("productPrice", newItem.getPrice());
         setResult(RESULT_OK, intent);
         //ScrollingActivity.getAdapter().addItem(newItem);
         finish();

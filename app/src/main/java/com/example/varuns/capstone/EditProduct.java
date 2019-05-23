@@ -171,9 +171,15 @@ public class EditProduct extends AppCompatActivity {
                 items = artisan.getArtisanItems();
                 item = items.get(itemId);
 
-                nameInput.setText(item.getItemName());
-                descInput.setText(item.getItemDescription());
-                priceInput.setText(item.getPrice().toString());
+                if (item.getItemName() != null) {
+                    nameInput.setText(item.getItemName());
+                }
+                if (item.getItemDescription() != null) {
+                    descInput.setText(item.getItemDescription());
+                }
+                if (item.getPrice() != null) {
+                    priceInput.setText(item.getPrice().toString());
+                }
                 if (item.getEncodedImage() != null) {
                     byte[] decodedString = Base64.decode(item.getEncodedImage(), Base64.DEFAULT);
                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);

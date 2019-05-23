@@ -46,9 +46,9 @@ public class ScrollingActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        if (artisan != null) {
-            getArtisanById(artisan.getArtisanId());
-        }
+        Integer artisanId = getIntent().getExtras().getInt("artisanId");
+        getArtisanById(artisanId);
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
