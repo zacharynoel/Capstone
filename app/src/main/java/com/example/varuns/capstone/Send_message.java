@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 
-public class Send_message extends AppCompatActivity implements View.OnClickListener {
+public class Send_message extends BottomNavigation implements View.OnClickListener {
 
     //Global to denote if SMS permissions enabled
     private static final int SEND_PERMISSION = 0;
@@ -55,33 +55,7 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
 
         sendButton.setOnClickListener(this);
 
-        setupBottomNavigationView();
-    }
-
-    private void setupBottomNavigationView() {
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_home:
-                        Intent intent = new Intent(Send_message.this, menu_activity.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.navigation_dashboard:
-                        Intent intent1 = new Intent(Send_message.this, Send_message.class);
-                        startActivity(intent1);
-                        break;
-                    case R.id.navigation_notifications:
-                        Intent intent2 = new Intent(Send_message.this, ReportsActivity.class);
-                        startActivity(intent2);
-                        break;
-
-                }
-                return true;
-            }
-        });
+        setupBottomNavigationView(Send_message.this);
     }
 
     //Calls sendMessage then clears the message body

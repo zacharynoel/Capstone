@@ -34,7 +34,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ScrollingActivity extends AppCompatActivity {
+public class ScrollingActivity extends BottomNavigation {
 
     static Artisan artisan;
     private static ArtisanProductAdapter artisanProductAdapterGlobal;
@@ -74,33 +74,7 @@ public class ScrollingActivity extends AppCompatActivity {
             }
         });
 
-        setupBottomNavigationView();
-    }
-
-    private void setupBottomNavigationView() {
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_home:
-                        Intent intent = new Intent(ScrollingActivity.this, menu_activity.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.navigation_dashboard:
-                        Intent intent1 = new Intent(ScrollingActivity.this, Send_message.class);
-                        startActivity(intent1);
-                        break;
-                    case R.id.navigation_notifications:
-                        Intent intent2 = new Intent(ScrollingActivity.this, ReportsActivity.class);
-                        startActivity(intent2);
-                        break;
-
-                }
-                return true;
-            }
-        });
+        setupBottomNavigationView(ScrollingActivity.this);
     }
 
     @Override

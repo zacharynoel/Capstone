@@ -5,12 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,7 +18,6 @@ import com.example.varuns.capstone.services.ApiService;
 import com.example.varuns.capstone.services.RestfulResponse;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddProduct extends AppCompatActivity {
+public class AddProduct extends BottomNavigation {
 
     Artisan artisan;
     EditText itemname;
@@ -65,7 +60,7 @@ public class AddProduct extends AppCompatActivity {
             }
         });
 
-        setupBottomNavigationView();
+        setupBottomNavigationView(AddProduct.this);
     }
 
     @Override
@@ -82,32 +77,6 @@ public class AddProduct extends AppCompatActivity {
             }
         }
         super.onActivityResult(requestCode, resultCode, intent);
-    }
-
-    private void setupBottomNavigationView() {
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_home:
-                        Intent intent = new Intent(AddProduct.this, menu_activity.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.navigation_dashboard:
-                        Intent intent1 = new Intent(AddProduct.this, Send_message.class);
-                        startActivity(intent1);
-                        break;
-                    case R.id.navigation_notifications:
-                        Intent intent2 = new Intent(AddProduct.this, ReportsActivity.class);
-                        startActivity(intent2);
-                        break;
-
-                }
-                return true;
-            }
-        });
     }
 
     public void cancelAddProd(View v){

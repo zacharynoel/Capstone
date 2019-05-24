@@ -62,7 +62,7 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class menu_activity extends AppCompatActivity
+public class menu_activity extends BottomNavigation
         implements NavigationView.OnNavigationItemSelectedListener,
              SearchView.OnQueryTextListener {
 
@@ -103,37 +103,8 @@ public class menu_activity extends AppCompatActivity
             }
         });
 
-        setupBottomNavigationView();
+        setupBottomNavigationView(menu_activity.this);
     }
-
-    private void setupBottomNavigationView() {
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    Intent intent = new Intent(menu_activity.this, menu_activity.class);
-                    startActivity(intent);
-                    break;
-
-                case R.id.navigation_dashboard:
-                    Intent intent1 = new Intent(menu_activity.this, Send_message.class);
-                    startActivity(intent1);
-                    break;
-
-                case R.id.navigation_notifications:
-                    Intent intent2 = new Intent(menu_activity.this, ReportsActivity.class);
-                    startActivity(intent2);
-                    break;
-
-            }
-                return true;
-        }
-    });
-}
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

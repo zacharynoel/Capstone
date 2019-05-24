@@ -18,7 +18,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditArtisan extends AppCompatActivity {
+public class EditArtisan extends BottomNavigation {
 
     Artisan artisan;
     EditText nameInput;
@@ -32,34 +32,8 @@ public class EditArtisan extends AppCompatActivity {
         setTitle(R.string.editartisan);
         int id = this.getIntent().getExtras().getInt("artisanId");
         getArtisanById(id);
-        setupBottomNavigationView();
+        setupBottomNavigationView(EditArtisan.this);
     }
-
-    private void setupBottomNavigationView() {
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_home:
-                        Intent intent = new Intent(EditArtisan.this, menu_activity.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.navigation_dashboard:
-                        Intent intent1 = new Intent(EditArtisan.this, Send_message.class);
-                        startActivity(intent1);
-                        break;
-                    case R.id.navigation_notifications:
-                        Intent intent2 = new Intent(EditArtisan.this, ReportsActivity.class);
-                        startActivity(intent2);
-                        break;
-
-                }
-                return true;
-            }
-        });
-    }
-
 
     public void cancelEditArtisan(View v){
         finish();

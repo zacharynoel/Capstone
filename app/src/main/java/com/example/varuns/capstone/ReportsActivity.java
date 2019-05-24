@@ -43,7 +43,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class ReportsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class ReportsActivity extends BottomNavigation implements AdapterView.OnItemSelectedListener {
     private ListView reportList;
     private ListView soldItemList;
     private Button backButton;
@@ -136,7 +136,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
 
         anyChartView = findViewById(R.id.any_chart_view);
 
-        setupBottomNavigationView();
+        setupBottomNavigationView(ReportsActivity.this);
 
         List<Artisan> artisansList = menu_activity.getAdapter().getArtisans();
 
@@ -188,34 +188,6 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         soldItemList.setVisibility(View.GONE);
         backButton.setVisibility(View.GONE);
         reportList.setVisibility(View.VISIBLE);
-    }
-
-    private void setupBottomNavigationView() {
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_notifications);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_home:
-                        Intent intent = new Intent(ReportsActivity.this, menu_activity.class);
-                        startActivity(intent);
-                        break;
-
-                    case R.id.navigation_dashboard:
-                        Intent intent1 = new Intent(ReportsActivity.this, Send_message.class);
-                        startActivity(intent1);
-                        break;
-
-                    case R.id.navigation_notifications:
-                        Intent intent2 = new Intent(ReportsActivity.this, ReportsActivity.class);
-                        startActivity(intent2);
-                        break;
-
-                }
-                return true;
-            }
-        });
     }
 
     Column column;

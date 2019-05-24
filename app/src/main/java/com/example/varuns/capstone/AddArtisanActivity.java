@@ -1,18 +1,8 @@
 package com.example.varuns.capstone;
 
-import android.content.Context;
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.varuns.capstone.model.Artisan;
@@ -26,7 +16,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddArtisanActivity extends AppCompatActivity {
+public class AddArtisanActivity extends BottomNavigation {
     private EditText editName;
     private EditText editPhoneNumber;
     private EditText editBio;
@@ -42,33 +32,7 @@ public class AddArtisanActivity extends AppCompatActivity {
         editPhoneNumber = (EditText) findViewById(R.id.editPhoneNumber);
         editBio = (EditText) findViewById(R.id.editBio);
 
-        setupBottomNavigationView();
-    }
-
-    private void setupBottomNavigationView() {
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_home:
-                        Intent intent = new Intent(AddArtisanActivity.this, menu_activity.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.navigation_dashboard:
-                        Intent intent1 = new Intent(AddArtisanActivity.this, Send_message.class);
-                        startActivity(intent1);
-                        break;
-                    case R.id.navigation_notifications:
-                        Intent intent2 = new Intent(AddArtisanActivity.this, ReportsActivity.class);
-                        startActivity(intent2);
-                        break;
-
-                }
-                return true;
-            }
-        });
+        setupBottomNavigationView(AddArtisanActivity.this);
     }
 
     public void addNewArtisan(View view) {
