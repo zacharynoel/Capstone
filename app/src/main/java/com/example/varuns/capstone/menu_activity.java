@@ -114,8 +114,7 @@ public class menu_activity extends AppCompatActivity
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    Intent intent = new Intent(menu_activity.this, menu_activity.class);
-                    startActivity(intent);
+                    //do nothing
                     break;
 
                 case R.id.navigation_dashboard:

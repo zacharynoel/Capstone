@@ -70,8 +70,7 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
                         startActivity(intent);
                         break;
                     case R.id.navigation_dashboard:
-                        Intent intent1 = new Intent(Send_message.this, Send_message.class);
-                        startActivity(intent1);
+                        //do nothing
                         break;
                     case R.id.navigation_notifications:
                         Intent intent2 = new Intent(Send_message.this, ReportsActivity.class);

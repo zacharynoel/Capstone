@@ -208,8 +208,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                         break;
 
                     case R.id.navigation_notifications:
-                        Intent intent2 = new Intent(ReportsActivity.this, ReportsActivity.class);
-                        startActivity(intent2);
+                        //do nothing
                         break;
 
                 }
