@@ -8,14 +8,17 @@
     android:layout_height="match_parent"
     tools:context=".ScrollingActivity"
     tools:layout_editor_absoluteY="81dp">
+
   <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       android:layout_width="match_parent"
 
+      android:layout_height="wrap_content"
       android:fitsSystemWindows="true"
       tools:context=".ScrollingActivity"
-      android:layout_height="wrap_content">
+      tools:layout_editor_absoluteX="0dp"
+      tools:layout_editor_absoluteY="16dp">
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -35,20 +38,12 @@
       <android.support.design.widget.CollapsingToolbarLayout
           android:id="@+id/toolbar_layout"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
+          android:layout_height="203dp"
           android:background="@color/colorPrimary"
           android:fitsSystemWindows="true"
-          app:contentScrim="?attr/colorPrimary"
+          app:contentScrim="@android:color/background_light"
           app:layout_scrollFlags="scroll|exitUntilCollapsed"
           app:toolbarId="@+id/toolbar">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
-            app:layout_collapseMode="pin"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -70,33 +65,36 @@
 
         <ImageButton
             android:id="@+id/editArtisan"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="52dp"
+            android:layout_height="39dp"
             android:layout_marginLeft="310dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
+            android:background="@drawable/ic_edit_btn"
             android:onClick="editArtisanClick"
             android:visibility="visible"
-            app:srcCompat="@android:drawable/ic_menu_edit" />
+            app:layout_collapseParallaxMultiplier="1.0" />
 
         <ImageButton
             android:id="@+id/addItem"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
             android:layout_marginLeft="310dp"
             android:layout_marginTop="68dp"
             android:layout_marginRight="20dp"
+            android:background="@drawable/add_item"
             android:onClick="addItemClick"
             android:visibility="visible"
             app:srcCompat="@android:drawable/ic_menu_add" />
 
         <ImageButton
             android:id="@+id/viewReport"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
             android:layout_marginLeft="310dp"
             android:layout_marginTop="106dp"
             android:layout_marginRight="20dp"
+            android:background="@drawable/reports"
             android:onClick="onReportClick"
             android:visibility="visible"
             app:srcCompat="@android:drawable/ic_menu_month" />
