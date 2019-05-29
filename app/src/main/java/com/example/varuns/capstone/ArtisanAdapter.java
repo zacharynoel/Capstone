@@ -125,8 +125,16 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
                             }
                         }
                     }
+                    //user searched 1 word - if the user has a correct first/last show results
+                    else {
+                        if (firstValid)
+                           lastValid = true;
+                        else if (lastValid)
+                           firstValid = true;
+                     }
+       
 
-                    if (firstValid || lastValid) {
+                    if (firstValid && lastValid) {
                         filtered.add(a);
                     }
                 }
