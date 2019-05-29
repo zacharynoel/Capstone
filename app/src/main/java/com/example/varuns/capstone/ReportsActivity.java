@@ -1,5 +1,7 @@
 package com.example.varuns.capstone;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -12,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,6 +36,10 @@ import com.anychart.enums.HoverMode;
 import com.anychart.enums.Position;
 import com.anychart.enums.TooltipPositionMode;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -54,48 +61,8 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
 
 
     List<SoldItem> currSoldItems = new LinkedList<>();
-
-    private class DateSpinnerSelector implements AdapterView.OnItemSelectedListener {
-        public void onItemSelected(AdapterView<?> parent, View view,
-                                   int pos, long id) {
-            String selected = (String)parent.getItemAtPosition(pos);
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 16);
-            calendar.set(Calendar.MINUTE, 0);
-
-            int negativeDays = 0;
-            switch (selected) {
-                case "Past Week":
-                    negativeDays = -7;
-                    break;
-
-                case "Past Month":
-                    negativeDays = -30;
-                    break;
-
-                case "Past Year":
-                    negativeDays = -365;
-                    break;
-
-                default:
-                    negativeDays = 7;
-                    break;
-            }
-
-            calendar.add(Calendar.DATE, negativeDays);
-            startDate = calendar.getTime();
-            calendar.add(Calendar.DATE, -negativeDays);
-            endDate = calendar.getTime();
-
-            createGraphData(currSoldItems);
-        }
-
-        public void onNothingSelected(AdapterView<?> parent) {
-            // Another interface callback
-        }
-    }
-
+    private int year, month, day;
+    Button startDateButton, endDateButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,20 +130,73 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
-        List<String> dateOptionsList = new LinkedList<>();
-        dateOptionsList.add("Past Week");
-        dateOptionsList.add("Past Month");
-        dateOptionsList.add("Past Year");
-        Spinner dateSpinner = (Spinner) findViewById(R.id.date_spinner);
-        ArrayAdapter<String> dateAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, dateOptionsList);
+        //configure date picking stuff
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        startDateButton = findViewById(R.id.dateOne);
+        endDateButton = findViewById(R.id.dateTwo);
+    }
 
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        dateSpinner.setAdapter(dateAdapter);
-        DateSpinnerSelector selector = new DateSpinnerSelector();
-        dateSpinner.setOnItemSelectedListener(selector);
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        if (id == 101) {
+            return new DatePickerDialog(this,
+                    startDateListener, year, month, day);
+        }
+        if (id == 102) {
+            return new DatePickerDialog(this,
+                    endDateListener, year, month, day);
+        }
+
+        return null;
+    }
+
+    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    private DatePickerDialog.OnDateSetListener startDateListener = new
+            DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker picker, int year, int month, int day) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.DAY_OF_MONTH, day);
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, month);
+                    startDate = calendar.getTime();
+                    startDateButton.setText(formatter.format(startDate));
+                    if (startDate.getTime() < endDate.getTime()) {
+                        createGraphData(currSoldItems);
+                    }
+                    else {
+                        endDateButton.setError("End date must be past start!");
+                    }
+        }
+    };
+
+    private DatePickerDialog.OnDateSetListener endDateListener = new
+            DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker picker, int year, int month, int day) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.DAY_OF_MONTH, day);
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, month);
+                    startDate = calendar.getTime();
+                    endDateButton.setText(formatter.format(startDate));
+                    if (startDate.getTime() < endDate.getTime()) {
+                        createGraphData(currSoldItems);
+                    }
+                    else {
+                        startDateButton.setError("Start date must be before end!");
+                    }
+        }
+    };
+
+    public void setStartDate(View view) {
+        showDialog(101);
+    }
+
+    public void setEndDate(View view) {
+        showDialog(102);
     }
 
     private String convertDate(String dateToString) {
