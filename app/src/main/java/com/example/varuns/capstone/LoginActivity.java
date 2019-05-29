@@ -23,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,6 +35,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazon.identity.auth.device.api.Listener;
+import com.amazon.identity.auth.device.api.authorization.Scope;
+import com.amazon.identity.auth.device.api.authorization.User;
 import com.example.varuns.capstone.model.SessionItem;
 import com.example.varuns.capstone.services.ApiService;
 import com.example.varuns.capstone.services.RestfulResponse;
@@ -56,6 +60,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.amazon.identity.auth.device.AuthError;
+import com.amazon.identity.auth.device.api.authorization.AuthCancellation;
+import com.amazon.identity.auth.device.api.authorization.AuthorizationManager;
+import com.amazon.identity.auth.device.api.authorization.AuthorizeListener;
+import com.amazon.identity.auth.device.api.authorization.AuthorizeRequest;
+import com.amazon.identity.auth.device.api.authorization.AuthorizeResult;
+import com.amazon.identity.auth.device.api.authorization.ProfileScope;
+import com.amazon.identity.auth.device.api.workflow.RequestContext;
+
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -67,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
+    private RequestContext requestContext;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -77,6 +91,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    String email;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +130,107 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        requestContext = RequestContext.create(this);
+
+        requestContext.registerListener(new AuthorizeListener() {
+
+            /* Authorization was completed successfully. */
+            @Override
+            public void onSuccess(AuthorizeResult result) {
+                /* Your app is now authorized for the requested scopes */
+              //  showProgress(true);
+              //  mAuthTask = new UserLoginTask(email, "password");
+              //  mAuthTask.execute((Void) null);
+                Intent intent = new Intent(LoginActivity.this, menu_activity.class);
+                startActivity(intent);
+            }
+
+            /* There was an error during the attempt to authorize the
+            application. */
+            @Override
+            public void onError(AuthError ae) {
+                System.out.println("Error when signing in");
+
+            }
+
+            /* Authorization was cancelled before it could be completed. */
+            @Override
+            public void onCancel(AuthCancellation cancellation) {
+                System.out.println("Cancel when signing in");
+            }
+        });
+
+        View loginButton = findViewById(R.id.login_with_amazon);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AuthorizationManager.authorize(new AuthorizeRequest
+                        .Builder(requestContext)
+                        .addScopes(ProfileScope.profile(), ProfileScope.postalCode())
+                        .build());
+            }});
     }
+
+    protected void onResume() {
+        super.onResume();
+        requestContext.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Scope[] scopes = {ProfileScope.profile(), ProfileScope.postalCode()};
+        AuthorizationManager.getToken(this, scopes, new Listener<AuthorizeResult, AuthError>() {
+            @Override
+            public void onSuccess(AuthorizeResult result) {
+                if (result.getAccessToken() != null) {
+                    /* The user is signed in */
+                    fetchUserProfile();
+                } else {
+                    /* The user is not signed in */
+                }
+            }
+
+            @Override
+            public void onError(AuthError ae) {
+                /* The user is not signed in */
+            }
+        });
+    }
+
+    private void fetchUserProfile() {
+        User.fetch(this, new Listener<User, AuthError>() {
+
+            /* fetch completed successfully. */
+            @Override
+            public void onSuccess(User user) {
+                final String name = user.getUserName();
+                final String uemail = user.getUserEmail();
+                final String account = user.getUserId();
+                final String zipCode = user.getUserPostalCode();
+
+                email = uemail;
+
+            }
+
+            /* There was an error during the attempt to get the profile. */
+            @Override
+            public void onError(AuthError ae) {
+           /*     runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String errorMessage = "Error retrieving profile information.\nPlease log in again";
+                        Toast errorToast = Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG);
+                        errorToast.setGravity(Gravity.CENTER, 0, 0);
+                        errorToast.show();
+                    }
+                });
+                */
+            }
+        });
+    }
+
 
     private void validateToken(String token) {
         ApiService.setToken(token);
