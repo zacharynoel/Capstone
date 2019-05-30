@@ -3,6 +3,7 @@ package com.example.varuns.capstone;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -21,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.varuns.capstone.Util.ImageUtil;
 import com.example.varuns.capstone.model.Artisan;
 import com.example.varuns.capstone.model.ArtisanItem;
 import com.example.varuns.capstone.services.ApiService;
@@ -229,8 +231,7 @@ public class ScrollingActivity extends AppCompatActivity {
             TextView itemDescription = (TextView)view.findViewById(R.id.itemDescription);
             ImageView imageView2 = (ImageView)view.findViewById(R.id.imageView2);
             if (artisanItems.get(i).getEncodedImage() != null) {
-                byte[] decodedString = Base64.decode(artisanItems.get(i).getEncodedImage(), Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                Bitmap decodedByte = ImageUtil.encodedStringToBitmap(artisanItems.get(i).getEncodedImage());
                 imageView2.setImageBitmap(decodedByte);
             }
             itemName.setText(artisanItems.get(i).getItemName());

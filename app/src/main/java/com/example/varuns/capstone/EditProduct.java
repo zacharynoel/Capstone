@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.varuns.capstone.Util.ImageUtil;
 import com.example.varuns.capstone.model.Artisan;
 import com.example.varuns.capstone.model.ArtisanItem;
 import com.example.varuns.capstone.services.ApiService;
@@ -125,10 +126,7 @@ public class EditProduct extends AppCompatActivity {
         item.setPrice(new BigDecimal(priceInput.getText().toString()));
 
         Bitmap bitmap = ((BitmapDrawable)imgButton.getDrawable()).getBitmap();
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream .toByteArray();
-        String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        String encoded = ImageUtil.BitmapToEncodedString(bitmap);
         item.setEncodedImage(encoded);
 
         //this call will update and save the contents of the artisan that is passed to it
