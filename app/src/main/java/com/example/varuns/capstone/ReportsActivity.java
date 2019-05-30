@@ -164,6 +164,8 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                     startDate = calendar.getTime();
                     startDateButton.setText(formatter.format(startDate));
                     if (startDate.getTime() < endDate.getTime()) {
+                        startDateButton.setError(null);
+                        endDateButton.setError(null);
                         createGraphData(currSoldItems);
                     }
                     else {
@@ -180,9 +182,11 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                     calendar.set(Calendar.DAY_OF_MONTH, day);
                     calendar.set(Calendar.YEAR, year);
                     calendar.set(Calendar.MONTH, month);
-                    startDate = calendar.getTime();
-                    endDateButton.setText(formatter.format(startDate));
+                    endDate = calendar.getTime();
+                    endDateButton.setText(formatter.format(endDate));
                     if (startDate.getTime() < endDate.getTime()) {
+                        startDateButton.setError(null);
+                        endDateButton.setError(null);
                         createGraphData(currSoldItems);
                     }
                     else {
