@@ -17,6 +17,9 @@ public interface LoginService {
     @POST("session")
     Call<RestfulResponse<SessionItem>> attemptLogin(@Body HashMap userLoginObj);
 
+    @POST("register")
+    Call<RestfulResponse<SessionItem>> attemptRegistration(@Body HashMap userRegistrationObj);
+
     @GET("api/validate")
     Call<RestfulResponse> validate();
 }

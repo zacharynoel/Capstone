@@ -3,27 +3,24 @@ package com.example.varuns.capstone;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Dialog;
+import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
+import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.Intent;
-import android.se.omapi.Session;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-
-import android.content.CursorLoader;
-import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,42 +29,34 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amazon.identity.auth.device.api.Listener;
-import com.amazon.identity.auth.device.api.authorization.Scope;
-import com.amazon.identity.auth.device.api.authorization.User;
-import com.example.varuns.capstone.model.SessionItem;
-import com.example.varuns.capstone.services.ApiService;
-import com.example.varuns.capstone.services.RestfulResponse;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import okhttp3.Headers;
-import okhttp3.Request;
-import okhttp3.ResponseBody;
-import okio.Buffer;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import com.amazon.identity.auth.device.AuthError;
+import com.amazon.identity.auth.device.api.Listener;
 import com.amazon.identity.auth.device.api.authorization.AuthCancellation;
 import com.amazon.identity.auth.device.api.authorization.AuthorizationManager;
 import com.amazon.identity.auth.device.api.authorization.AuthorizeListener;
 import com.amazon.identity.auth.device.api.authorization.AuthorizeRequest;
 import com.amazon.identity.auth.device.api.authorization.AuthorizeResult;
 import com.amazon.identity.auth.device.api.authorization.ProfileScope;
+import com.amazon.identity.auth.device.api.authorization.Scope;
+import com.amazon.identity.auth.device.api.authorization.User;
 import com.amazon.identity.auth.device.api.workflow.RequestContext;
+import com.example.varuns.capstone.model.SessionItem;
+import com.example.varuns.capstone.services.ApiService;
+import com.example.varuns.capstone.services.RestfulResponse;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -92,6 +81,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     String email;
+    String password;
 
 
     @Override
@@ -128,6 +118,36 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        Button mRegistrationButton = findViewById(R.id.registration_button);
+        mRegistrationButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
+                // custom dialog
+                final Dialog dialog = new Dialog(LoginActivity.this);
+                dialog.setContentView(R.layout.activity_login_registration_popup);
+
+                Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
+                final AutoCompleteTextView dRegistrationEmail = dialog.findViewById(R.id.registration_email);
+                final EditText dRegistrationPassword = dialog.findViewById(R.id.registration_password);
+
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String registrationEmail = dRegistrationEmail.getText().toString();
+                        String registrationPassword = dRegistrationPassword.getText().toString();
+                        UserRegistrationTask dDialogRegistrationTask = new UserRegistrationTask(registrationEmail, registrationPassword);
+                        dDialogRegistrationTask.execute();
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
@@ -139,11 +159,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onSuccess(AuthorizeResult result) {
                 /* Your app is now authorized for the requested scopes */
-              //  showProgress(true);
-              //  mAuthTask = new UserLoginTask(email, "password");
-              //  mAuthTask.execute((Void) null);
-                Intent intent = new Intent(LoginActivity.this, menu_activity.class);
-                startActivity(intent);
+                UserLoginTask qAuthTask = new UserLoginTask(email, password);
+                qAuthTask.execute((Void) null);
+                try {
+                    if(!qAuthTask.get()) {
+                        UserRegistrationTask qRegisterTask = new UserRegistrationTask(email, password);
+                        qRegisterTask.execute((Void) null);
+                        if(qRegisterTask.get()) {
+                            qAuthTask = new UserLoginTask(email, password);
+                            qAuthTask.execute((Void) null);
+                        }
+                    }
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //Intent intent = new Intent(LoginActivity.this, menu_activity.class);
+                //startActivity(intent);
             }
 
             /* There was an error during the attempt to authorize the
@@ -211,6 +244,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 final String zipCode = user.getUserPostalCode();
 
                 email = uemail;
+                password = account;
 
             }
 
@@ -523,6 +557,50 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             System.out.println("Cancelled");
             mAuthTask = null;
             showProgress(false);
+        }
+    }
+
+    /**
+     * Represents an asynchronous registration task used to authenticate
+     * the user.
+     */
+    public class UserRegistrationTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final String mEmail;
+        private final String mPassword;
+
+        UserRegistrationTask(String email, String password) {
+            mEmail = email;
+            mPassword = password;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            HashMap<String,String> loginObj = new HashMap<>();
+            loginObj.put("username", mEmail);
+            loginObj.put("password", mPassword);
+            Call<RestfulResponse<SessionItem>> call = ApiService.loginService().attemptRegistration(loginObj);
+            //handle the response
+            try {
+                Response<RestfulResponse<SessionItem>> response = call.execute();
+                return response.isSuccessful();
+            } catch (IOException e) {
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success) {
+                System.out.println("Successful registration");
+            } else {
+                System.out.println("Unsuccessful registration");
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            System.out.println("Cancelled Registration");
         }
     }
 }

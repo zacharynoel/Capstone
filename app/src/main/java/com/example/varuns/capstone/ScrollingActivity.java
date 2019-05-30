@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
@@ -16,15 +18,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.varuns.capstone.Util.ImageUtil;
 import com.example.varuns.capstone.model.Artisan;
 import com.example.varuns.capstone.model.ArtisanItem;
+import com.example.varuns.capstone.model.ItemCategory;
 import com.example.varuns.capstone.services.ApiService;
 import com.example.varuns.capstone.services.RestfulResponse;
 import com.google.gson.Gson;
@@ -36,15 +41,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ScrollingActivity extends AppCompatActivity {
+public class ScrollingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     static Artisan artisan;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
     private static ArtisanProductAdapter artisanProductAdapterGlobal;
-    static TextView artisanBio;
+//    static TextView artisanBio;
     static TextView artisanName;
     static TextView prodName;
     static TextView prodDesc;
+    FloatingActionButton submitEdit;
     private Integer[] artisanImages = {R.drawable.maria, R.drawable.native5, R.drawable.native3 };
+    Spinner spinner;
+    List<String> spinnerOptions;
     @Override
     protected void onResume(){
         super.onResume();
@@ -59,12 +69,21 @@ public class ScrollingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scrolling);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        artisanBio = (TextView) findViewById(R.id.artisanBio);
-        artisanName = (TextView) findViewById(R.id.artisanName);
         Integer artisanId = getIntent().getExtras().getInt("artisanId");
         getArtisanById(artisanId);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), artisanId);
+        adapter.setArtisanId(artisanId);
+        viewPager.setAdapter(adapter);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        setupSpinner();
+
+
+//        artisanBio = (TextView) findViewById(R.id.artisanBio);
+        artisanName = (TextView) findViewById(R.id.artisanName);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +96,42 @@ public class ScrollingActivity extends AppCompatActivity {
         });
 
         setupBottomNavigationView();
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        System.out.print("ASSSSSSS");
+
+        if (artisan != null) {
+            if (spinnerOptions.get(pos).equals("Edit Artisan")) {
+                editArtisanClick(view);
+            } else if (spinnerOptions.get(pos).equals("Add Product")) {
+                addItemClick(view);
+            } else if (spinnerOptions.get(pos).equals("View Reports")) {
+                onReportClick(view);
+            }
+        }
+    }
+
+    private void setupSpinner() {
+        spinnerOptions = new ArrayList<>();
+        spinnerOptions.add("Edit Artisan");
+        spinnerOptions.add("Add Product");
+        spinnerOptions.add("View Reports");
+        spinner = (Spinner) findViewById(R.id.spinner);
+        ScrollingActivity.SpinnerAdapter spinnerAdapter = new ScrollingActivity.SpinnerAdapter(spinnerOptions);
+        spinner.setAdapter(spinnerAdapter);
+        int initialSelectedPosition = spinner.getSelectedItemPosition();
+
+
+        spinner.setOnItemSelectedListener(this);
+
+
+
     }
 
     private void setupBottomNavigationView() {
@@ -142,26 +197,26 @@ public class ScrollingActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if(resultCode == RESULT_OK) {
                 artisanName.setText(data.getStringExtra("artisanName"));
-                artisanBio.setText(data.getStringExtra("artisanBio"));
+//                artisanBio.setText(data.getStringExtra("artisanBio"));
             }
         }
 
         //addItem
-        if (requestCode == 2) {
-            if(resultCode == RESULT_OK) {
-                final ArtisanItem newItem = new ArtisanItem(
-                        data.getIntExtra("productArtisan", -1),
-                        data.getIntExtra("productId", -1),
-                        data.getStringExtra("productName"),
-                        data.getStringExtra("productDesc"));
-                ListView artisanList = (ListView)findViewById(R.id.artisanProductList);
-                List<ArtisanItem> items = artisan.getArtisanItems();
-                items.add(newItem);
-                artisan.setArtisanItems(items);
-                ScrollingActivity.ArtisanProductAdapter artisanProductAdapter = new ScrollingActivity.ArtisanProductAdapter(items);
-                artisanList.setAdapter(artisanProductAdapter);
-            }
-        }
+//        if (requestCode == 2) {
+//            if(resultCode == RESULT_OK) {
+//                final ArtisanItem newItem = new ArtisanItem(
+//                        data.getIntExtra("productArtisan", -1),
+//                        data.getIntExtra("productId", -1),
+//                        data.getStringExtra("productName"),
+//                        data.getStringExtra("productDesc"));
+//                ListView artisanList = (ListView)findViewById(R.id.artisanProductList);
+//                List<ArtisanItem> items = artisan.getArtisanItems();
+//                items.add(newItem);
+//                artisan.setArtisanItems(items);
+//                ScrollingActivity.ArtisanProductAdapter artisanProductAdapter = new ScrollingActivity.ArtisanProductAdapter(items);
+//                artisanList.setAdapter(artisanProductAdapter);
+//            }
+//        }
     }
 
     public void onReportClick(View v){
@@ -177,20 +232,20 @@ public class ScrollingActivity extends AppCompatActivity {
         call.enqueue(new Callback<RestfulResponse<Artisan>>() {
             @Override
             public void onResponse(Call<RestfulResponse<Artisan>> call, Response<RestfulResponse<Artisan>> response) {
-                Gson gson = new Gson();
+//                Gson gson = new Gson();
                 artisan = response.body().getData();
                 ImageView imageView = (ImageView)findViewById(R.id.imageButton);
                 imageView.setImageResource(artisanImages[(artisan.getArtisanId() - 1)%3]);
-                artisanBio = (TextView) findViewById(R.id.artisanBio);
+//                artisanBio = (TextView) findViewById(R.id.artisanBio);
                 TextView artisanName = (TextView) findViewById(R.id.artisanName);
-                System.out.print("bio: " + artisan.getBio());
-                artisanBio.setText(artisan.getBio());
+//                System.out.print("bio: " + artisan.getBio());
+//                artisanBio.setText(artisan.getBio());
                 artisanName.setText(artisan.getFirstName() + " " + artisan.getLastName());
-                ListView artisanList = (ListView)findViewById(R.id.artisanProductList);
-                if (artisan.getArtisanItems().size() > 0) {
-                    ScrollingActivity.ArtisanProductAdapter artisanProductAdapter = new ScrollingActivity.ArtisanProductAdapter(artisan.getArtisanItems());
-                    artisanList.setAdapter(artisanProductAdapter);
-                }
+//                ListView artisanList = (ListView)findViewById(R.id.artisanProductList);
+//                if (artisan.getArtisanItems().size() > 0) {
+//                    ScrollingActivity.ArtisanProductAdapter artisanProductAdapter = new ScrollingActivity.ArtisanProductAdapter(artisan.getArtisanItems());
+//                    artisanList.setAdapter(artisanProductAdapter);
+//                }
 
             }
 
@@ -236,6 +291,34 @@ public class ScrollingActivity extends AppCompatActivity {
             }
             itemName.setText(artisanItems.get(i).getItemName());
             itemDescription.setText(artisanItems.get(i).getItemDescription());
+            return view;
+        }
+
+    }
+
+    class SpinnerAdapter extends BaseAdapter {
+
+        List<String> options;
+
+        public SpinnerAdapter(List<String> options) {
+
+            this.options = options;
+        }
+
+        public int getCount() {
+            return options.size();
+        }
+        public String getItem(int i) {
+            return options.get(i);
+        }
+        public void addItem(String option) { options.add(option);}
+        public long getItemId(int i) {
+            return i;
+        }
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = getLayoutInflater().inflate(R.layout.category_layout, null);
+            TextView categoryDescription = (TextView)view.findViewById(R.id.categoryDescription);
+            categoryDescription.setText(spinnerOptions.get(i));
             return view;
         }
 

@@ -1,6 +1,8 @@
 package com.example.varuns.capstone;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -27,6 +29,8 @@ import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,20 +38,27 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Button button2 = (Button) findViewById(R.id.button2);
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(myIntent);
-            }
-        });
-
+//        Button button2 = (Button) findViewById(R.id.button2);
+//        button2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
+//                startActivity(myIntent);
+//            }
+//        });
+//
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
+//
+//        //gson tool for printing objects
+//        final Gson gson = new Gson();
 
-        //gson tool for printing objects
-        final Gson gson = new Gson();
+//        viewPager = (ViewPager) findViewById(R.id.viewpager);
+//        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+//        viewPager.setAdapter(adapter);
+//
+//        tabLayout = (TabLayout) findViewById(R.id.tabs);
+//        tabLayout.setupWithViewPager(viewPager);
 
 //        //GETTING ARTISANS EXAMPLE
 //

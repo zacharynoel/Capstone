@@ -14,12 +14,18 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.varuns.capstone.Util.ImageUtil;
 import com.example.varuns.capstone.model.Artisan;
 import com.example.varuns.capstone.model.ArtisanItem;
+import com.example.varuns.capstone.model.ItemCategory;
 import com.example.varuns.capstone.services.ApiService;
 import com.example.varuns.capstone.services.RestfulResponse;
 
@@ -32,7 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditProduct extends AppCompatActivity {
+public class EditProduct extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     Artisan artisan;
     TextInputEditText descInput;
@@ -43,6 +49,9 @@ public class EditProduct extends AppCompatActivity {
     Integer artisanId;
     Integer itemId;
     ImageButton imgButton;
+    List<ItemCategory> itemCategories;
+    Spinner spinner;
+    ItemCategory itemCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +65,11 @@ public class EditProduct extends AppCompatActivity {
         nameInput = (TextInputEditText) findViewById(R.id.namebox);
         descInput = (TextInputEditText) findViewById(R.id.descbox);
         priceInput = (TextInputEditText) findViewById(R.id.pricebox);
+        spinner = (Spinner) findViewById(R.id.categorySpinner);
+
 
         getArtisanById(artisanId);
+        getItemCategories();
 
         imgButton = (ImageButton) findViewById(R.id.imageButton2);
 
@@ -87,6 +99,46 @@ public class EditProduct extends AppCompatActivity {
             }
         }
         super.onActivityResult(requestCode, resultCode, intent);
+    }
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
+    }
+
+
+    private void setCategorySpinnerOptions(List<ItemCategory> itemCategories) {
+
+        // Create an ArrayAdapter using the artisans array and a default spinner layout
+        EditProduct.ItemCategoryAdapter itemCategoryAdapter = new EditProduct.ItemCategoryAdapter(itemCategories);
+
+        // Specify the layout to use when the list of choices appears
+        // Apply the adapter to the spinner
+        spinner.setAdapter(itemCategoryAdapter);
+        spinner.setOnItemSelectedListener(this);
+
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        itemCategory = (ItemCategory)parent.getItemAtPosition(pos);
+
+    }
+
+    private void getItemCategories() {
+        Call<RestfulResponse<List<ItemCategory>>> call = ApiService.itemService().getAllItemCategories();
+        //handle the response
+        call.enqueue(new Callback<RestfulResponse<List<ItemCategory>>>() {
+            @Override
+            public void onResponse(Call<RestfulResponse<List<ItemCategory>>> call, Response<RestfulResponse<List<ItemCategory>>> response) {
+                itemCategories = response.body().getData();
+                setCategorySpinnerOptions(itemCategories);
+
+            }
+
+            @Override
+            public void onFailure(Call<RestfulResponse<List<ItemCategory>>> call, Throwable t) {
+                Toast.makeText(EditProduct.this, "failure", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setupBottomNavigationView() {
@@ -124,6 +176,9 @@ public class EditProduct extends AppCompatActivity {
         item.setItemName(nameInput.getText().toString());
         item.setItemDescription(descInput.getText().toString());
         item.setPrice(new BigDecimal(priceInput.getText().toString()));
+        if (itemCategory != null) {
+            item.setItemCategory(itemCategory);
+        }
 
         Bitmap bitmap = ((BitmapDrawable)imgButton.getDrawable()).getBitmap();
         String encoded = ImageUtil.BitmapToEncodedString(bitmap);
@@ -203,5 +258,33 @@ public class EditProduct extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    class ItemCategoryAdapter extends BaseAdapter {
+
+        List<ItemCategory> itemCategories;
+
+        public ItemCategoryAdapter(List<ItemCategory> itemCategories) {
+
+            this.itemCategories = itemCategories;
+        }
+
+        public int getCount() {
+            return itemCategories.size();
+        }
+        public ItemCategory getItem(int i) {
+            return itemCategories.get(i);
+        }
+        public void addItem(ItemCategory itemCategory) { itemCategories.add(itemCategory);}
+        public long getItemId(int i) {
+            return itemCategories.get(i).getCategoryId();
+        }
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = getLayoutInflater().inflate(R.layout.category_layout, null);
+            TextView categoryDescription = (TextView)view.findViewById(R.id.categoryDescription);
+            categoryDescription.setText(itemCategories.get(i).getDescription());
+            return view;
+        }
+
     }
 }

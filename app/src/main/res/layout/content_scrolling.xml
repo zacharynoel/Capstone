@@ -9,7 +9,7 @@
 
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ScrollingActivity"
-    tools:showIn="@layout/activity_scrolling">
+    tools:showIn="@layout/activity_scrolling1">
 
     <TextView
         android:id="@+id/artisanBio"

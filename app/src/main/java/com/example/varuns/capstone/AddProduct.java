@@ -51,6 +51,7 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
     Integer id;
     List<ItemCategory> itemCategories;
     Spinner spinner;
+    ItemCategory itemCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +148,9 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
         ArtisanItem newItem = new ArtisanItem(id, items.size()+1, itemname.getText().toString(), itemdesc.getText().toString());
         newItem.setPrice(new BigDecimal(itemPrice.getText().toString()));
         newItem.setEncodedImage(encoded);
+        if (itemCategory != null) {
+            newItem.setItemCategory(itemCategory);
+        }
         items.add(newItem);
         artisan.setArtisanItems(items);
 
@@ -181,20 +185,18 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
     private void setCategorySpinnerOptions(List<ItemCategory> itemCategories) {
 
         // Create an ArrayAdapter using the artisans array and a default spinner layout
-        ArrayAdapter<ItemCategory> adapter = new ArrayAdapter<ItemCategory>(this,
-            android.R.layout.simple_spinner_item, itemCategories);
+        ItemCategoryAdapter itemCategoryAdapter = new ItemCategoryAdapter(itemCategories);
 
         // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
          // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
+        spinner.setAdapter(itemCategoryAdapter);
         spinner.setOnItemSelectedListener(this);
 
     }
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
-        ItemCategory itemCategory = (ItemCategory)parent.getItemAtPosition(pos);
+        itemCategory = (ItemCategory)parent.getItemAtPosition(pos);
 
     }
 
@@ -205,6 +207,7 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             public void onResponse(Call<RestfulResponse<List<ItemCategory>>> call, Response<RestfulResponse<List<ItemCategory>>> response) {
                 itemCategories = response.body().getData();
+                setCategorySpinnerOptions(itemCategories);
 
             }
 
@@ -241,31 +244,31 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
         return true;
     }
 
-//    class ItemCategoryAdapter extends BaseAdapter {
-//
-//        List<ItemCategory> itemCategories;
-//
-//        public ItemCategoryAdapter(List<ItemCategory> itemCategories) {
-//
-//            this.itemCategories = itemCategories;
-//        }
-//
-//        public int getCount() {
-//            return itemCategories.size();
-//        }
-//        public ItemCategory getItem(int i) {
-//            return itemCategories.get(i);
-//        }
-//        public void addItem(ItemCategory itemCategory) { itemCategories.add(itemCategory);}
-//        public long getItemId(int i) {
-//            return itemCategories.get(i).getCategoryId();
-//        }
-//        public View getView(int i, View view, ViewGroup viewGroup) {
-//            Spinner spinner = (Spinner) findViewById(R.id.categorySpinner);
-//            spinner
-//
-//            return view;
-//        }
-//
-//    }
+    class ItemCategoryAdapter extends BaseAdapter {
+
+        List<ItemCategory> itemCategories;
+
+        public ItemCategoryAdapter(List<ItemCategory> itemCategories) {
+
+            this.itemCategories = itemCategories;
+        }
+
+        public int getCount() {
+            return itemCategories.size();
+        }
+        public ItemCategory getItem(int i) {
+            return itemCategories.get(i);
+        }
+        public void addItem(ItemCategory itemCategory) { itemCategories.add(itemCategory);}
+        public long getItemId(int i) {
+            return itemCategories.get(i).getCategoryId();
+        }
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = getLayoutInflater().inflate(R.layout.category_layout, null);
+            TextView categoryDescription = (TextView)view.findViewById(R.id.categoryDescription);
+            categoryDescription.setText(itemCategories.get(i).getDescription());
+            return view;
+        }
+
+    }
 }
