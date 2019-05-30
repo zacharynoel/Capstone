@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/edit_artisan_option"
+        android:title="Edit Artisan"/>
+
+    <item
+        android:id="@+id/add_product_option"
+        android:title="Add Product"/>
+
+    <item
+        android:id="@+id/view_reports_option"
+        android:title="View Reports"/>
+
+</menu>
