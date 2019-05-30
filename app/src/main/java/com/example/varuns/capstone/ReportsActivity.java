@@ -61,48 +61,8 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
 
 
     List<SoldItem> currSoldItems = new LinkedList<>();
-
-    private class DateSpinnerSelector implements AdapterView.OnItemSelectedListener {
-        public void onItemSelected(AdapterView<?> parent, View view,
-                                   int pos, long id) {
-            String selected = (String)parent.getItemAtPosition(pos);
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 16);
-            calendar.set(Calendar.MINUTE, 0);
-
-            int negativeDays = 0;
-            switch (selected) {
-                case "Past Week":
-                    negativeDays = -7;
-                    break;
-
-                case "Past Month":
-                    negativeDays = -30;
-                    break;
-
-                case "Past Year":
-                    negativeDays = -365;
-                    break;
-
-                default:
-                    negativeDays = 7;
-                    break;
-            }
-
-            calendar.add(Calendar.DATE, negativeDays);
-            startDate = calendar.getTime();
-            calendar.add(Calendar.DATE, -negativeDays);
-            endDate = calendar.getTime();
-
-            createGraphData(currSoldItems);
-        }
-
-        public void onNothingSelected(AdapterView<?> parent) {
-            // Another interface callback
-        }
-    }
-
+    private int year, month, day;
+    Button startDateButton, endDateButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

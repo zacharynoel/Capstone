@@ -11,6 +11,7 @@ public class ArtisanItem {
     String imageId;
     String encodedImage;
     BigDecimal price;
+    ItemCategory itemCategory;
 
     public ArtisanItem(Integer artisanId, Integer itemId, String itemName, String itemDescription) {
         this.artisanId = artisanId;
@@ -73,5 +74,13 @@ public class ArtisanItem {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public ItemCategory getItemCategory() {
+        return itemCategory;
+    }
+
+    public void setItemCategory(ItemCategory itemCategory) {
+        this.itemCategory = itemCategory;
     }
 }

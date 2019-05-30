@@ -2,6 +2,7 @@ package com.example.varuns.capstone.services;
 
 import com.example.varuns.capstone.model.Artisan;
 import com.example.varuns.capstone.model.ArtisanItem;
+import com.example.varuns.capstone.model.ItemCategory;
 import com.example.varuns.capstone.model.SoldItem;
 
 import java.util.List;
@@ -31,6 +32,9 @@ public interface ItemService {
 
     @GET("api/artisan-item/sold-item/user-id/{userId}")
     Call<RestfulResponse<List<SoldItem>>> getSoldItemsByUserId(@Path("userId") String userId);
+
+    @GET("api/artisan-item/item-categories")
+    Call<RestfulResponse<List<ItemCategory>>> getAllItemCategories();
 
 
 

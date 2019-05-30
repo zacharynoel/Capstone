@@ -12,12 +12,21 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.varuns.capstone.Util.ImageUtil;
 import com.example.varuns.capstone.model.Artisan;
 import com.example.varuns.capstone.model.ArtisanItem;
+import com.example.varuns.capstone.model.ItemCategory;
 import com.example.varuns.capstone.services.ApiService;
 import com.example.varuns.capstone.services.RestfulResponse;
 
@@ -25,13 +34,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddProduct extends AppCompatActivity {
+public class AddProduct extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     Artisan artisan;
     EditText itemname;
@@ -39,9 +49,13 @@ public class AddProduct extends AppCompatActivity {
     EditText itemPrice;
     ImageButton imgButton;
     Integer id;
+    List<ItemCategory> itemCategories;
+    Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        itemCategories = new ArrayList<>();
+        getItemCategories();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
         setTitle(R.string.addproduct);
@@ -52,9 +66,8 @@ public class AddProduct extends AppCompatActivity {
         itemname = (EditText) findViewById(R.id.addProductName);
         itemdesc = (EditText) findViewById(R.id.addProductDesc);
         itemPrice = (EditText) findViewById(R.id.pricebox);
-
-
         imgButton = (ImageButton) findViewById(R.id.addProductPic);
+        spinner = (Spinner) findViewById(R.id.categorySpinner);
 
         imgButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +95,10 @@ public class AddProduct extends AppCompatActivity {
             }
         }
         super.onActivityResult(requestCode, resultCode, intent);
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
     }
 
     private void setupBottomNavigationView() {
@@ -161,6 +178,43 @@ public class AddProduct extends AppCompatActivity {
         finish();
     }
 
+    private void setCategorySpinnerOptions(List<ItemCategory> itemCategories) {
+
+        // Create an ArrayAdapter using the artisans array and a default spinner layout
+        ArrayAdapter<ItemCategory> adapter = new ArrayAdapter<ItemCategory>(this,
+            android.R.layout.simple_spinner_item, itemCategories);
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+         // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        ItemCategory itemCategory = (ItemCategory)parent.getItemAtPosition(pos);
+
+    }
+
+    private void getItemCategories() {
+        Call<RestfulResponse<List<ItemCategory>>> call = ApiService.itemService().getAllItemCategories();
+        //handle the response
+        call.enqueue(new Callback<RestfulResponse<List<ItemCategory>>>() {
+            @Override
+            public void onResponse(Call<RestfulResponse<List<ItemCategory>>> call, Response<RestfulResponse<List<ItemCategory>>> response) {
+                itemCategories = response.body().getData();
+
+            }
+
+            @Override
+            public void onFailure(Call<RestfulResponse<List<ItemCategory>>> call, Throwable t) {
+                Toast.makeText(AddProduct.this, "failure", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void getArtisanById(final Integer artisanId) {
 
         Call<RestfulResponse<Artisan>> call = ApiService.artisanService().getArtisanById(artisanId.toString());
@@ -186,4 +240,32 @@ public class AddProduct extends AppCompatActivity {
         }
         return true;
     }
+
+//    class ItemCategoryAdapter extends BaseAdapter {
+//
+//        List<ItemCategory> itemCategories;
+//
+//        public ItemCategoryAdapter(List<ItemCategory> itemCategories) {
+//
+//            this.itemCategories = itemCategories;
+//        }
+//
+//        public int getCount() {
+//            return itemCategories.size();
+//        }
+//        public ItemCategory getItem(int i) {
+//            return itemCategories.get(i);
+//        }
+//        public void addItem(ItemCategory itemCategory) { itemCategories.add(itemCategory);}
+//        public long getItemId(int i) {
+//            return itemCategories.get(i).getCategoryId();
+//        }
+//        public View getView(int i, View view, ViewGroup viewGroup) {
+//            Spinner spinner = (Spinner) findViewById(R.id.categorySpinner);
+//            spinner
+//
+//            return view;
+//        }
+//
+//    }
 }
