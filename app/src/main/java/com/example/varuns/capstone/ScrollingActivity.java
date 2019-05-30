@@ -104,8 +104,6 @@ public class ScrollingActivity extends AppCompatActivity implements AdapterView.
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
-        System.out.print("ASSSSSSS");
-
         if (artisan != null) {
             if (spinnerOptions.get(pos).equals("Edit Artisan")) {
                 editArtisanClick(view);
@@ -119,16 +117,16 @@ public class ScrollingActivity extends AppCompatActivity implements AdapterView.
 
     private void setupSpinner() {
         spinnerOptions = new ArrayList<>();
+        spinnerOptions.add("");
         spinnerOptions.add("Edit Artisan");
         spinnerOptions.add("Add Product");
         spinnerOptions.add("View Reports");
         spinner = (Spinner) findViewById(R.id.spinner);
         ScrollingActivity.SpinnerAdapter spinnerAdapter = new ScrollingActivity.SpinnerAdapter(spinnerOptions);
         spinner.setAdapter(spinnerAdapter);
-        int initialSelectedPosition = spinner.getSelectedItemPosition();
+        //int initialSelectedPosition = spinner.getSelectedItemPosition();
 
-
-        spinner.setOnItemSelectedListener(this);
+        spinner.setOnItemSelectedListener(this); // Calls onItemSelected()
 
 
 
@@ -320,6 +318,18 @@ public class ScrollingActivity extends AppCompatActivity implements AdapterView.
             TextView categoryDescription = (TextView)view.findViewById(R.id.categoryDescription);
             categoryDescription.setText(spinnerOptions.get(i));
             return view;
+        }
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            View v = null;
+            if (position == 0) {
+                TextView tv = new TextView(ScrollingActivity.this);
+                tv.setVisibility(View.GONE);
+                v = tv;
+            } else {
+                v = super.getDropDownView(position, null, parent);
+            }
+            return v;
         }
 
     }
