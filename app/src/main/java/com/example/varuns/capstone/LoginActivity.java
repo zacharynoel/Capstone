@@ -180,7 +180,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
 
             /* There was an error during the attempt to authorize the
-            application. */
+            application.
             @Override
             public void onError(AuthError ae) {
                 System.out.println("Error when signing in");
@@ -251,7 +251,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             /* There was an error during the attempt to get the profile. */
             @Override
             public void onError(AuthError ae) {
-           /*     runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         String errorMessage = "Error retrieving profile information.\nPlease log in again";
@@ -260,7 +260,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         errorToast.show();
                     }
                 });
-                */
+
             }
         });
     }
@@ -501,6 +501,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
+        private int responseCode = 401;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -527,6 +528,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
                 else{
                     System.out.println("Response unsuccessful, clearing token");
+                    responseCode = response.code();
                     ApiService.clearToken();
                 }
             } catch (IOException e) {
@@ -547,7 +549,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 nextScreen();
             } else {
                 System.out.println("Unsuccessful login");
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                if (responseCode == 401) {
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                }
+                else {
+                    mEmailView.setError(getString(R.string.error_incorrect_email));
+                }
                 mPasswordView.requestFocus();
             }
         }

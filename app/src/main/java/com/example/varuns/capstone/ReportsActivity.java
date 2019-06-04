@@ -163,14 +163,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                     calendar.set(Calendar.MONTH, month);
                     startDate = calendar.getTime();
                     startDateButton.setText(formatter.format(startDate));
-                    if (startDate.getTime() < endDate.getTime()) {
-                        startDateButton.setError(null);
-                        endDateButton.setError(null);
-                        createGraphData(currSoldItems);
-                    }
-                    else {
-                        endDateButton.setError("End date must be past start!");
-                    }
+                    createGraphData(currSoldItems);
         }
     };
 
@@ -184,14 +177,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                     calendar.set(Calendar.MONTH, month);
                     endDate = calendar.getTime();
                     endDateButton.setText(formatter.format(endDate));
-                    if (startDate.getTime() < endDate.getTime()) {
-                        startDateButton.setError(null);
-                        endDateButton.setError(null);
-                        createGraphData(currSoldItems);
-                    }
-                    else {
-                        startDateButton.setError("Start date must be before end!");
-                    }
+                    createGraphData(currSoldItems);
         }
     };
 
@@ -205,7 +191,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
 
     private String convertDate(String dateToString) {
         String[] split = dateToString.split(" ");
-        return split[1] + " " + split[2];
+        return split[1] + " " + split[2] + " " + split[5];
     }
 
     public void goBackToReport(View view) {
@@ -242,10 +228,35 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        if (!(bottomNavigationView.getSelectedItemId() == R.id.navigation_notifications))
+            bottomNavigationView.setSelectedItemId(R.id.navigation_notifications);
+    }
+
+    private boolean verifySelectedDates() {
+        if (startDate.getTime() < endDate.getTime()) {
+            startDateButton.setError(null);
+            endDateButton.setError(null);
+            return true;
+        }
+        else {
+            endDateButton.setError("End date must be past start!");
+            startDateButton.setError("Start date must be before end!");
+            return false;
+        }
+    }
+
     Column column;
     Cartesian cartesian;
     boolean graphCreated = false;
     public List<SoldItem> createGraphData(List<SoldItem> soldItems) {
+        if (!verifySelectedDates()) {
+            return new LinkedList<>();
+        }
+
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         if (soldItems == null) {
@@ -257,20 +268,20 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         reportAdapterGlobal = reportAdapter;
 
         List<DataEntry> data = new ArrayList<>();
-        HashMap<String, List<SoldItem>> map = new HashMap<>();
+        HashMap<Long, List<SoldItem>> map = new HashMap<>();
 
         for (SoldItem si : soldItems) {
             if (si.getDateSold().getTime() >= startDate.getTime()
                     && si.getDateSold().getTime() <= endDate.getTime()) {
-                String dateStr = convertDate(si.getDateSold().toString());
-                if (!map.containsKey(dateStr)) {
+                long dateTime = si.getDateSold().getTime();
+                if (!map.containsKey(dateTime)) {
                     List<SoldItem> newItems = new LinkedList<SoldItem>();
                     newItems.add(si);
-                    map.put(dateStr, newItems);
+                    map.put(dateTime, newItems);
                 }
 
                 else {
-                    map.get(dateStr).add(si);
+                    map.get(dateTime).add(si);
                 }
             }
         }
@@ -286,13 +297,17 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         startDate = new Date(originalStartDate);
 
         int max = 0;
-        for (Map.Entry<String, List<SoldItem>> entry : map.entrySet()) {
-            data.add(new ValueDataEntry(entry.getKey(), entry.getValue().size()));
+        for (Map.Entry<Long, List<SoldItem>> entry : map.entrySet()) {
+            data.add(new ValueDataEntry(convertDate(new Date(entry.getKey()).toString()),
+                    entry.getValue().size()));
             max = max >= entry.getValue().size() ? max : entry.getValue().size();
         }
 
         if (!graphCreated) {
             cartesian = AnyChart.column();
+            cartesian.xScroller(true);
+            cartesian.xZoom().setToPointsCount(100, false, cartesian.xScale());
+
             column = cartesian.column(data);
             column.tooltip()
                     .titleFormat("{%X}")
@@ -325,6 +340,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
+        System.out.println("On Item Selected");
         Artisan current = (Artisan)parent.getItemAtPosition(pos);
 
         List<SoldItem> soldItems = current.getSoldItems();

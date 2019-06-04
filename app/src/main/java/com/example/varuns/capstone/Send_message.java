@@ -58,6 +58,15 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
         setupBottomNavigationView();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        if (!(bottomNavigationView.getSelectedItemId() == R.id.navigation_dashboard))
+            bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);
+    }
+
     private void setupBottomNavigationView() {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);

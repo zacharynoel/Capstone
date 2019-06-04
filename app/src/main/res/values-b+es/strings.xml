@@ -85,6 +85,7 @@
     <string name="error_invalid_email">El correo electrónico es invalido</string>
     <string name="error_invalid_password">La contraseña es demasiado corta</string>
     <string name="error_incorrect_password">La contraseña es incorrecta</string>
+    <string name="error_incorrect_email">El correo electrónico no se ha registrado</string>
     <string name="error_field_required">Este articulo es requerido</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
