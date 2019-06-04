@@ -89,8 +89,8 @@ public class menu_activity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         artisanList = (ListView)findViewById(R.id.artisanList);
-        getArtisans();
-//        getArtisansNoDB();
+        //getArtisans();
+        getArtisansNoDB();
         artisanList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -104,6 +104,14 @@ public class menu_activity extends AppCompatActivity
         });
 
         setupBottomNavigationView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        if (!(bottomNavigationView.getSelectedItemId() == R.id.navigation_home))
+            bottomNavigationView.setSelectedItemId(R.id.navigation_home);
     }
 
     private void setupBottomNavigationView() {

@@ -33,17 +33,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amazon.identity.auth.device.AuthError;
-import com.amazon.identity.auth.device.api.Listener;
-import com.amazon.identity.auth.device.api.authorization.AuthCancellation;
-import com.amazon.identity.auth.device.api.authorization.AuthorizationManager;
-import com.amazon.identity.auth.device.api.authorization.AuthorizeListener;
-import com.amazon.identity.auth.device.api.authorization.AuthorizeRequest;
-import com.amazon.identity.auth.device.api.authorization.AuthorizeResult;
-import com.amazon.identity.auth.device.api.authorization.ProfileScope;
-import com.amazon.identity.auth.device.api.authorization.Scope;
-import com.amazon.identity.auth.device.api.authorization.User;
-import com.amazon.identity.auth.device.api.workflow.RequestContext;
 import com.example.varuns.capstone.model.SessionItem;
 import com.example.varuns.capstone.services.ApiService;
 import com.example.varuns.capstone.services.RestfulResponse;
@@ -69,7 +58,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-    private RequestContext requestContext;
+    //private RequestContext requestContext;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -126,14 +115,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 // custom dialog
                 final Dialog dialog = new Dialog(LoginActivity.this);
-                dialog.setContentView(R.layout.activity_login_registration_popup);
+                //dialog.setContentView(R.layout.activity_login_registration_popup);
 
-                Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
-                final AutoCompleteTextView dRegistrationEmail = dialog.findViewById(R.id.registration_email);
-                final EditText dRegistrationPassword = dialog.findViewById(R.id.registration_password);
+                //Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
+                //final AutoCompleteTextView dRegistrationEmail = dialog.findViewById(R.id.registration_email);
+                //final EditText dRegistrationPassword = dialog.findViewById(R.id.registration_password);
 
                 // if button is clicked, close the custom dialog
-                dialogButton.setOnClickListener(new OnClickListener() {
+                /*dialogButton.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String registrationEmail = dRegistrationEmail.getText().toString();
@@ -144,21 +133,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     }
                 });
 
-                dialog.show();
+                dialog.show();*/
             }
         });
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        requestContext = RequestContext.create(this);
+        /*requestContext = RequestContext.create(this);
 
         requestContext.registerListener(new AuthorizeListener() {
 
-            /* Authorization was completed successfully. */
+            /* Authorization was completed successfully.
             @Override
             public void onSuccess(AuthorizeResult result) {
-                /* Your app is now authorized for the requested scopes */
+                /* Your app is now authorized for the requested scopes
                 UserLoginTask qAuthTask = new UserLoginTask(email, password);
                 qAuthTask.execute((Void) null);
                 try {
@@ -180,21 +169,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
 
             /* There was an error during the attempt to authorize the
-            application. */
+            application.
             @Override
             public void onError(AuthError ae) {
                 System.out.println("Error when signing in");
 
             }
 
-            /* Authorization was cancelled before it could be completed. */
+            /* Authorization was cancelled before it could be completed.
             @Override
             public void onCancel(AuthCancellation cancellation) {
                 System.out.println("Cancel when signing in");
             }
-        });
+        });*/
 
-        View loginButton = findViewById(R.id.login_with_amazon);
+        /*View loginButton = findViewById(R.id.login_with_amazon);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,40 +191,40 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         .Builder(requestContext)
                         .addScopes(ProfileScope.profile(), ProfileScope.postalCode())
                         .build());
-            }});
+            }});*/
     }
 
     protected void onResume() {
         super.onResume();
-        requestContext.onResume();
+        //requestContext.onResume();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Scope[] scopes = {ProfileScope.profile(), ProfileScope.postalCode()};
+        /*Scope[] scopes = {ProfileScope.profile(), ProfileScope.postalCode()};
         AuthorizationManager.getToken(this, scopes, new Listener<AuthorizeResult, AuthError>() {
             @Override
             public void onSuccess(AuthorizeResult result) {
                 if (result.getAccessToken() != null) {
-                    /* The user is signed in */
+                    /* The user is signed in
                     fetchUserProfile();
                 } else {
-                    /* The user is not signed in */
+                    /* The user is not signed in
                 }
             }
 
             @Override
             public void onError(AuthError ae) {
-                /* The user is not signed in */
+                /* The user is not signed in
             }
-        });
+        });*/
     }
 
     private void fetchUserProfile() {
-        User.fetch(this, new Listener<User, AuthError>() {
+        /*User.fetch(this, new Listener<User, AuthError>() {
 
-            /* fetch completed successfully. */
+            /* fetch completed successfully.
             @Override
             public void onSuccess(User user) {
                 final String name = user.getUserName();
@@ -248,7 +237,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             }
 
-            /* There was an error during the attempt to get the profile. */
+            /* There was an error during the attempt to get the profile.
             @Override
             public void onError(AuthError ae) {
            /*     runOnUiThread(new Runnable() {
@@ -260,9 +249,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         errorToast.show();
                     }
                 });
-                */
+
             }
-        });
+        });*/
     }
 
 
@@ -501,6 +490,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
+        private int responseCode = 401;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -527,6 +517,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
                 else{
                     System.out.println("Response unsuccessful, clearing token");
+                    responseCode = response.code();
                     ApiService.clearToken();
                 }
             } catch (IOException e) {
@@ -547,7 +538,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 nextScreen();
             } else {
                 System.out.println("Unsuccessful login");
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                if (responseCode == 401) {
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                }
+                else {
+                    mEmailView.setError(getString(R.string.error_incorrect_email));
+                }
                 mPasswordView.requestFocus();
             }
         }
