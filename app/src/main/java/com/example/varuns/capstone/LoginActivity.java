@@ -180,7 +180,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
 
             /* There was an error during the attempt to authorize the
-            application.
+            application. */
             @Override
             public void onError(AuthError ae) {
                 System.out.println("Error when signing in");
@@ -251,7 +251,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             /* There was an error during the attempt to get the profile. */
             @Override
             public void onError(AuthError ae) {
-                runOnUiThread(new Runnable() {
+            /*    runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         String errorMessage = "Error retrieving profile information.\nPlease log in again";
@@ -260,7 +260,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         errorToast.show();
                     }
                 });
-
+                */
             }
         });
     }
