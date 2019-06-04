@@ -129,7 +129,14 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
                         }
                     }
 
-                    if (firstValid || lastValid) {
+                    else {
+                        if (firstValid)
+                            lastValid = true;
+                        else if (lastValid)
+                            firstValid = true;
+                    }
+
+                    if (firstValid && lastValid) {
                         filtered.add(a);
                     }
                 }
