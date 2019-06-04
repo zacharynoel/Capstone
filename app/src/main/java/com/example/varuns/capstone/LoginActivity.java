@@ -586,6 +586,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             HashMap<String,String> loginObj = new HashMap<>();
             loginObj.put("username", mEmail);
             loginObj.put("password", mPassword);
+
+            if(mEmail.isEmpty() || mPassword.isEmpty() || mPassword.length() < 5){
+                return false;
+            }
+
             Call<RestfulResponse<SessionItem>> call = ApiService.loginService().attemptRegistration(loginObj);
             //handle the response
             try {
@@ -601,6 +606,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success) {
                 System.out.println("Successful registration");
             } else {
+                if(mEmail.isEmpty() && mPassword.isEmpty())
+                    Toast.makeText(LoginActivity.this, "Registration must include an email and password", Toast.LENGTH_SHORT).show();
+                else if(mEmail.isEmpty())
+                    Toast.makeText(LoginActivity.this, "Registration must include an email", Toast.LENGTH_SHORT).show();
+                else if(mPassword.isEmpty())
+                    Toast.makeText(LoginActivity.this, "Registration must include a password", Toast.LENGTH_SHORT).show();
+                else if(mPassword.length() < 4)
+                    Toast.makeText(LoginActivity.this, "Password must contain 5 or more characters", Toast.LENGTH_SHORT).show();
                 System.out.println("Unsuccessful registration");
             }
         }
