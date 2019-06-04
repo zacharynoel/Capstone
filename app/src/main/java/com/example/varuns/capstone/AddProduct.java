@@ -146,7 +146,10 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
 
         List<ArtisanItem> items = artisan.getArtisanItems();
         ArtisanItem newItem = new ArtisanItem(id, items.size()+1, itemname.getText().toString(), itemdesc.getText().toString());
-        newItem.setPrice(new BigDecimal(itemPrice.getText().toString()));
+        if(!itemPrice.getText().toString().isEmpty())
+            newItem.setPrice(new BigDecimal(itemPrice.getText().toString()));
+        else
+            newItem.setPrice(new BigDecimal(0));
         newItem.setEncodedImage(encoded);
         if (itemCategory != null) {
             newItem.setItemCategory(itemCategory);
