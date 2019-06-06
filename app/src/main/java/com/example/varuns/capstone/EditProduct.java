@@ -191,6 +191,13 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
             public void onResponse(Call<RestfulResponse<ArtisanItem>> call, Response<RestfulResponse<ArtisanItem>> response) {
                 //report the result of the call
                 Toast.makeText(EditProduct.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                Intent intent  = new Intent();
+                intent.putExtra("artisanId", artisan.getArtisanId());
+                setResult(RESULT_OK, intent);
+                finish();
+
+
+
 
             }
 
@@ -200,8 +207,6 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
                 Toast.makeText(EditProduct.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-        finish();
 
     }
 

@@ -230,6 +230,7 @@ public class menu_activity extends AppCompatActivity
 
         ArtisanAdapter artisanAdapter = new ArtisanAdapter(this, artisans);
         artisanAdapterGlobal = artisanAdapter;
+        artisanAdapterGlobal.notifyDataSetChanged();
         if (artisanList != null)
             artisanList.setAdapter(artisanAdapter);
 
@@ -249,6 +250,7 @@ public class menu_activity extends AppCompatActivity
                 ArtisanAdapter artisanAdapter = new ArtisanAdapter(context, artisans);
                 artisanList.setAdapter(artisanAdapter);
                 artisanAdapterGlobal = artisanAdapter;
+                artisanAdapterGlobal.notifyDataSetChanged();
 
                 //queue a second call to retrieve sold items for the artisan
                 Call<RestfulResponse<List<SoldItem>>> call2 = ApiService.itemService().getSoldItemsByUserId("1");

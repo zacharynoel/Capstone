@@ -7,37 +7,42 @@
     tools:context=".AddArtisanActivity"
     tools:layout_editor_absoluteY="81dp">
 
+    <ImageButton
+        android:id="@+id/addArtisanPic"
+        android:layout_width="108dp"
+        android:layout_height="103dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="fitXY"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
+
     <EditText
         android:id="@+id/editName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="17dp"
         android:ems="10"
         android:hint="@string/nameartisan"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/editBio"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/addArtisanPic" />
 
     <EditText
         android:id="@+id/editBio"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="91dp"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="14dp"
         android:ems="10"
         android:hint="@string/bio"
         android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/editPhoneNumber"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editName" />
@@ -47,15 +52,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="14dp"
         android:ems="10"
         android:hint="@string/phonenumber"
         android:inputType="phone"
-        app:layout_constraintBottom_toTopOf="@+id/new_artisan_btn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editBio" />
 
@@ -63,14 +66,12 @@
         android:id="@+id/new_artisan_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="252dp"
+        android:layout_marginStart="280dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/round_button"
         android:onClick="addNewArtisan"
         android:text="@string/add"
         android:textColor="@android:color/background_light"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editPhoneNumber" />
 

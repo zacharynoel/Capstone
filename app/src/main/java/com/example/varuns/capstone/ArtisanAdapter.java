@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anychart.enums.Sort;
+import com.example.varuns.capstone.Util.ImageUtil;
 import com.example.varuns.capstone.model.Artisan;
 import com.example.varuns.capstone.model.ItemCategory;
 import com.example.varuns.capstone.model.SoldItem;
@@ -209,6 +210,8 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
         this.artisans = artisans;
         this.filteredArtisans = artisans;
         this.context = context;
+        this.notifyDataSetChanged();
+
         getFilter();
     }
 
@@ -288,7 +291,12 @@ public class ArtisanAdapter extends BaseAdapter implements Filterable {
 
         int ran_seed = Math.abs((filteredArtisans.get(i).getFirstName()).hashCode());
         System.out.println(ran_seed);
-        artisanImage.setImageResource(((menu_activity)context).artisanImages[ran_seed%3]);
+        if (artisans.get(i).getEncodedImage() != null) {
+            artisanImage.setImageBitmap(ImageUtil.encodedStringToBitmap(artisans.get(i).getEncodedImage()));
+
+        } else {
+            artisanImage.setImageResource(((menu_activity) context).artisanImages[ran_seed % 3]);
+        }
 
         return view;
     }

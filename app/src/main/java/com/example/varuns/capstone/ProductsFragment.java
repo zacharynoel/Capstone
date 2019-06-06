@@ -44,6 +44,13 @@ public class ProductsFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getArtisanById(artisanId);
+
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         position = getArguments().getInt("pos");

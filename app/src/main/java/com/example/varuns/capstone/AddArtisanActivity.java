@@ -2,6 +2,10 @@ package com.example.varuns.capstone;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -12,9 +16,11 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.varuns.capstone.Util.ImageUtil;
 import com.example.varuns.capstone.model.Artisan;
 import com.example.varuns.capstone.services.ApiService;
 import com.example.varuns.capstone.services.RestfulResponse;
@@ -30,6 +36,8 @@ public class AddArtisanActivity extends AppCompatActivity {
     private EditText editName;
     private EditText editPhoneNumber;
     private EditText editBio;
+    ImageButton imgButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +49,33 @@ public class AddArtisanActivity extends AppCompatActivity {
         editName = (EditText) findViewById(R.id.editName);
         editPhoneNumber = (EditText) findViewById(R.id.editPhoneNumber);
         editBio = (EditText) findViewById(R.id.editBio);
+        imgButton = (ImageButton)findViewById(R.id.addArtisanPic);
+        imgButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, 1);
+            }
+        });
 
         setupBottomNavigationView();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (resultCode == RESULT_OK) {
+            if (intent != null) {
+                final Uri uri = intent.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                    imgButton.setImageBitmap(bitmap);
+                } catch(IOException e) {
+                    System.out.println("Error, cannot find image file");
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 
     private void setupBottomNavigationView() {
@@ -81,6 +114,7 @@ public class AddArtisanActivity extends AppCompatActivity {
         String phoneNumber = editPhoneNumber.getText().toString();
         String bio = editBio.getText().toString();
 
+
         //create artisan to save
         final Artisan artisan = new Artisan();
         String[] names = name.split(" ");
@@ -114,6 +148,8 @@ public class AddArtisanActivity extends AppCompatActivity {
         }
         artisan.setBio(bio);
         artisan.setPhoneNo(phoneNumber);
+        String encodedImage = ImageUtil.BitmapToEncodedString(((BitmapDrawable)imgButton.getDrawable()).getBitmap());
+        artisan.setEncodedImage(encodedImage);
 
         //call save artisan function of artisan service
         //when saving what ever you saved is returned with updated ids and other fields
@@ -131,7 +167,10 @@ public class AddArtisanActivity extends AppCompatActivity {
                 }
                 System.out.println("Reciever: " + response.raw().toString());
                 artisan.setArtisanId(response.body().getData().getArtisanId());
+                finish();
+
             }
+
 
             @Override
             public void onFailure(Call<RestfulResponse<Artisan>> call, Throwable t) {
@@ -141,9 +180,7 @@ public class AddArtisanActivity extends AppCompatActivity {
 
         if (menu_activity.getAdapter() != null)
             menu_activity.getAdapter().addArtisan(artisan);
-
-        finish();
-    }
+        }
 
     //verifies that user inputted correct information
     private boolean verifyFields() {
