@@ -20,8 +20,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,11 +43,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ScrollingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class ScrollingActivity extends AppCompatActivity {
 
     static Artisan artisan;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private ImageButton popupMenuButton;
     private static ArtisanProductAdapter artisanProductAdapterGlobal;
 //    static TextView artisanBio;
     static TextView artisanName;
@@ -53,8 +56,8 @@ public class ScrollingActivity extends AppCompatActivity implements AdapterView.
     static TextView prodDesc;
     FloatingActionButton submitEdit;
     private Integer[] artisanImages = {R.drawable.maria, R.drawable.native5, R.drawable.native3 };
-    Spinner spinner;
-    List<String> spinnerOptions;
+    PopupMenu artisanMenu;
+    List<String> menuOptions;
     @Override
     protected void onResume(){
         super.onResume();
@@ -79,8 +82,36 @@ public class ScrollingActivity extends AppCompatActivity implements AdapterView.
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        setupSpinner();
 
+        popupMenuButton = findViewById(R.id.artisan_options_menu);
+        popupMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(ScrollingActivity.this, popupMenuButton);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                        .inflate(R.menu.artisan_popup_menu, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (artisan != null) {
+                            if (item.getTitle().equals("Edit Artisan")) {
+                                editArtisanClick();
+                            } else if (item.getTitle().equals("Add Product")) {
+                                addItemClick();
+                            } else if (item.getTitle().equals("View Reports")) {
+                                onReportClick();
+                            }
+                        }
+                        return true;
+                    }
+                });
+
+                popup.show(); //showing popup menu
+            }
+        });
 
 //        artisanBio = (TextView) findViewById(R.id.artisanBio);
         artisanName = (TextView) findViewById(R.id.artisanName);
@@ -100,36 +131,6 @@ public class ScrollingActivity extends AppCompatActivity implements AdapterView.
 
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
-    }
-
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
-        if (artisan != null) {
-            if (spinnerOptions.get(pos).equals("Edit Artisan")) {
-                editArtisanClick(view);
-            } else if (spinnerOptions.get(pos).equals("Add Product")) {
-                addItemClick(view);
-            } else if (spinnerOptions.get(pos).equals("View Reports")) {
-                onReportClick(view);
-            }
-        }
-    }
-
-    private void setupSpinner() {
-        spinnerOptions = new ArrayList<>();
-        spinnerOptions.add("");
-        spinnerOptions.add("Edit Artisan");
-        spinnerOptions.add("Add Product");
-        spinnerOptions.add("View Reports");
-        spinner = (Spinner) findViewById(R.id.spinner);
-        ScrollingActivity.SpinnerAdapter spinnerAdapter = new ScrollingActivity.SpinnerAdapter(spinnerOptions);
-        spinner.setAdapter(spinnerAdapter);
-        //int initialSelectedPosition = spinner.getSelectedItemPosition();
-
-        spinner.setOnItemSelectedListener(this); // Calls onItemSelected()
-
-
-
     }
 
     private void setupBottomNavigationView() {
@@ -177,13 +178,13 @@ public class ScrollingActivity extends AppCompatActivity implements AdapterView.
         startActivity(intent);
     }
 
-    public void editArtisanClick(View v){
+    public void editArtisanClick(){
         Intent intent = new Intent(ScrollingActivity.this, EditArtisan.class);
         intent.putExtra("artisanId", artisan.getArtisanId());
         startActivityForResult(intent, 1);
     }
 
-    public void addItemClick(View v){
+    public void addItemClick(){
         Intent intent = new Intent(ScrollingActivity.this, AddProduct.class);
         intent.putExtra("artisanId", artisan.getArtisanId());
         startActivityForResult(intent, 2);
@@ -217,7 +218,7 @@ public class ScrollingActivity extends AppCompatActivity implements AdapterView.
 //        }
     }
 
-    public void onReportClick(View v){
+    public void onReportClick(){
         Intent intent = new Intent(ScrollingActivity.this, ReportsActivity.class);
         intent.putExtra("artisanId", artisan.getArtisanId());
         startActivity(intent);
@@ -294,46 +295,6 @@ public class ScrollingActivity extends AppCompatActivity implements AdapterView.
             itemName.setText(artisanItems.get(i).getItemName());
             itemDescription.setText(artisanItems.get(i).getItemDescription());
             return view;
-        }
-
-    }
-
-    class SpinnerAdapter extends BaseAdapter {
-
-        List<String> options;
-
-        public SpinnerAdapter(List<String> options) {
-
-            this.options = options;
-        }
-
-        public int getCount() {
-            return options.size();
-        }
-        public String getItem(int i) {
-            return options.get(i);
-        }
-        public void addItem(String option) { options.add(option);}
-        public long getItemId(int i) {
-            return i;
-        }
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            view = getLayoutInflater().inflate(R.layout.category_layout, null);
-            TextView categoryDescription = (TextView)view.findViewById(R.id.categoryDescription);
-            categoryDescription.setText(spinnerOptions.get(i));
-            return view;
-        }
-        @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
-            View v = null;
-            if (position == 0) {
-                TextView tv = new TextView(ScrollingActivity.this);
-                tv.setVisibility(View.GONE);
-                v = tv;
-            } else {
-                v = super.getDropDownView(position, null, parent);
-            }
-            return v;
         }
 
     }
