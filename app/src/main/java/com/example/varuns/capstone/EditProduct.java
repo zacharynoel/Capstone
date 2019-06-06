@@ -175,7 +175,12 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
         }
         item.setItemName(nameInput.getText().toString());
         item.setItemDescription(descInput.getText().toString());
-        item.setPrice(new BigDecimal(priceInput.getText().toString()));
+
+        if(!priceInput.getText().toString().isEmpty() && Double.parseDouble(priceInput.getText().toString()) >= 0)
+            item.setPrice(new BigDecimal(priceInput.getText().toString()));
+        else
+            item.setPrice(new BigDecimal(0));
+
         if (itemCategory != null) {
             item.setItemCategory(itemCategory);
         }

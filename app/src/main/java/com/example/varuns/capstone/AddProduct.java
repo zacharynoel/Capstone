@@ -147,7 +147,7 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
 
         List<ArtisanItem> items = artisan.getArtisanItems();
         ArtisanItem newItem = new ArtisanItem(id, items.size()+1, itemname.getText().toString(), itemdesc.getText().toString());
-        if(!itemPrice.getText().toString().isEmpty())
+        if(!itemPrice.getText().toString().isEmpty() && Double.parseDouble(itemPrice.getText().toString()) >= 0)
             newItem.setPrice(new BigDecimal(itemPrice.getText().toString()));
         else
             newItem.setPrice(new BigDecimal(0));
