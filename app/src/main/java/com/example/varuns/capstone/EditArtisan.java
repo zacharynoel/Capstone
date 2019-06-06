@@ -123,6 +123,11 @@ public class EditArtisan extends AppCompatActivity {
             return;
         }
 
+        if (names[0].matches("\\d+")) {
+            nameError("Name should not contain any numbers");
+            return;
+        }
+
         if (phoneInput.getText().length()==0){
             phoneInput.setError("Phone number is required!");
             return;
@@ -136,6 +141,11 @@ public class EditArtisan extends AppCompatActivity {
         artisan.setFirstName(names[0]);
 
         if (names.length == 2) {
+            if (names[1].matches("\\d+")) {
+                nameError("Name should not contain any numbers");
+                return;
+            }
+
             artisan.setLastName(names[1]);
         }
         else {
