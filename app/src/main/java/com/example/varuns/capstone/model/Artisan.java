@@ -12,6 +12,8 @@ public class Artisan {
     String phoneNo;
     List<ArtisanItem> artisanItems;
     List<SoldItem> soldItems;
+    String imageId;
+    String encodedImage;
 
     public Artisan(Integer artisanId, String firstName, String lastName, String bio, List<ArtisanItem> artisanItems, String phoneNo) {
         this.artisanItems = artisanItems;
@@ -81,5 +83,25 @@ public class Artisan {
 
     public String toString() {
         return firstName + " " + lastName;
+    }
+
+    public void setSoldItems(List<SoldItem> soldItems) {
+        this.soldItems = soldItems;
+    }
+
+    public String getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(String imageId) {
+        this.imageId = imageId;
+    }
+
+    public String getEncodedImage() {
+        return encodedImage;
+    }
+
+    public void setEncodedImage(String encodedImage) {
+        this.encodedImage = encodedImage;
     }
 }

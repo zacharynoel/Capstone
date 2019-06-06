@@ -56,6 +56,13 @@ public class BioFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getArtisanById(artisanId);
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_tab, container, false);
@@ -103,14 +110,14 @@ public class BioFragment extends Fragment {
                 }
                 productName.setText(artisan.getArtisanItems().get(0).getItemName());
             }
-            if (artisan.getArtisanItems().get(1) != null) {
+            if (artisan.getArtisanItems().size() > 1) {
                 if (artisan.getArtisanItems().get(1).getEncodedImage() != null) {
                     Bitmap decodedByte = ImageUtil.encodedStringToBitmap(artisan.getArtisanItems().get(1).getEncodedImage());
                     productImage1.setImageBitmap(decodedByte);
                 }
                 productName1.setText(artisan.getArtisanItems().get(1).getItemName());
             }
-            if (artisan.getArtisanItems().get(2) != null) {
+            if (artisan.getArtisanItems().size() > 2) {
                 if (artisan.getArtisanItems().get(2).getEncodedImage() != null) {
                     Bitmap decodedByte = ImageUtil.encodedStringToBitmap(artisan.getArtisanItems().get(2).getEncodedImage());
                     productImage2.setImageBitmap(decodedByte);

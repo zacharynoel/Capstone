@@ -1,6 +1,10 @@
 package com.example.varuns.capstone;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -8,11 +12,15 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.varuns.capstone.Util.ImageUtil;
 import com.example.varuns.capstone.model.Artisan;
 import com.example.varuns.capstone.services.ApiService;
 import com.example.varuns.capstone.services.RestfulResponse;
+
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,6 +32,7 @@ public class EditArtisan extends AppCompatActivity {
     EditText nameInput;
     EditText bioInput;
     EditText phoneInput;
+    ImageButton imgButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +42,33 @@ public class EditArtisan extends AppCompatActivity {
         int id = this.getIntent().getExtras().getInt("artisanId");
         getArtisanById(id);
         setupBottomNavigationView();
+
+        imgButton = (ImageButton)findViewById(R.id.addArtisanPic);
+
+        imgButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, 1);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (resultCode == RESULT_OK) {
+            if (intent != null) {
+                final Uri uri = intent.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                    imgButton.setImageBitmap(bitmap);
+                } catch(IOException e) {
+                    System.out.println("Error, cannot find image file");
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 
     private void setupBottomNavigationView() {
@@ -108,6 +144,11 @@ public class EditArtisan extends AppCompatActivity {
         artisan.setBio(bioInput.getText().toString());
         artisan.setPhoneNo(phoneInput.getText().toString());
 
+        Bitmap bitmap = ((BitmapDrawable)imgButton.getDrawable()).getBitmap();
+        String encoded = ImageUtil.BitmapToEncodedString(bitmap);
+        artisan.setEncodedImage(encoded);
+
+
         //call save artisan function of artisan service
         //when saving what ever you saved is returned with updated ids and other fields
         Call<RestfulResponse<Artisan>> call1 = ApiService.artisanService().saveArtisan(artisan);
@@ -116,6 +157,14 @@ public class EditArtisan extends AppCompatActivity {
             public void onResponse(Call<RestfulResponse<Artisan>> call, Response<RestfulResponse<Artisan>> response) {
                 //report the result of the call
                 Toast.makeText(EditArtisan.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.putExtra("artisanName", (artisan.getFirstName() + " " + artisan.getLastName()));
+                intent.putExtra("artisanBio", artisan.getBio());
+                setResult(RESULT_OK, intent);
+                //menu_activity.artName.setText(artisan.getFirstName()+" " +artisan.getLastName());
+                //ScrollingActivity.artisanBio.setText(artisan.getBio());
+                //ScrollingActivity.artisanName.setText(artisan.getFirstName()+" " +artisan.getLastName());
+                finish();
                 //artisan.setArtisanId(response.body().getData().getArtisanId());
             }
 
@@ -124,15 +173,6 @@ public class EditArtisan extends AppCompatActivity {
                 Toast.makeText(EditArtisan.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-        Intent intent = new Intent();
-        intent.putExtra("artisanName", (artisan.getFirstName() + " " + artisan.getLastName()));
-        intent.putExtra("artisanBio", artisan.getBio());
-        setResult(RESULT_OK, intent);
-        //menu_activity.artName.setText(artisan.getFirstName()+" " +artisan.getLastName());
-        //ScrollingActivity.artisanBio.setText(artisan.getBio());
-        //ScrollingActivity.artisanName.setText(artisan.getFirstName()+" " +artisan.getLastName());
-        finish();
     }
 
     private void getArtisanById(final Integer artisanId) {
@@ -150,6 +190,10 @@ public class EditArtisan extends AppCompatActivity {
                 nameInput.setText(artisan.getFirstName()+" "+artisan.getLastName());
                 bioInput.setText(artisan.getBio());
                 phoneInput.setText(artisan.getPhoneNo());
+                if (artisan.getEncodedImage() != null) {
+                    Bitmap decodedByte = ImageUtil.encodedStringToBitmap(artisan.getEncodedImage());
+                    imgButton.setImageBitmap(decodedByte);
+                }
             }
 
             @Override

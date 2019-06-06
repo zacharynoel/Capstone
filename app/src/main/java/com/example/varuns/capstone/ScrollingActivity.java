@@ -63,7 +63,7 @@ public class ScrollingActivity extends AppCompatActivity {
         super.onResume();
         Integer artisanId = getIntent().getExtras().getInt("artisanId");
         getArtisanById(artisanId);
-
+        System.out.println("TESTING!!!!");
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,7 +195,7 @@ public class ScrollingActivity extends AppCompatActivity {
         //editArtisan
         if (requestCode == 1) {
             if(resultCode == RESULT_OK) {
-                artisanName.setText(data.getStringExtra("artisanName"));
+//                artisanName.setText(data.getStringExtra("artisanName"));
 //                artisanBio.setText(data.getStringExtra("artisanBio"));
             }
         }
@@ -234,7 +234,12 @@ public class ScrollingActivity extends AppCompatActivity {
 //                Gson gson = new Gson();
                 artisan = response.body().getData();
                 ImageView imageView = (ImageView)findViewById(R.id.imageButton);
-                imageView.setImageResource(artisanImages[(artisan.getArtisanId() - 1)%3]);
+                if (artisan.getEncodedImage() != null) {
+                    imageView.setImageBitmap(ImageUtil.encodedStringToBitmap(artisan.getEncodedImage()));
+                } else {
+                    imageView.setImageResource(artisanImages[(artisan.getArtisanId() - 1)%3]);
+
+                }
 //                artisanBio = (TextView) findViewById(R.id.artisanBio);
                 TextView artisanName = (TextView) findViewById(R.id.artisanName);
 //                System.out.print("bio: " + artisan.getBio());
@@ -245,7 +250,6 @@ public class ScrollingActivity extends AppCompatActivity {
 //                    ScrollingActivity.ArtisanProductAdapter artisanProductAdapter = new ScrollingActivity.ArtisanProductAdapter(artisan.getArtisanItems());
 //                    artisanList.setAdapter(artisanProductAdapter);
 //                }
-
             }
 
             @Override

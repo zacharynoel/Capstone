@@ -79,6 +79,7 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
             }
         });
 
+
         setupBottomNavigationView();
     }
 
@@ -166,6 +167,13 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
                 //report the result of the call
                 Toast.makeText(AddProduct.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 //artisan.setArtisanId(response.body().getData().getArtisanId());
+                Intent intent = new Intent();
+                intent.putExtra("artisanId", artisan.getArtisanId());
+
+                setResult(RESULT_OK, intent);
+
+                //ScrollingActivity.getAdapter().addItem(newItem);
+                finish();
             }
 
             @Override
@@ -173,16 +181,6 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
                 Toast.makeText(AddProduct.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-        Intent intent = new Intent();
-        intent.putExtra("productArtisan", newItem.getArtisanId());
-        intent.putExtra("productId", newItem.getItemId());
-        intent.putExtra("productName", newItem.getItemName());
-        intent.putExtra("productDesc", newItem.getItemDescription());
-        intent.putExtra("productPrice", newItem.getPrice());
-        setResult(RESULT_OK, intent);
-        //ScrollingActivity.getAdapter().addItem(newItem);
-        finish();
     }
 
     private void setCategorySpinnerOptions(List<ItemCategory> itemCategories) {

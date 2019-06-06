@@ -6,39 +6,44 @@
     android:layout_height="match_parent"
     tools:context=".EditArtisan"
     tools:layout_editor_absoluteY="81dp">
+  <ImageButton
+      android:id="@+id/addArtisanPic"
+      android:layout_width="91dp"
+      android:layout_height="89dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="16dp"
+      android:scaleType="fitXY"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:srcCompat="@android:drawable/ic_menu_camera" />
 
   <EditText
       android:id="@+id/editName2"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="10dp"
-      android:layout_marginLeft="10dp"
-      android:layout_marginTop="16dp"
+      android:layout_marginTop="24dp"
       android:layout_marginEnd="10dp"
-      android:layout_marginRight="10dp"
-      android:layout_marginBottom="22dp"
       android:ems="10"
       android:hint="@string/nameartisan"
       android:inputType="textPersonName"
-      app:layout_constraintBottom_toTopOf="@+id/editBio2"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toBottomOf="@+id/addArtisanPic" />
 
   <EditText
       android:id="@+id/editBio2"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
+      android:layout_width="362dp"
+      android:layout_height="102dp"
       android:layout_marginStart="10dp"
-      android:layout_marginLeft="10dp"
+      android:layout_marginTop="8dp"
       android:layout_marginEnd="10dp"
-      android:layout_marginRight="10dp"
-      android:layout_marginBottom="21dp"
       android:ems="10"
       android:hint="@string/bio"
       android:inputType="textMultiLine"
-      app:layout_constraintBottom_toTopOf="@+id/editPhoneNumber2"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/editName2" />
 
@@ -47,47 +52,40 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="10dp"
-      android:layout_marginLeft="10dp"
-      android:layout_marginTop="154dp"
+      android:layout_marginTop="8dp"
       android:layout_marginEnd="10dp"
-      android:layout_marginRight="10dp"
       android:ems="10"
       android:hint="@string/phonenumber"
       android:inputType="phone"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toBottomOf="@+id/editBio2" />
 
   <Button
       android:id="@+id/submitArtEdit"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginEnd="26dp"
-      android:layout_marginRight="26dp"
-      android:layout_marginBottom="126dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginBottom="100dp"
       android:background="@drawable/round_button"
       android:onClick="addArtisan"
       android:text="@string/submit"
       android:textColor="@android:color/background_light"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toEndOf="@+id/cancelArtAdd" />
+      app:layout_constraintEnd_toEndOf="parent" />
 
   <Button
       android:id="@+id/cancelArtAdd"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="1dp"
-      android:layout_marginLeft="1dp"
-      android:layout_marginEnd="2dp"
-      android:layout_marginRight="2dp"
+      android:layout_marginEnd="24dp"
       android:background="@drawable/round_button"
       android:onClick="cancelEditArtisan"
       android:text="@string/cancel"
       android:textColor="@android:color/background_light"
       app:layout_constraintBaseline_toBaselineOf="@+id/submitArtEdit"
-      app:layout_constraintEnd_toStartOf="@+id/submitArtEdit"
-      app:layout_constraintStart_toStartOf="parent" />
+      app:layout_constraintEnd_toStartOf="@+id/submitArtEdit" />
 
   <android.support.design.widget.BottomNavigationView
       android:id="@+id/navigation"
