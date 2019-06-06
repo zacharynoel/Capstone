@@ -118,7 +118,7 @@ public class Send_message extends AppCompatActivity implements View.OnClickListe
         if(currentNum.isEmpty())
             currentNum = phoneNo;
 
-        if(!phoneNo.matches("\\d+")) {
+        if(!android.util.Patterns.PHONE.matcher(phoneNo).matches()) {
             Toast.makeText(getApplicationContext(),
                     "Could not send, phone number is not an integer", Toast.LENGTH_LONG).show();
         }
